@@ -1,0 +1,72 @@
+.screen-setting-box{
+  height: 385px;
+  font-size: 14px;
+  .screen-title{
+    padding-left: 16px;
+    height: 38px;
+    line-height: 38px;
+    background: #D1D1BB;
+    border-radius: 3px;
+    color: #000;
+  }
+  .left-top-cont{
+    margin-top: 12px;
+  }
+  .left-top-cont-top{
+    display: flex;
+    .left-img-box{
+      margin-right: 26px;
+      width: 430px;
+      height: 282px;
+      background: #FFFFFF;
+      border: 1px solid #979797;
+    }
+    .test-count{
+      margin-top: 8px;
+      padding-left: 12px;
+      width: 84px;
+      height: 30px;
+      background: #EDEDED;
+      border: 1px solid #CBCBCB;
+      border-radius: 3px;
+    }
+    .switch-three{
+      margin-top: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      .switch-three-item{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 60px;
+        height: 48px;
+        margin: 0 45px 18px 0;
+      }
+    }
+  }
+  .left-top-cont-bottom{
+    display: flex;
+    align-items: center;
+  }
+}
+// 开关的背景色
+:host::ng-deep.ant-switch-checked{
+  background-color: #D1D762;
+}
+// 数字输入框的宽度
+:host::ng-deep .ant-input-number{
+  width: 60px;
+  }
+  // 数字输入框的高度
+  :host::ng-deep .ant-input-number-input{
+    height: 32px;
+  }
+  // 单选框按钮背景色和字体色
+  :host::ng-deep .ant-radio-group-solid .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled){
+    color: #000;
+    background: #D1D762;
+    border-color: #D1D762;
+  }
+  :host::ng-deep .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)::before{
+    background: #D1D762;
+  }

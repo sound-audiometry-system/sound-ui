@@ -1,0 +1,49 @@
+<section class="screen-setting-box">
+  <div class="screen-title">画面设置</div>
+  <form nz-form [formGroup]="imageConfigForm">
+    <div class="left-top-cont">
+      <div class="left-top-cont-top">
+        <div class="left-img-box"></div>
+        <div class="right-cont-box">
+          <div>测试总数</div>
+          <div class="test-count"></div>
+          <div class="switch-three">
+            <div class="switch-three-item">
+              <span>对错模式</span><nz-switch [(ngModel)]="enableRightWrongMode"></nz-switch>
+            </div>
+            <div class="switch-three-item">
+              <span>错误走向</span><nz-switch [(ngModel)]="enableWrongDirectMode"></nz-switch>
+            </div>
+            <div class="switch-three-item">
+              <span>手动模式</span><nz-switch [(ngModel)]="enableManualPlayMode"></nz-switch>
+            </div>
+          </div>
+          <div style="margin-bottom:14px">干扰难度</div>
+          <nz-form-item>
+            <nz-form-control [nzSpan]="12" nzErrorTip="Please select your gender!">
+              <nz-select formControlName="jammingMode">
+                <nz-option [nzValue]='0' nzLabel="无"></nz-option>
+                <nz-option [nzValue]='1' nzLabel="1：2"></nz-option>
+                <nz-option [nzValue]='2' nzLabel="1：3"></nz-option>
+                <nz-option [nzValue]='3' nzLabel="1：4"></nz-option>
+              </nz-select>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+      <div class="left-top-cont-bottom">
+        <nz-switch [(ngModel)]="enableImageMode"></nz-switch>
+        <div style="margin-left: 14px;">使用画面</div>
+        <nz-radio-group style="margin-left: 27px;" formControlName="audioImageSequence" nzButtonStyle="solid">
+          <label nz-radio-button [nzValue]='3'>画面声音同时出现</label>
+          <label nz-radio-button [nzValue]='1'>画面延迟出现</label>
+          <label nz-radio-button [nzValue]='2'>声音延迟出现</label>
+        </nz-radio-group>
+        <nz-input-number-group style="margin-left: 12px;" nzAddOnAfter="s">
+          <nz-input-number formControlName="audioImageTimeInterval" [nzStep]="1" [nzMin]="1"
+            [nzMax]="30"></nz-input-number>
+        </nz-input-number-group>
+      </div>
+    </div>
+  </form>
+</section>

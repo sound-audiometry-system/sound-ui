@@ -1,0 +1,147 @@
+<section style="height: 754px;display: flex;justify-content: space-between;">
+  <div style="margin-right: 120px;" class="config-left">
+    <div class="left-top">
+      <app-screen-settings-box></app-screen-settings-box>
+    </div>
+    <div class="left-bottom">
+      <div class="left-bottom-top">
+        <div>播放方式</div>
+        <nz-radio-group [(ngModel)]="audioPlayModel" style="margin-left: 16px;">
+          <label nz-radio [nzValue]="1" style="color: #484848;">顺序播放</label>
+          <label nz-radio [nzValue]="2" style="color: #484848;">随机</label>
+          <label nz-radio [nzValue]="3" style="color: #484848;">自定义播放</label>
+          <div style="color: #676767;">（拖动音响编码进行排序或修改序号进行排序）</div>
+        </nz-radio-group>
+      </div>
+      <div class="left-bottom-cont">
+        <div class="left-bottom-cont-signal">
+          <div class="left-bottom-cont-title">
+            <span>信号声</span>
+            <span>（点击音响进行设置）</span>
+          </div>
+          <div class="left-bottom-cont-center">
+            <div class="left-bottom-cont-signal-box" *ngFor="let item of [1,2,3]">
+              <div class="signal-index-box">1.</div>
+              <div class="signal-round-group">
+                <div class="signal-round-item" *ngFor="let itemCount of [11,2,3,0,5]">{{itemCount}}</div>
+              </div>
+              <div class="signal-interal">
+                <span>间隔时间</span>
+                <nz-input-number-group style="margin-left: 12px;" nzAddOnAfter="s">
+                  <nz-input-number [nzStep]="1" [nzMin]="1" [nzMax]="30"></nz-input-number>
+                </nz-input-number-group>
+              </div>
+            </div>
+          </div>
+          <div class="signal-select-file-box">
+            <div class="environment-select-file"></div>
+            <button nz-button nzType="default">选择文件</button>
+          </div>
+        </div>
+        <div class="left-bottom-cont-environment">
+          <div class="left-bottom-cont-title">
+            <span>环境声</span>
+            <span>（点击音响进行设置）</span>
+          </div>
+          <div class="environment-cont-bottom">
+            <div class="environment-cont-bottom-item">
+              <span>1.</span>
+              <div class="environment-cont-bottom-item-round">11</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="config-right">
+    <div class="right-top">
+      <div class="audio-title">音频设置</div>
+      <div class="right-top-cont">
+        <div class="left-color-box color-box">
+          <span>左</span>
+          <div class="left-color"></div>
+        </div>
+        <div class="center-sound">
+          <div (click)="setActiveSound(soundItem)" class="sound-btn"
+            [ngStyle]="{'transform':'rotate('+30*soundItem+'deg)'}"
+            *ngFor="let soundItem of [0,1,2,3,4,5,6,7,8,9,10,11]">
+            <div [ngStyle]="{'transform':'rotate('+(-30)*soundItem+'deg)','transform-origin': 'center center'}"
+              [ngClass]="{
+                  'signalBg':determineBgc('signalBg',soundItem),
+                  'environmenBg':determineBgc('environmenBg',soundItem),
+                  'doubleBg':determineBgc('doubleBg',soundItem),
+                  'noneBg':determineBgc('noneBg',soundItem)}">
+              {{soundItem}}</div>
+          </div>
+        </div>
+        <div class="right-color-box color-box">
+          <span>右</span>
+          <div class="right-color"></div>
+        </div>
+        <div class="sound-label">
+          <div>
+            <div class="dot-signal"></div>
+            <span>信号声</span>
+          </div>
+          <div>
+            <div class="dot-ambient"></div>
+            <span>环境声</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="right-bottom">
+      <form nz-form [formGroup]="audioConfigsForm">
+        <div class="sound-title">{{audioConfigsForm.get('index')?.value||0}}号音响</div>
+        <div class="sound-content">
+          <div class="signal-config-right">
+            <div class="signal-config-right-top">
+              <label nz-checkbox class="round-checkbox" formControlName="enableSignalSoundChannel">信号声</label>
+              <div style="margin-left:26px;">
+                <nz-switch formControlName="isSimultaneous"></nz-switch>
+                <span style="margin-left: 9px;">是否同时发声</span>
+              </div>
+              <div style="margin-left: 38px;">
+                <nz-input-number formControlName="signalSoundDecibels" [nzMin]="20" [nzMax]="160"
+                  [nzStep]="audioConfigsForm.get('signalSoundDecibelsInter')?.value||1"></nz-input-number>
+                <span>（分贝db）</span>
+              </div>
+              <div style="margin-left: 15px;">
+                <!-- <span>步幅：步幅：步幅：</span> -->
+                <nz-input-number formControlName="signalSoundDecibelsInter" [nzMin]="1" [nzMax]="10"
+                  [nzStep]="1"></nz-input-number>
+              </div>
+            </div>
+            <div *ngIf="audioConfigsForm.get('isSimultaneous')?.value" class="signal-config-right-bottom">
+              <div class="sound-round" *ngFor="let signalItem of audioConfigsForm.get('soundIndexes')?.value">
+                {{signalItem}}</div>
+              <!-- <div class="simultaneous-edit">编辑</div> -->
+              <div class="simultaneous-btns">
+                <button style="border: 0;" class="simultaneous-btn" nz-button nzType="default">取消</button>
+                <button class="simultaneous-btn" nz-button nzType="default">确定</button>
+              </div>
+            </div>
+          </div>
+          <div class="environment-config-right">
+            <label nz-checkbox class="round-checkbox" formControlName="enableEnvironmentalSoundChannel">环境声</label>
+            <div class="environment-config-right-bottom">
+              <div class="environment-select-file">{{audioConfigsForm.get('environmentalSoundFile')?.value||''}}</div>
+              <button nz-button nzType="default">选择文件</button>
+              <div style="margin-left: 36px;">
+                <nz-input-number formControlName="environmentalSoundDecibels" [nzMin]="20" [nzMax]="160"
+                  [nzStep]="audioConfigsForm.get('environmentalSoundDecibelsInter')?.value||1"></nz-input-number>
+                <span>（分贝db）</span>
+              </div>
+              <div>
+                <!-- <span>步幅：</span> -->
+                <nz-input-number style="width:60px;" formControlName="environmentalSoundDecibelsInter" [nzMin]="1"
+                  [nzMax]="10" [nzStep]="1"></nz-input-number>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</section>

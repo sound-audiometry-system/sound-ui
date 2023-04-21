@@ -1,0 +1,336 @@
+.config-left,.config-right{
+  min-width: 700px;
+  flex:1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.left-bottom{
+  .left-bottom-top{
+    display: flex;
+    align-items: center;
+  }
+  .left-bottom-cont{
+    margin-top: 26px;
+    display: flex;
+    height: 309px;
+    .left-bottom-cont-signal{
+     margin-right: 14px;
+    }
+    &>div{
+      flex:1;
+      display: flex;
+      flex-direction: column;
+      background-color: #f6f6f6;
+    }
+    .left-bottom-cont-title{
+      display: flex;
+      align-items: center;
+      height: 31px;
+      padding-left: 16px;
+      background: #E8E8DE;
+      color: #343434;
+      & span:last-child{
+        margin-left: 8px;
+        color: #9D9D9D;
+        font-size: 12px;
+      }
+    }
+    .left-bottom-cont-center{
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 16px;
+      .left-bottom-cont-signal-box{
+        margin-top: 12px;
+        display: flex;
+        .signal-index-box{
+          height: 28px;
+          width: 28px;
+          line-height: 28px;
+        }
+        .signal-round-group{
+          flex: 1;
+          display: flex;
+          flex-wrap: wrap;
+          .signal-round-item{
+            margin: 0 10px 12px 0;
+            width: 28px;
+            height: 28px;
+            text-align: center;
+            line-height: 28px;
+            border-radius: 50%;
+            background: #B0B912;
+            font-size: 12px;
+            color: #fff;
+          }
+        }
+        .signal-interal{
+          width: 160px;
+          height: 26px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+    }
+    .signal-select-file-box{
+      padding: 0 9px;
+      display: flex;
+      align-items: center;
+      height: 37px;
+      background: #D8D8D8;
+      .environment-select-file{
+        flex: 1;
+        height: 26px;
+        background: #FFFFFF;
+        border: 1px solid #B5B5B5;
+        border-radius: 2px;
+      }
+      button{
+        margin-left: 6px;
+        padding-top: 3px;
+        width: 80px;
+        height: 26px;
+        border: 1px solid #C2C76A;
+        border-radius: 3px;
+        font-size: 12px;
+      }
+    }
+    // 左侧环境声配置样式
+    .environment-cont-bottom{
+     flex: 1;
+     overflow-y: auto;
+     padding: 0 16px;
+     .environment-cont-bottom-item{
+      margin-top: 12px;
+      display: flex;
+      align-items: center;
+      .environment-cont-bottom-item-round{
+        margin-left: 9px;
+        width: 28px;
+        height: 28px;
+        text-align: center;
+        line-height: 28px;
+        border-radius: 50%;
+        background: #FFBE26;
+        color: #fff;
+        font-size: 12px;
+      }
+     }
+    }
+  }
+}
+.right-top{
+
+  height: 420px;
+  font-size: 14px;
+  .audio-title{
+    padding-left: 16px;
+    height: 38px;
+    line-height: 38px;
+    background: #D1D1BB;
+    border-radius: 3px;
+    color: #000;
+  }
+  .right-top-cont{
+    margin-top: 18px;
+    position: relative;
+    display: flex;
+    .color-box{
+      width: 128px;
+      font-size: 14px;
+      color: #3A3A3A;
+    }
+    .left-color-box{
+      margin-left: 22px;
+      .left-color{
+        height: 14px;
+        background-image: linear-gradient(270deg, #f6f6f500 18%, #3256C6 100%, #537FEA 100%);
+      }
+    }
+    .right-color-box{
+      margin-left: 51px;
+      .right-color{
+        height: 14px;
+        background-image: linear-gradient(270deg, #f6f6f500 18%, #C63232 100%, #537FEA 100%);
+      }
+    }
+    .center-sound{
+      position: relative;
+      width: 244px;
+      height: 244px;
+      border-radius: 50%;
+      background-image: url(~src/assets/sound_bg.png);
+      background-position: center center;
+      background-size: 216px 216px;
+      background-repeat: no-repeat;
+      .sound-btn{
+        position: absolute;
+        top: 0px;
+        left: 108px;
+        transform:rotate(30deg);
+        transform-origin: 14px 122px;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: #DDDDDD;
+        color: #A3A3A3;
+        text-align: center;
+        line-height: 28px;
+        cursor: pointer;
+        &>div{
+          border-radius: 50%;
+        }
+      }
+    }
+    .sound-label{
+      position: absolute;
+      top: 243px;
+      right: 0;
+      &>div{
+        margin-bottom: 16px;
+        display: flex;
+        align-items: center;
+        &>div{
+          margin-right: 6px;
+          width: 12px;
+          height: 12px;
+          border-radius: 50%;
+        }
+        .dot-signal{
+          background-color: #B0B912;
+        }
+        .dot-ambient{
+          background-color: #FFBE26;
+        }
+      }
+    }
+  }
+}
+.right-bottom{
+  height: 317px;
+  font-size: 14px;
+  background: #F6F6F6;
+  border-radius: 3px;
+  .sound-title{
+    padding-left: 24px;
+    height: 32px;
+    line-height: 32px;
+    color: #000;
+    background: #D8D8D8;
+  }
+  .sound-content{
+    padding: 24px 58px 0 24px;
+    .signal-config-right{
+      height: 124px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      .signal-config-right-top{
+        display: flex;
+        align-items: center;
+      }
+      .signal-config-right-bottom{
+        position: relative;
+        padding: 14px 0 0 2px;
+        display: flex;
+        height: 82px;
+        border: 1px dashed #D5D5D5;
+        border-radius: 1px;
+        background-color: #f0f0f0;
+        .sound-round{
+          margin-left:12px;
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          text-align: center;
+          line-height: 28px;
+          background: #B0B912;
+          color: #fff;
+          font-size: 12px;
+        }
+       .simultaneous-edit{
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        width: 34px;
+        height: 22px;
+        text-align: center;
+        line-height: 22px;
+        color: #5275E4;
+        font-size: 12px;
+        &:hover{
+          opacity: .6;
+        }
+       }
+       .simultaneous-btns{
+        position: absolute;
+        top: 5px;
+        right: 8px;
+        .simultaneous-btn{
+          width: 58px;
+          height: 21px;
+          margin-left:4px ;
+          background-color: #fff;
+          font-size: 12px;
+          padding-top: 1px;
+        }
+       } 
+      }
+    }
+    .environment-config-right{
+      margin-top: 34px;
+      .environment-config-right-bottom{
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        .environment-select-file{
+          margin-right: 12px;
+          padding-left: 12px;
+          flex:1;
+          height: 26px;
+          background: #FFFFFF;
+          border: 1px solid #B5B5B5;
+          border-radius: 2px;
+        }
+        button{
+          padding-top: 3px;
+          width: 80px;
+          height: 26px;
+          border: 1px solid #C2C76A;
+          border-radius: 3px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+// 音响背景色切换
+.signalBg{
+  background-color: #B0B912 !important;
+  color: #fff !important;
+}
+.environmenBg{
+  background-color: #FFBE26 !important;
+  color: #fff !important;
+}
+.doubleBg{
+  background: linear-gradient(90deg,#B0B912 50% ,#FFBE26 50%) !important;
+  color: #fff !important;
+}
+.noneBg{
+  background-color: #DDDDDD !important;
+  color: #A3A3A3 !important;
+}
+// 开关的背景色
+:host::ng-deep.ant-switch-checked{
+  background-color: #D1D762;
+}
+// 数字输入框的宽度
+:host::ng-deep .ant-input-number{
+width: 60px;
+}
+// 数字输入框的高度
+:host::ng-deep .ant-input-number-input{
+  height: 26px;
+}
