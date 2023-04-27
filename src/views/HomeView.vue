@@ -1,6 +1,6 @@
-<script setup>
+<script lang="ts" setup>
 import hear from "./hear/Sound.vue"
-import vision from "./vision/index.vue"
+import vision from "./vision/Index.vue"
 </script>
 
 <template>
@@ -32,13 +32,15 @@ import vision from "./vision/index.vue"
   /* background-color: #819323; */
 
 }
+
 .el-tabs__content {
   padding: 32px;
   color: #6b778c;
   font-size: 32px;
-  
+
 }
-.el-tab-pane{
+
+.el-tab-pane {
   height: 500px;
 }
 </style>
