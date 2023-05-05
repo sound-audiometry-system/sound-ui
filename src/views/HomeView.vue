@@ -21,26 +21,7 @@ const activeName = ref('first')
             <userHeader></userHeader>
         </el-header>
         <el-main>
-            <!-- <el-tabs type="border-card">
-                <el-tab-pane>
-                    <template #label>
-                        <span class="custom-tabs-label1">
-                            <span>言语识别采集</span>
-                        </span>
-                    </template>
-
-                </el-tab-pane>
-                <el-tab-pane>
-                    <template #label>
-                        <span class="custom-tabs-label">
-                            <span>言语测试视觉辅助</span>
-                        </span>
-                    </template>
-                    <vision></vision>
-                </el-tab-pane>
-            </el-tabs> -->
-
-            <el-tabs v-model="activeName" type="card" class="demo-tabs" @tab-click="handleClick">
+            <el-tabs v-model="activeName" type="border-card" class="demo-tabs" @tab-click="handleClick">
                 <el-tab-pane label="言语识别采集" name="first">言语识别采集</el-tab-pane>
                 <el-tab-pane label="言语测试视觉辅助" name="second">言语测试视觉辅助</el-tab-pane>
             </el-tabs>

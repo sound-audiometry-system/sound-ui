@@ -23,7 +23,9 @@
     background-color: #ffffff;
     font-size: large;
     line-height: 48px;
-
+    .el-icon{
+        vertical-align: sub;
+    }
     .userinfo {
         width: 180px;
         height: 48px;
