@@ -34,7 +34,6 @@ let voiceSimulate = ()=>{
         .el-button {
             width: 120px;
             height: 60px;
-
         }
     }
 </style>

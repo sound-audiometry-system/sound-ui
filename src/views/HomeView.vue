@@ -4,29 +4,79 @@
 
 import foot from "./lay/foot.vue"
 import testFrom from "./home/form.vue"
-import userHeader from "./lay/MainHeader.vue"
-
 import { ref } from "vue"
-import type { TabsPaneContext } from 'element-plus'
-const handleClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab, event)
-}
-const activeName = ref('first')
 
+
+const testForm = ref < any > ();
+const options = [
+    {
+        value: 'Option1',
+        label: 'Option1',
+    },
+    {
+        value: 'Option2',
+        label: 'Option2',
+    },
+    {
+        value: 'Option3',
+        label: 'Option3',
+    },
+    {
+        value: 'Option4',
+        label: 'Option4',
+    },
+    {
+        value: 'Option5',
+        label: 'Option5',
+    },
+]
+let startTestDialogVisible = ref(false)
+
+let startTest = () => {
+    debugger
+    startTestDialogVisible.value = true
+}
+let value = ''
 </script>
 
 <template>
-    <el-container>
-        <el-header>
-            <userHeader></userHeader>
-        </el-header>
-        <el-main>
-            <el-tabs v-model="activeName" type="border-card" class="demo-tabs" @tab-click="handleClick">
-                <el-tab-pane label="言语识别采集" name="first">言语识别采集</el-tab-pane>
-                <el-tab-pane label="言语测试视觉辅助" name="second">言语测试视觉辅助</el-tab-pane>
-            </el-tabs>
-        </el-main>
-    </el-container>
+    <div class="common-layout">
+        <el-container>
+            <el-header>
+                <el-row>
+                    <el-col :span="24">
+                        <div class="ep-bg-purple-dark"><label>首页</label></div>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <div class="ep-bg-purple-dark1" />
+                    </el-col>
+                </el-row>
+            </el-header>
+            <el-main>
+                <div>开始&测试</div>
+                <el-select v-model="value" filterable placeholder="Select">
+                    <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
+                </el-select>
+                <div style="margin-top: 5px;">
+                    <el-button @click="testForm.value.startTestDialogVisible.value= true">开始测试</el-button>
+                </div>
+                <testForm ref="testForm"></testForm>
+                <!-- 开始测试弹窗 -->
+                <!-- <el-dialog v-model="startTestDialogVisible" title="开始测试" width="30%" destroy-on-close center>
+                    <testFrom ref="testForm" :startTestDialogVisible.sync = "startTestDialogVisible"></testFrom>
+                    <el-form-item>
+                        <el-button>取消</el-button>
+                        <el-button type="primary" @click="onSubmit">确定</el-button>
+                    </el-form-item>
+                </el-dialog> -->
+            </el-main>
+            <el-footer>
+                <foot></foot>
+            </el-footer>
+        </el-container>
+    </div>
 </template>
 
 <style lang="scss" scoped>
@@ -39,18 +89,10 @@ body,
     border-radius: 4px
 }
 
-.el-tabs__item .is-top .is-active {
-    background-color: aqua;
-}
-
 .el-main {
     text-align: center;
     display: inline-block;
 
-}
-
-.el-container {
-    width: 800px;
 }
 
 .common-layout {
@@ -60,8 +102,8 @@ body,
 }
 
 .el-header {
-    height: 48px;
-    // background-color: aqua;
+    height: 90px;
+    background-color: aqua;
     padding: 0;
 
     .el-row {
