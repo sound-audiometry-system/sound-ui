@@ -3,11 +3,9 @@
 // import vision from "./vision/index.vue"
 
 import foot from "./lay/foot.vue"
-import testFrom from "./home/form.vue"
 import { ref } from "vue"
 
 
-const testForm = ref < any > ();
 const options = [
     {
         value: 'Option1',
@@ -60,17 +58,8 @@ let value = ''
                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value" />
                 </el-select>
                 <div style="margin-top: 5px;">
-                    <el-button @click="testForm.value.startTestDialogVisible.value= true">开始测试</el-button>
+                    <el-button @click="startTestDialogVisible= true">开始测试</el-button>
                 </div>
-                <testForm ref="testForm"></testForm>
-                <!-- 开始测试弹窗 -->
-                <!-- <el-dialog v-model="startTestDialogVisible" title="开始测试" width="30%" destroy-on-close center>
-                    <testFrom ref="testForm" :startTestDialogVisible.sync = "startTestDialogVisible"></testFrom>
-                    <el-form-item>
-                        <el-button>取消</el-button>
-                        <el-button type="primary" @click="onSubmit">确定</el-button>
-                    </el-form-item>
-                </el-dialog> -->
             </el-main>
             <el-footer>
                 <foot></foot>

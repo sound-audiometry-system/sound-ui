@@ -4,9 +4,15 @@
     </el-form-item>
     <el-container>
         <el-aside>
-            <el-switch v-model="value1" :before-change="beforeChange1" /><label style="font-size: 16px;">左显示器</label>
-            <el-switch v-model="value2" class="ml-2" /><label>右显示器</label> 
-            <div style="margin-left: 10px; width: 400px;height: 320px; background-color: #8cdcfe;"></div>
+            <div class="es-switch">
+                <span ><el-switch v-model="value1" :before-change="beforeChange1" /><label style="font-size: 16px;">左显示器</label></span>
+                <span ><el-switch v-model="value2" class="ml-2" /><label>右显示器</label> </span>
+            </div>
+            <div style="margin-left: 10px; width: 320px;height: 240px; background-color: #8cdcfe;"></div>
+
+            <div style="margin-left: 10px; width: 400px;height: 230px; background-color: #8cdcfe; margin-top: 35px;">
+                答题区域
+            </div>
         </el-aside>
         
         <el-main>Main</el-main>
@@ -31,6 +37,11 @@ let beforeChange1 = (value1) => {
 </script>
 
 <style lang="scss" scoped>
+.el-form-item{
+    margin-top: 3px;
+    margin-bottom: 3px;
+}
+
 .el-container {
     height: 580px;
 
@@ -40,18 +51,23 @@ let beforeChange1 = (value1) => {
     }
 
     .el-main {
+        
         background-color: bisque;
     }
 }
-
+.es-switch{
+    display: flex;
+    justify-content: space-between;
+    width: 320px;
+    margin-left: 10px;
+    .ml-2 {
+        
+    }
+}
 .el-aside {
     padding: 3px 5px;
     display: inline-block;
 
-    .ml-2 {
-        float: right;
-        // flex-direction: column;
-        // align-self: flex-end;
-    }
+    
 }
 </style>

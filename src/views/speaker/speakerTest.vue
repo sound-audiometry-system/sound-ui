@@ -56,5 +56,8 @@ let value = ref("1")
     .el-tabs {
         height: 700px;
     }
+    .el-main{
+        padding-block: inherit;
+    }
 }
 </style>
