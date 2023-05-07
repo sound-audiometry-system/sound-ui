@@ -13,8 +13,6 @@ declare module '@vue/runtime-core' {
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElContainer: typeof import('element-plus/es')['ElContainer']
-    ElDialog: typeof import('element-plus/es')['ElDialog']
-    ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElHeader: typeof import('element-plus/es')['ElHeader']
