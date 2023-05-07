@@ -44,7 +44,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import sound from "@/components/sound/index.vue";
+import sound from "../../components/sound/index.vue";
 import speakerChart from "./components/speakerChart.vue";
 </script>
 

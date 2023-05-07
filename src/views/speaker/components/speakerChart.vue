@@ -1,3 +1,4 @@
+<!-- echarts组件 -->
 <template>
   <div
     id="myChart"

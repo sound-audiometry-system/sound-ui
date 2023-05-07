@@ -5,15 +5,17 @@
     <el-container>
         <el-aside>
             <div class="es-switch">
-                <span><el-switch v-model="value1" :before-change="beforeChange1" /><label
-                        style="font-size: 16px;">左显示器</label></span>
+                <span><el-switch v-model="value1" :before-change="beforeChange1" />
+                    <label style="font-size: 16px;">左显示器</label></span>
                 <span><el-switch v-model="value2" class="ml-2" /><label>右显示器</label> </span>
             </div>
             <div style="margin-left: 10px; width: 320px;height: 240px; background-color: #8cdcfe;"></div>
 
             <el-row class="error-a">
                 <label style="margin-left: 5px;font-size: large;">错误走向</label>
-                <el-button  size="small" style="margin-right: 5px;"><el-icon style="color: red;margin-right: 2px;"><CircleClose /></el-icon>错误</el-button>
+                <el-button size="small" style="margin-right: 5px;"><el-icon style="color: red;margin-right: 2px;">
+                        <CircleClose />
+                    </el-icon>错误</el-button>
                 <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
             </el-row>
             <el-row style="margin-left: 10px; width: 400px;height: 200px; background-color: #8cdcfe;">
@@ -22,8 +24,12 @@
         </el-aside>
 
         <el-main>
-            <el-button style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>开启录音</el-button>
-            <div style="height: 280px;width: 465px;"><sound @handleClkItem="handleClkItem"></sound></div>
+            <el-button style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle>
+                    <Microphone />
+                </el-icon>开启录音</el-button>
+            <div style="height: 280px;width: 465px; background-color: blueviolet;">
+                
+            </div>
             <el-row class="el-btn a">
                 <el-button size="small">开始</el-button>
                 <el-button size="small">保存</el-button>
