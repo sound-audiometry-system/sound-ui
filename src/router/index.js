@@ -22,6 +22,11 @@ const router = createRouter({
       name:'vision',
       component: () => import('../views/vision/index.vue')
     },
+    {
+      path:'/checkConfig',
+      name:'checkConfig',
+      component: () => import('../views/config/index.vue')
+    },
     
   ]
 })
