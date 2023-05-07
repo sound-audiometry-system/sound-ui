@@ -24,12 +24,8 @@
         </el-aside>
 
         <el-main>
-            <el-button style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle>
-                    <Microphone />
-                </el-icon>开启录音</el-button>
-            <div style="height: 280px;width: 465px; background-color: blueviolet;">
-                
-            </div>
+            <el-button style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>开启录音</el-button>
+            <div style="height: 280px;width: 465px;"><sound @handleClkItem="handleClkItem"></sound></div>
             <el-row class="el-btn a">
                 <el-button size="small">开始</el-button>
                 <el-button size="small">保存</el-button>
