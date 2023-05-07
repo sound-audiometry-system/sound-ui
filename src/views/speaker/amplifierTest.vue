@@ -2,8 +2,12 @@
   <div style="margin-top: 40px">
     <el-row :gutter="10">
       <el-col :span="13"
-        >11111111222222222222222222222222222222222222222222222222222
-        22222222222222222222222222</el-col
+        ><speaker-chart></speaker-chart>
+        <div class="chart-btm">
+            <div style="display: flex;align-items: center;"><span class="left-box"></span>强制性频率</div>
+            <div><el-button type="info" plain>保存并进行另一侧</el-button></div>
+          </div>
+        </el-col
       >
       <el-col :span="11">
         <sound></sound>
@@ -28,11 +32,11 @@
           </div>
           <div class="mbm14 bc-btn">
             播放信号
-            <p>[空格]</p>
+            <p class="c9">[空格]</p>
           </div>
           <div class="mbm14 bc-btn">
             <p>保存点</p>
-            <p>[Enter]</p>
+            <p class="c9">[Enter]</p>
           </div>
         </div>
       </el-col>
@@ -41,6 +45,7 @@
 </template>
 <script setup lang="ts">
 import sound from "@/components/sound/index.vue";
+import speakerChart from "./components/speakerChart.vue";
 </script>
 
 <style lang="scss" scoped>
@@ -70,5 +75,20 @@ import sound from "@/components/sound/index.vue";
 }
 .mbm14 {
   margin-bottom: 14px;
+}
+.c9 {
+  color: #989898;
+}
+.chart-btm {
+  display: flex;
+  justify-content: space-between;
+  padding: 20px;
+  .left-box {
+    display: inline-block;
+    width: 40px;
+    height: 20px;
+    border: 1px solid #d54949;
+    margin-right: 6px;
+  }
 }
 </style>
