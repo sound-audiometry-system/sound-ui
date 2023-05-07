@@ -8,7 +8,7 @@
             <el-tabs type="border-card">
                 <el-tab-pane label="扬声器测听">
                     <!-- echarts图表 -->
-                    11111111111
+                    <amplifier-test></amplifier-test>
                     <!-- <div id="echarts-a" style="width: 600px;height:400px;"></div> -->
                 </el-tab-pane>
                 <el-tab-pane label="听力测试">
@@ -24,6 +24,7 @@ import { ref } from "vue"
 import * as echarts from 'echarts';
 import userHeader from "../lay/MainHeader.vue"
 import hearTest from "./hearTest.vue"
+import amplifierTest from "./amplifierTest.vue"
 
 // var myChart = echarts.init(document.getElementById('echarts-a'));
 // 绘制图表
@@ -59,5 +60,8 @@ let value = ref("1")
     .el-main{
         padding-block: inherit;
     }
+}
+.el-tabs--border-card {
+    background-color: #f6f6f6;
 }
 </style>

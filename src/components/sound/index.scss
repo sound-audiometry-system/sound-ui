@@ -1,0 +1,115 @@
+.dot {
+    position: relative;
+    padding-top: 20px;
+  }
+  .dot-outer {
+    position: relative;
+    width: 210px;
+    height: 210px;
+    border-radius: 50%;
+    border: 18px solid #f0f0f0;
+  }
+  .dot-center {
+    width: 140px;
+    height: 140px;
+    background-color: #fff;
+    border-radius: 50%;
+    margin: auto;
+    margin-top: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    img {
+      position: relative;
+    z-index: 99;
+    }
+  }
+  .dot-center::before {
+    content: "";
+    position: absolute;
+    left: 0%;
+    top: 49%;
+    width: 140px;
+    border-top: 2px solid;
+    border-radius: 10px;
+    border-color: #e5e2e2;
+  }
+  .dot-center::after {
+    content: "";
+    position: absolute;
+    left: 49%;
+    top: 0%;
+    height: 140px;
+    border-left: 2px solid;
+    border-radius: 10px;
+    border-color: #e5e4e4;
+  }
+  .dot-control {
+    position: absolute;
+    //   top: -16px;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #dddddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .dot-control:nth-child(2) {
+    left: 73px;
+    top: -32px;
+  }
+  .dot-control:nth-child(3) {
+    right: 20px;
+    top: -18px;
+  }
+  .dot-control:nth-child(4) {
+    right: -20px;
+    top: 20px;
+  }
+  .dot-control:nth-child(5) {
+    right: -32px;
+    top: 70px;
+  }
+  .dot-control:nth-child(6) {
+    top: 120px;
+    right: -26px;
+  }
+  .dot-control:nth-child(7) {
+    right: 9px;
+    bottom: -14px;
+  }
+  .dot-control:nth-child(8) {
+    left: 73px;
+    bottom: -32px;
+  }
+  .dot-control:nth-child(9) {
+      left: 9px;
+    bottom: -14px;
+  }
+  .dot-control:nth-child(10) {
+    top: 120px;
+    left: -26px;
+  }
+  .dot-control:nth-child(11) {
+    left: -32px;
+    top: 70px;
+  }
+  .dot-control:nth-child(12) {
+    left: -20px;
+    top: 20px;
+  }
+  .dot-control:nth-child(13) {
+    left: 20px;
+    top: -18px;
+  }
+  .left-indicate {
+    width: 128px;
+height: 14px;
+background-image: linear-gradient(270deg, #f6f6f500 18%, #3256C6 100%, #537FEA 100%);
+  }
+  .right-indicate {
+    width: 128px;
+height: 14px;
+background-image: linear-gradient(270deg, #f6f6f500 18%, #C63232 100%, #537FEA 100%);
+  }
