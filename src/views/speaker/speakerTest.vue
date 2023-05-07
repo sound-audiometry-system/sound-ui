@@ -16,8 +16,8 @@
         </el-tab-pane>
       </el-tabs>
     </el-main>
+    <footer-tab></footer-tab>
   </el-container>
-  <footer></footer>
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
@@ -26,13 +26,13 @@ import userHeader from "../lay/MainHeader.vue";
 import hearTest from "./hearTest.vue";
 import amplifierTest from "./amplifierTest.vue";
 import footer from "../../components/sound/index.vue";
-
+import footerTab from "../../components/footerTab.vue";
 let value = ref("1");
 </script>
 <style lang="scss" scoped>
 .el-container {
   width: 1080px;
-  height: 800px;
+  height: 820px;
 
   .el-tabs {
     height: 700px;

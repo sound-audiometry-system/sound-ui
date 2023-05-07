@@ -39,6 +39,28 @@ const chooseItem = (val) => {
 </script>
 
 <style scoped>
+.el-footer {
+    background-color: rgb(30, 25, 25);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .activeColor {
+  background-color: rgb(180, 190, 90);
+
+  .icon {
+    color: rgb(30, 25, 25)
+  }
+
+  .font {
+    color: rgb(30, 25, 25)
+  }
+}
+.font {
+  font-size: small;
+  font-weight: bold;
+  color: white;
+}
 .footer-div {
   width: 10%;
   height: 100%;
