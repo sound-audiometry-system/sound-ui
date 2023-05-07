@@ -63,7 +63,7 @@
       </div>
       <template #footer>
         <el-button color="#f2f3f5" @click="chooseTypeVisble = false">取消</el-button>
-        <el-button color="rgb(180,190,90)" @click="chooseTypeVisble = false">确定</el-button>
+        <el-button color="rgb(180,190,90)" @click="handleNav">确定</el-button>
       </template>
     </el-dialog>
   </el-container>
@@ -71,7 +71,7 @@
 <script setup lang="ts" >
 import { ref } from 'vue'
 import { Search } from '@element-plus/icons-vue'
-
+import router from '@/router/index.js'
 const active = ref(1)
 
 const chooseTypeVisble = ref(false)
@@ -98,7 +98,12 @@ const searchUser = () => {
 const loadTestData = () => {
   //后续为远程获取测试结果
 }
-
+const handleNav = () => {
+  chooseTypeVisble.value = false
+  if (testResult.value == 1) {
+    router.push('/speaker')
+  }
+}
 //加载测试数据
 loadTestData()
 

@@ -8,7 +8,7 @@
       <el-col class="dot" :span="12">
         <div class="dot-outer">
           <div class="dot-center"><img src="../../assets/header.png" width="30" alt=""></div>
-          <div v-for="(item, index) in 12" :key="index" class="dot-control">
+          <div @click="handleClkItem(index)" v-for="(item, index) in 12" :key="index" class="dot-control">
             {{ index }}
           </div>
         </div>
@@ -22,6 +22,10 @@
 </template>
 
 <script setup lang="ts">
+const emit = defineEmits(['handleClkItem'])
+const handleClkItem = (index: number) => {
+    emit('handleClkItem', index)
+}
 </script>
 
 <style lang="scss" scoped>

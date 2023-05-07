@@ -53,12 +53,12 @@ let value = ref("1");
 .el-container {
   width: 1080px;
   height: 820px;
-
   .el-tabs {
     height: 700px;
   }
   .el-main {
     padding-block: inherit;
+    padding: 0 !important;
   }
 }
 .el-tabs--border-card {

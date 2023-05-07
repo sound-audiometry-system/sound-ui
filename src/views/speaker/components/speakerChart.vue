@@ -16,10 +16,10 @@ const initChart = () => {
       trigger: "axis",
     },
     grid: {
-      left: "3%",
-      right: "4%",
-      bottom: "3%",
-      containLabel: true,
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0
     },
     toolbox: {
       feature: {
