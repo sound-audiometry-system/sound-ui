@@ -38,7 +38,7 @@ const chooseItem = (val) => {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-footer {
     background-color: rgb(30, 25, 25);
     display: flex;

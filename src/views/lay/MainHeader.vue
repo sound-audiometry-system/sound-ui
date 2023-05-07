@@ -1,7 +1,7 @@
 <!-- 头部个人信息 -->
 <template>
     <el-row :gutter="20">
-        <el-col :span="6">
+        <el-col :span="6" style="width: 120px;">
             <el-icon size="24">
                 <Avatar />
             </el-icon>
@@ -18,27 +18,19 @@
 <script setup lang="ts">
 </script>
 <style scoped lang="scss">
-.el-row {
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-
-    .el-col {
-        width: 180px;
+.el-col {
+        width: 120px;
         height: 48px;
-        display: inline-block;
+        display: flex;
         background-color: #ffffff;
         font-size: large;
         line-height: 48px;
-
-        .el-icon {
-            vertical-align: sub;
-        }
+        justify-content: flex-start;
+        align-items: center;
 
         .el-button {
             font-size: large;
             line-height: 65px;
         }
     }
-}
 </style>
