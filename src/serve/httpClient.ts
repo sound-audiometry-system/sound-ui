@@ -1,8 +1,8 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-import { TResponseData } from '@/types/global/request'
-import { Local } from '@/utils/storage'
+import { TResponseData } from '@/serve/types/request'
+// import { Local } from '@/utils/storage'
 import { ElMessage } from 'element-plus'
-import { useUserStore } from '@/store/user'
+// import { useUserStore } from '@/store/user'
 class Api {
   instance: AxiosInstance
   config: AxiosRequestConfig
@@ -21,11 +21,11 @@ class Api {
  
         addPending(config)
  
-        const token = Local.get('ACCESS_TOKEN')
-        if (token) {
-          //@ts-ignore
-          config.headers.Authorization = token
-        }
+        // const token = Local.get('ACCESS_TOKEN')
+        // if (token) {
+        //   //@ts-ignore
+        //   config.headers.Authorization = token
+        // }
         return config
       },
       (error) => Promise.reject(error)
@@ -65,7 +65,7 @@ export default api
  * @param {*} error
  */
 function httpErrorStatusHandle(error: any) {
-  const userStore = useUserStore()
+  // const userStore = useUserStore()
   // 处理被取消的请求
   if (axios.isCancel(error)) return console.error('请求的重复请求：' + error.message)
   let message = ''
@@ -78,7 +78,7 @@ function httpErrorStatusHandle(error: any) {
         message = '参数不正确！'
         break
       case 401:
-        userStore.clearLoginInfo()
+        // userStore.clearLoginInfo()
         message = '您未登录，或者登录已经超时，请先登录！'
         break
       case 403:
