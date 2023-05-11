@@ -72,7 +72,7 @@ defineExpose({
   /* background-color: #f1f1f1; */
   height: 300px;
 }
->>> .el-dialog__body {
+.el-dialog__body {
   padding-top: 0 !important;
 }
 </style>
