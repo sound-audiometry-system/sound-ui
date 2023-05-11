@@ -1,3 +1,3 @@
-export interface Test {
-    id: string | number;
+export interface UserInfo {
+    uid: string | number;
 }

@@ -1,39 +1,49 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 import { TResponseData } from '@/serve/types/request'
-// import { Local } from '@/utils/storage'
 import { ElMessage } from 'element-plus'
-// import { useUserStore } from '@/store/user'
 class Api {
   instance: AxiosInstance
   config: AxiosRequestConfig
  
   constructor(option: AxiosRequestConfig) {
     this.config = option
+    console.log(this.config, 'option')
     // 配置全局参数
     this.instance = axios.create(this.config)
     this.interceptors()
   }
  
   interceptors() {
+    // console.log(this.instance.interceptors.request)
+    // this.instance.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
     this.instance.interceptors.request.use(
       (config) => {
-        removePending(config)
+        // if (config.method === 'GET') {
+        //   //  给data赋值以绕过if判断
+        //   config.data = true
+        // }
+        config.headers['Content-Type'] = 'application/json'
+        // config.headers['Content-Type'] = 'application/json'
+        // removePending(config)
  
-        addPending(config)
+        // addPending(config)
  
         // const token = Local.get('ACCESS_TOKEN')
         // if (token) {
         //   //@ts-ignore
         //   config.headers.Authorization = token
         // }
+        
+        // console.log(config, 'config')
         return config
+        
       },
       (error) => Promise.reject(error)
     )
  
     this.instance.interceptors.response.use(
       (response) => {
-        removePending(response.config)
+        // removePending(response.config)
  
         const res = response.data
         if (res.code !== 1) {
@@ -49,13 +59,26 @@ class Api {
     )
   }
   async request<T = any>(config: AxiosRequestConfig): Promise<TResponseData<T>> {
+    console.log(config)
     return this.instance.request<TResponseData<T>, TResponseData<T>>(config)
   }
 }
- 
+const baseUrl = 'http://192.168.2.114:8080/wxc/hy_saas_client_gateway/ym_fha'
 const api = new Api({
-  baseURL: '/api',
+  baseURL: baseUrl,
   timeout: 10 * 1000,
+  // transformRequest: [
+  //   (data) => {
+  //     //对请求的参数进行处理
+  //     data = JSON.stringify(data);
+  //     return data;
+  //   },
+  // ],
+  headers: {
+    Accept: "application/json, text/plain, */*",
+    "Content-Type": "application/json",
+    "X-Requested-With": "XMLHttpRequest",
+  },
 })
  
 export default api
