@@ -8,11 +8,11 @@ class UserApi {
    * @param params 查询参数
    * @returns
    */
-  getUserInfo(params: object) {
+  getUserInfo(data: object) {
     return http.request<UserInfo>({
       url: '/hearing_service/api/patient/info',
       method: 'POST',
-      data: params,
+      data,
       // headers: {
       //   Accept: "application/json, text/plain, */*",
       //   "Content-Type": "application/json",
@@ -20,11 +20,16 @@ class UserApi {
       // },
     })
   }
-  getUserPatient(params: object) {
+  /**
+   * 根据用户id获取用户配置信息
+   * @param data 查询参数
+   * @returns
+   */
+  getUserPatient(data: object) {
     return http.request<UserInfo>({
       url: '/hearing_service/api/patient/testList',
       method: 'POST',
-      data: params,
+      data,
     })
   }
 
