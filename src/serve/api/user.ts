@@ -20,6 +20,14 @@ class UserApi {
       // },
     })
   }
+  getUserPatient(params: object) {
+    return http.request<UserInfo>({
+      url: '/hearing_service/api/patient/testList',
+      method: 'POST',
+      data: params,
+    })
+  }
+
 
 }
 
