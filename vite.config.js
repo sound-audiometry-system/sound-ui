@@ -7,6 +7,14 @@ import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
+// 打包后手动添加前缀脚本
+const addPrefixPlugin = (prefix) => ({
+  name: 'add-prefix-plugin',
+  async transformIndexHtml(html) {
+    return html.replace(/(href|src)="(?!http|\/\/)/g, `$1="${prefix}`)
+  },
+})
+
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
@@ -18,6 +26,7 @@ export default defineConfig({
     Components({
       resolvers: [ElementPlusResolver()],
     }),
+    addPrefixPlugin('/static'),
   ],
   resolve: {
     alias: {
