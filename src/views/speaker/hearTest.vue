@@ -24,7 +24,7 @@
         </el-aside>
 
         <el-main>
-            <el-button style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>开启录音</el-button>
+            <el-button @click="handleAudio" style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>开启录音</el-button><el-button @click="handleStopAudio" style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>结束录音</el-button>
             <div style="height: 280px;width: 465px;"><sound @handleClkItem="handleClkItem"></sound></div>
             <el-row class="el-btn a">
                 <el-button size="small" @click="handleStart">开始</el-button>
@@ -69,7 +69,7 @@ let beforeChange1 = (value1) => {
   }
   return value1;
 };
-const emit = defineEmits(["handleStart", "handleStop"]);
+const emit = defineEmits(["handleStart", "handleStop", "handleAudio","handleStopAudio"]);
 const handleClk = () => {
   // console.log(answerDialogRef.value);
   answerDialogRef.value.show([]);
@@ -83,6 +83,12 @@ const handleStart = ()=> {
 }
 const handleStop = ()=> {
   emit("handleStop");
+}
+const handleAudio = ()=> {
+  emit("handleAudio");
+}
+const handleStopAudio = ()=> {
+  emit("handleStopAudio");
 }
 </script>
 
