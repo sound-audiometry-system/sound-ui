@@ -1,4 +1,4 @@
-import { fileURLToPath, URL } from "node:url";
+// import { fileURLToPath, URL } from "node:url";
 
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
@@ -6,10 +6,10 @@ import vue from "@vitejs/plugin-vue";
 import AutoImport from "unplugin-auto-import/vite";
 import Components from "unplugin-vue-components/vite";
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
-
-import { fileURLToPath, URL } from "node:url";
-import { defineConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
+import path from 'path' // 需安装此模块
+// import { fileURLToPath, URL } from "node:url";
+// import { defineConfig } from "vite";
+// import vue from "@vitejs/plugin-vue";
 
 const addPrefixPlugin = (prefix) => ({
   name: 'add-prefix-plugin',
@@ -21,7 +21,7 @@ const addPrefixPlugin = (prefix) => ({
 export default defineConfig({
   plugins: [
     vue(),
-    addPrefixPlugin("/static"),
+    // addPrefixPlugin("/static"),
     // ...
     AutoImport({
       resolvers: [ElementPlusResolver()],
@@ -32,7 +32,8 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      // "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@": path.join(__dirname, "./src"), // path记得引入
     },
   },
   server: {

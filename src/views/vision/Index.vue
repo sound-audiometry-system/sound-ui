@@ -44,11 +44,11 @@
             v-if="userSearchData.length > 0"
           >
             <div style="display: flex; align-items: center; margin: 2% 2% 0 2%">
-              <Female class="icon" v-if="item.sex == 1" />
+              <Female class="icon" v-if="item.gender == 1" />
               <Male class="icon" v-else />
               <text
-                style="margin-left: 4%; font-size: revert; font-weight: bold"
-                >{{ item.userId }}</text
+                style="margin-left: 4%; font-size: revert; font-weight: bold;width: 80%"
+                >{{ item.name }}</text
               >
             </div>
             <el-button
@@ -105,10 +105,10 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Female width="1.2em" height="1.2em" v-if="userInfo.sex == 1" />
+            <Female width="1.2em" height="1.2em" v-if="userInfo.gender == 1" />
             <Male width="1.2em" height="1.2em" v-else />
             <text style="margin-left: 1%; font-weight: bold">{{
-              userInfo.userId
+              userInfo.name
             }}</text>
           </div>
         </div>
@@ -139,12 +139,13 @@
 <script setup lang="ts" >
 import { ref, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import router from "@/router/index.js";
-import userApi from "@/serve/api/user";
+import { useRouter } from 'vue-router'
+import { userApi } from "@/serve/api/user";
 
 // const queryData = async () => {
 //     const res = await userApi.getPageData(params)
 // }
+ const router = useRouter()
 const active = ref(1);
 
 const form = reactive({})
@@ -154,20 +155,17 @@ const chooseTypeVisble = ref(false);
 const inputUserId = ref(1);
 //存储选择的用户信息
 const userInfo = ref({
-  sex: null,
-  userId: "",
+  name: null,
+  gender: "",
 });
 
 //搜索的用户结果,sex为1为男性，sex为2为女性
 const userSearchData = ref([
-  { sex: 1, userId: "000032" },
-  { sex: 2, userId: "000033" },
+  { gender: 1, name: "000032" },    
 ]);
 //测试列表
 const testData = ref([
-  { name: "听力测试", id: 1 },
-  { name: "配置检查", id: 2 },
-  { name: "言语实景模拟", id: 3 },
+  { name: "听力测试", id: 1, questionsControl: true, directControl: true, wrongControl: true, jammingMode: 1, commands: [] },
 ]);
 //测试结果
 const testResult = ref();
@@ -182,15 +180,27 @@ const loadTestData = () => {
   //后续为远程获取测试结果
 };
 
-const getUserInfo = () => {
-  const res = userApi.getUserInfo({ uid: inputUserId.value });
+const getUserInfo = async() => {
+  const res = await userApi.getUserInfo({ uid: inputUserId.value });
+  // console.log(res, '2222222')
+  userSearchData.value = [res.data]
+};
+
+// 获取用户配置
+const getUserPatient = async(uid: string | number) => {
+  const res = await userApi.getUserPatient({ uid: uid });
+  testData.value = res.data
+  // console.log(res, '2222222')
+  // userSearchData.value = [res.data]
 };
 
 const handleNav = () => {
   chooseTypeVisble.value = false;
-  if (testResult.value == 1) {
-    router.push("/speaker");
-  }
+  const testArr = testData.value.filter(item=> item.id == testResult.value)
+  console.log(testArr)
+  // if (testResult.value == 1) {
+    router.push({ path: "/speaker", query: { testData: JSON.stringify(testArr[0]) } });
+  // }
 };
 //加载测试数据
 // loadTestData()
@@ -198,14 +208,16 @@ getUserInfo();
 
 //跳转到测试页面
 const toTest = (info) => {
-  inputUserId.value = info.userId;
+  inputUserId.value = info.name;
   userInfo.value = info;
+  getUserPatient(info.uid)
   chooseTypeVisble.value = true;
 };
 
 //footer下面图标切换颜色
 const chooseItem = (val) => {
   active.value = val;
+  console.log(active, 'active')
   //后续为头部切换页面
 };
 </script>

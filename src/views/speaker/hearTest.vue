@@ -9,7 +9,7 @@
                     <label style="font-size: 16px;">左显示器</label></span>
                 <span><el-switch v-model="value2" class="ml-2" /><label>右显示器</label> </span>
             </div>
-            <div style="margin-left: 10px; width: 320px;height: 240px; background-color: #8cdcfe;"></div>
+            <div style="margin-left: 10px; width: 320px;height: 240px; background-color: #000;"></div>
 
             <el-row class="error-a">
                 <label style="margin-left: 5px;font-size: large;">错误走向</label>
@@ -27,10 +27,10 @@
             <el-button style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>开启录音</el-button>
             <div style="height: 280px;width: 465px;"><sound @handleClkItem="handleClkItem"></sound></div>
             <el-row class="el-btn a">
-                <el-button size="small">开始</el-button>
-                <el-button size="small">保存</el-button>
-                <el-button size="small">保存并生成记录</el-button>
-                <el-button size="small">提前结束</el-button>
+                <el-button size="small" @click="handleStart">开始</el-button>
+                <el-button size="small" @click="handleStop">保存</el-button>
+                <el-button size="small" @click="handleStop">保存并生成记录</el-button>
+                <el-button size="small" @click="handleStop">提前结束</el-button>
                 <el-button size="small">测试文件</el-button>
             </el-row>
             <el-row class="el-btn b">
@@ -69,13 +69,20 @@ let beforeChange1 = (value1) => {
   }
   return value1;
 };
+const emit = defineEmits(["handleStart", "handleStop"]);
 const handleClk = () => {
-  console.log(answerDialogRef.value);
+  // console.log(answerDialogRef.value);
   answerDialogRef.value.show([]);
 };
 const handleClkItem = (index) => {
     console.log(index)
     soundDialogRef.value.show(index)
+}
+const handleStart = ()=> {
+  emit("handleStart");
+}
+const handleStop = ()=> {
+  emit("handleStop");
 }
 </script>
 

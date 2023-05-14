@@ -74,7 +74,7 @@
 <script setup lang="ts">
 import { ref,reactive } from "vue";
 import type { CSSProperties } from 'vue'
-import userApi from "@/serve/api/user";
+import { userApi } from "@/serve/api/user";
 const dialogVisible = ref(false);
 const soundIndex = ref(0);
 const radio1 = ref("1");

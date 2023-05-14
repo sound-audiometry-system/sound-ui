@@ -15,7 +15,7 @@ const router = createRouter({
     {
       path:'/',
       name:'home',
-      component: () => import('../views/vision/index.vue')
+      component: () => import('../views/vision/Index.vue')
     },
     {
       path:'/checkConfig',

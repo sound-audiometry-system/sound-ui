@@ -7,7 +7,7 @@ class Api {
  
   constructor(option: AxiosRequestConfig) {
     this.config = option
-    console.log(this.config, 'option')
+    // console.log(this.config, 'option')
     // 配置全局参数
     this.instance = axios.create(this.config)
     this.interceptors()
@@ -22,11 +22,11 @@ class Api {
         //   //  给data赋值以绕过if判断
         //   config.data = true
         // }
-        config.headers['Content-Type'] = 'application/json'
         // config.headers['Content-Type'] = 'application/json'
-        // removePending(config)
+        // config.headers['Content-Type'] = 'application/json'
+        removePending(config)
  
-        // addPending(config)
+        addPending(config)
  
         // const token = Local.get('ACCESS_TOKEN')
         // if (token) {
@@ -43,12 +43,13 @@ class Api {
  
     this.instance.interceptors.response.use(
       (response) => {
-        // removePending(response.config)
+        removePending(response.config)
  
         const res = response.data
-        if (res.code !== 1) {
-          ElMessage.error(res.msg)
-        }
+        // if (res.code !== 1) {
+        //   ElMessage.error(res.msg)
+        // }
+        // console.log(res.data)
         return res
       },
       (error) => {
@@ -59,11 +60,10 @@ class Api {
     )
   }
   async request<T = any>(config: AxiosRequestConfig): Promise<TResponseData<T>> {
-    console.log(config)
     return this.instance.request<TResponseData<T>, TResponseData<T>>(config)
   }
 }
-const baseUrl = 'http://192.168.2.114:8080/wxc/hy_saas_client_gateway/ym_fha'
+const baseUrl = 'https://8y401t989.imdo.co'
 const api = new Api({
   baseURL: baseUrl,
   timeout: 10 * 1000,
@@ -74,11 +74,11 @@ const api = new Api({
   //     return data;
   //   },
   // ],
-  headers: {
-    Accept: "application/json, text/plain, */*",
-    "Content-Type": "application/json",
-    "X-Requested-With": "XMLHttpRequest",
-  },
+  // headers: {
+  //   Accept: "application/json, text/plain, */*",
+  //   "Content-Type": "application/json",
+  //   "X-Requested-With": "XMLHttpRequest",
+  // },
 })
  
 export default api
