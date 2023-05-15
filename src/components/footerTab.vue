@@ -3,16 +3,16 @@
     <el-footer>
       <div
         class="footer-div"
-        :class="{ activeColor: active == 1 }"
-        @click="chooseItem(1)"
+        :class="{ activeColor: route.path == '/speaker' }"
+        @click="chooseItem(1, '/speaker')"
       >
         <Tickets class="icon" color="white" />
         <text class="font">听力测试</text>
       </div>
       <div
         class="footer-div"
-        :class="{ activeColor: active == 2 }"
-        @click="chooseItem(2)"
+        :class="{ activeColor: route.path == '/checkConfig' }"
+        @click="chooseItem(2, '/checkConfig')"
       >
         <Setting class="icon" color="white" />
         <text class="font">配置检查</text>
@@ -31,9 +31,13 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+const router = useRouter()
 const active = ref(1)
-const chooseItem = (val) => {
+const route = useRoute();
+const chooseItem = (val, route) => {
   active.value = val
+  router.push(route)
   //后续为头部切换页面
 }
 </script>

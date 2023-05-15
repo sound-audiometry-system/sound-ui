@@ -204,7 +204,7 @@ const handleNav = () => {
 };
 //加载测试数据
 // loadTestData()
-getUserInfo();
+// getUserInfo();
 
 //跳转到测试页面
 const toTest = (info) => {

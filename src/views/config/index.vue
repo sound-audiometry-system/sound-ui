@@ -6,7 +6,7 @@
         <el-tab-pane style="width: 590px" label="设备连接">
           <equipment />
         </el-tab-pane>
-        <el-tab-pane style="width: 590px" label="测试声音阈校准">
+        <el-tab-pane style="width: 100%" label="测试声音阈校准">
           <calibration></calibration>
         </el-tab-pane>
       </el-tabs>

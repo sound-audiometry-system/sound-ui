@@ -37,7 +37,7 @@ import { useRoute } from "vue-router";
 let value = ref("1");
 let isStart = false;
 const route = useRoute();
-const testData = JSON.parse(route.query.testData);
+const testData = route.query.testData ? JSON.parse(route.query.testData) : [];
 var rec;
 const startTest = async () => {
   //开始
