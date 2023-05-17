@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>test</title>
+    <style>
+        .img-list {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: space-around;
+        }
+
+        p {
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <a href="http://localhost:8080/ping">left</a>
+    <div id="imgList" class="img-list">
+
+    </div>
+    <script type="application/javascript">
+        var imgList = document.getElementById('imgList');
+        // var answerList = ['https://img2.baidu.com/it/u=2045218492,1693722965&fm=253&fmt=auto&app=120&f=JPEG?w=1354&h=800', 'https://img2.baidu.com/it/u=2045218492,1693722965&fm=253&fmt=auto&app=120&f=JPEG?w=1354&h=800', 'https://img2.baidu.com/it/u=2045218492,1693722965&fm=253&fmt=auto&app=120&f=JPEG?w=1354&h=800', 'https://img2.baidu.com/it/u=2045218492,1693722965&fm=253&fmt=auto&app=120&f=JPEG?w=1354&h=800'];
+        // var imgNode=document.createElement('img');
+
+        document.addEventListener('astilectron-ready', function () {
+            astilectron.onMessage(function (message) {
+                var childs = imgList.childNodes;
+                if (childs && childs.length > 1) {
+                    for (var i = childs.length - 1; i >= 0; i--) {
+                        imgList.removeChild(childs[i]);
+                    }
+                }
+                if (message.cmdType == 'imageDisplay') {
+                    for (let i = 0; i < message.answerList.length; i++) {
+                        var div = document.createElement('div');
+                        div.className = "box";
+                        imgList.appendChild(div);
+                    }
+                    for (let j = 0; j < message.answerList.length; j++) {
+                        var imgNode = document.createElement('img');
+                        var pNode = document.createElement('p')
+                        pNode.innerText = message.answerList[j]['label']
+                        pNode.style.textAlign = 'center';
+                        imgNode.style.width = "300px"
+                        imgNode.style.height = "300px"
+                        imgNode.src = message.answerList[j]['sourceUrl']
+                        if (document.getElementsByClassName('box').length > 0) {
+                            document.getElementsByClassName('box')[j].appendChild(imgNode);
+                            document.getElementsByClassName('box')[j].appendChild(pNode);
+                        }
+                    }
+                }
+            });
+        })
+    </script>
+</body>
+
+</html>
