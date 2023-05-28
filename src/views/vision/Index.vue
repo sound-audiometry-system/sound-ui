@@ -32,7 +32,7 @@
                 @blur="searchUser"
               >
                 <template #prepend>
-                  <el-button :icon="Search" />
+                  <el-button @click="searchUser" :icon="Search" />
                 </template>
               </el-input>
             </el-form-item>
@@ -141,7 +141,10 @@ import { ref, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router'
 import { userApi } from "@/serve/api/user";
-
+import { useStore } from 'vuex'
+// import { useStore } from '../../store'
+  let store = useStore();
+  // console.log()
 // const queryData = async () => {
 //     const res = await userApi.getPageData(params)
 // }
@@ -152,7 +155,7 @@ const form = reactive({})
 
 const chooseTypeVisble = ref(false);
 //定义输入的用户id
-const inputUserId = ref(1);
+const inputUserId = ref(null);
 //存储选择的用户信息
 const userInfo = ref({
   name: null,
@@ -190,6 +193,9 @@ const getUserInfo = async() => {
 const getUserPatient = async(uid: string | number) => {
   const res = await userApi.getUserPatient({ uid: uid });
   testData.value = res.data
+  store.commit("setTestData", res.data)
+  console.log(store)
+  // store['_mutations'].setTestData()
   // console.log(res, '2222222')
   // userSearchData.value = [res.data]
 };
@@ -197,9 +203,9 @@ const getUserPatient = async(uid: string | number) => {
 const handleNav = () => {
   chooseTypeVisble.value = false;
   const testArr = testData.value.filter(item=> item.id == testResult.value)
-  console.log(testArr)
+  store.commit("setTestData", testArr)
   // if (testResult.value == 1) {
-    router.push({ path: "/speaker", query: { testData: JSON.stringify(testArr[0]) } });
+    router.push({ path: "/speaker" });
   // }
 };
 //加载测试数据

@@ -25,7 +25,7 @@
   </el-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { auditionApi } from "@/serve/api/user";
 import * as echarts from "echarts";
 import userHeader from "../lay/MainHeader.vue";
@@ -34,14 +34,17 @@ import amplifierTest from "./amplifierTest.vue";
 import footer from "../../components/sound/index.vue";
 import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
+import { useStore, mapState } from 'vuex'
 let value = ref("1");
 let isStart = false;
+let store = useStore();
 const route = useRoute();
-const testData = route.query.testData ? JSON.parse(route.query.testData) : [];
+const testData = store.getters.getTestData
 var rec;
+console.log(testData)
 const startTest = async () => {
   //开始
-  const res = await auditionApi.startTest(testData);
+  const res = await auditionApi.startTest(testData[0]);
   if (res.code == 0) {
     isStart = true;
   }
@@ -97,6 +100,11 @@ const recStart = () => {
 const handleStart = () => {
   if (isStart) return;
   startTest();
+  document.addEventListener("astilectron-ready",  ()=> {
+    astilectron.onMessage((message)=> {
+      console.log(message);
+    });
+  });
 };
 const handleStop = () => {
   if (!isStart) return;
@@ -132,8 +140,8 @@ const handleStopAudio = () => {
     });
 }
 onMounted(() => {
-  document.addEventListener("astilectron-ready", function () {
-    astilectron.onMessage(function (message) {
+  document.addEventListener("astilectron-ready",  ()=> {
+    astilectron.onMessage((message)=> {
       console.log(message);
     });
   });

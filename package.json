@@ -13,8 +13,10 @@
     "element-plus": "^2.3.2",
     "node-sass": "^8.0.0",
     "production": "0.0.2",
+    "recorder-core": "^1.2.23020100",
     "vue": "^3.2.47",
-    "vue-router": "^4.1.6"
+    "vue-router": "^4.1.6",
+    "vuex": "^4.0.2"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",

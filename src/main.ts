@@ -18,8 +18,9 @@ import 'recorder-core/src/engine/mp3-engine' //如果此格式有额外的编码
 
 //可选的插件支持项
 import 'recorder-core/src/extensions/waveview'
-
+import store from './store'
 const app = createApp(App)
+app.use(store)
 app.use(Recorder);
 for (let icon in Icons) {
     app.component(icon, (Icons as any)[icon]) // （2） 全局注册

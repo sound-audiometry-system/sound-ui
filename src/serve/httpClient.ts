@@ -63,7 +63,8 @@ class Api {
     return this.instance.request<TResponseData<T>, TResponseData<T>>(config)
   }
 }
-const baseUrl = 'https://8y401t989.imdo.co'
+const baseUrl = 'http://192.168.2.171:8081'
+// const baseUrl = 'http://192.168.10.12:8081'
 const api = new Api({
   baseURL: baseUrl,
   timeout: 10 * 1000,

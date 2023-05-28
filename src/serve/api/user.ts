@@ -10,7 +10,7 @@ class UserApi {
    */
   getUserInfo(data: object) {
     return http.request<UserInfo>({
-      url: '/wxc/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/info',
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/info',
       method: 'POST',
       data,
       // headers: {
@@ -27,7 +27,7 @@ class UserApi {
    */
   getUserPatient(data: object) {
     return http.request<UserInfo>({
-      url: '/wxc/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/testList',
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/testList',
       method: 'POST',
       data,
     })
