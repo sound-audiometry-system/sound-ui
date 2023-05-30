@@ -3,10 +3,10 @@
     <el-main
       >标签页
       <el-tabs type="border-card">
-        <el-tab-pane style="width: 590px" label="设备连接">
+        <el-tab-pane style="width: 540px" label="设备连接">
           <equipment />
         </el-tab-pane>
-        <el-tab-pane style="width: 100%" label="测试声音阈校准">
+        <el-tab-pane style="width: 540px" label="测试声音阈校准">
           <calibration></calibration>
         </el-tab-pane>
       </el-tabs>
@@ -25,14 +25,14 @@ import calibration from "./calibration.vue";
 <style scoped lang="scss">
 .el-container {
   width: 1080px;
-  height: 800px;
+  height: 803px;
 
   .el-main {
     height: 655px;
     padding: 0px;
 
     .el-tabs {
-      height: 740px;
+      height: 715px;
       :deep(.el-tabs__item) {
         width: 590px;
       }
