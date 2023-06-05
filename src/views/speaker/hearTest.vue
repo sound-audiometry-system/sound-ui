@@ -1,67 +1,176 @@
 <template>
-    <el-form-item label="测试名称">
-        <el-input disabled v-model="testName" />
-    </el-form-item>
-    <el-container>
-        <el-aside>
-            <div class="es-switch">
-                <span><el-switch v-model="value1" :before-change="beforeChange1" />
-                    <label style="font-size: 16px;">左显示器</label></span>
-                <span><el-switch v-model="value2" class="ml-2" /><label>右显示器</label> </span>
-            </div>
-            <div style="margin-left: 10px; width: 320px;height: 240px; background-color: #000;"></div>
+  <el-form-item label="测试名称">
+    <el-input disabled v-model="testName" />
+  </el-form-item>
+  <el-container>
+    <el-aside>
+      <div class="es-switch">
+        <span
+          ><el-switch v-model="value1" :before-change="beforeChange1" />
+          <label style="font-size: 16px">左显示器</label></span
+        >
+        <span
+          ><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
+        </span>
+      </div>
+      <div
+        style="
+          margin-left: 10px;
+          width: 420px;
+          height: 240px;
+          padding: 0 6px;
+          display: flex;
+        "
+      >
+        <el-row style="background-color: #000;width: 82%;height: 100%;align-items: center;" align="center" :gutter="10">
+          <el-col
+            v-for="(item, index) in props.imageData.answerList"
+            :key="item.id"
+            :span="8"
+          >
+            <el-image
+              @click="checkedImg(index)"
+              style="width: 100%; height: 160px"
+              :src="item.sourceUrl"
+              :fit="item.label"
+            />
+          </el-col>
+        </el-row>
+        <div style="width: 18%;margin-left: 10px;">
+          <p>测试总数</p>
+          <div class="test-total-box">20</div>
+          <div style="margin-top: 10px;"><el-switch v-model="value1" :before-change="beforeChange1" /></div>
+          <p style="font-size: 12px;">同时打开两边显示器</p>
+        </div>
+      </div>
 
-            <el-row class="error-a">
-                <label style="margin-left: 5px;font-size: large;">错误走向</label>
-                <el-button size="small" style="margin-right: 5px;"><el-icon style="color: red;margin-right: 2px;">
-                        <CircleClose />
-                    </el-icon>错误</el-button>
-                <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
-            </el-row>
-            <el-row style="margin-left: 10px; width: 400px;height: 200px; background-color: #8cdcfe;">
-                错误展示
-            </el-row>
-        </el-aside>
+      <el-row class="error-a">
+        <label style="margin-left: 5px; font-size: large">错误走向</label>
+        <el-button size="small" style="margin-right: 5px"
+          ><el-icon style="color: red; margin-right: 2px">
+            <CircleClose /> </el-icon
+          >错误</el-button
+        >
+        <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
+      </el-row>
+      <el-row
+        :gutter="10"
+        style="
+          margin-left: 10px;
+          width: 400px;
+          height: 200px;
+          background-color: #8cdcfe;
+          padding-top: 6px;
+        "
+      >
+        <el-col
+          v-for="(item, index) in props.imageData.answerList"
+          :key="item.id"
+          :span="8"
+        >
+          <el-image
+            :class="{
+              'is-checked-img-error':
+                item.isCheckFlag && index + 1 != item.target,
+              'is-checked-img-success':
+                item.isCheckFlag && index + 1 == props.imageData.target,
+            }"
+            style="width: 100%; height: 160px"
+            :src="item.sourceUrl"
+            :fit="item.label"
+          />
+          <div style="text-align: center">
+            <el-icon
+              v-if="item.isCheckFlag && index + 1 != props.imageData.target"
+              style="color: red; font-size: 26px; margin: 0 auto"
+              ><CircleClose
+            /></el-icon>
+            <el-icon
+              v-if="item.isCheckFlag && index + 1 == props.imageData.target"
+              style="color: green; font-size: 26px"
+              ><CircleCheck
+            /></el-icon>
+          </div>
+        </el-col>
+      </el-row>
+    </el-aside>
 
-        <el-main>
-            <el-button @click="handleAudio" style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>开启录音</el-button><el-button @click="handleStopAudio" style="margin: 3px 0px 5px 0px;" link><el-icon style="margin-right: 2px;" circle ><Microphone /></el-icon>结束录音</el-button>
-            <div style="height: 280px;width: 465px;"><sound @handleClkItem="handleClkItem"></sound></div>
-            <el-row class="el-btn a">
-                <el-button size="small" @click="handleStart">开始</el-button>
-                <el-button size="small" @click="handleStop">保存</el-button>
-                <el-button size="small" @click="handleStop">保存并生成记录</el-button>
-                <el-button size="small" @click="handleStop">提前结束</el-button>
-                <el-button size="small">测试文件</el-button>
-            </el-row>
-            <el-row class="el-btn b">
-                <el-button size="small">上一个</el-button><el-button size="small">下一个</el-button><el-button
-                    size="small">重复</el-button>
-            </el-row>
-            <el-row>
-                <div style="height: 110px;width: 465px;background-color: #E9E9E9;padding: 12px 20px;">
-                <div style="display: flex;justify-content: space-between;margin-bottom: 16px;align-items: center;"><span style="font-weight: bold;">答题进度</span><span style="font-size: 12px;" @click="handleClk">查看全部<el-icon><CaretRight /></el-icon></span></div>
-                <div style="height: 24px;overflow: hidden;"><span v-for="(item, index) in 20" :key="index" :class="{'answer-num': true, 'success-active': index === 0 || index === 1, 'error-active': index===2 || index===3}">{{ index+1 }}</span></div>
-                </div>
-            </el-row>
-        </el-main>
-        <answer-dialog ref="answerDialogRef"></answer-dialog>
-        <sound-dialog ref="soundDialogRef"></sound-dialog>
-    </el-container>
+    <el-main>
+      <el-button @click="handleAudio" style="margin: 3px 0px 5px 0px" link
+        ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
+        >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
+      >
+      <div style="height: 280px; width: 465px">
+        <sound @handleClkItem="handleClkItem"></sound>
+      </div>
+      <el-row class="el-btn a">
+        <el-button size="small" @click="handleStart">开始</el-button>
+        <el-button size="small" @click="handleStop">保存</el-button>
+        <el-button size="small" @click="handleStop">保存并生成记录</el-button>
+        <el-button size="small" @click="handleStop">提前结束</el-button>
+        <el-button size="small">测试文件</el-button>
+      </el-row>
+      <el-row class="el-btn b">
+        <el-button @click="handlePrev" size="small">上一个</el-button
+        ><el-button @click="handleNext" size="small">下一个</el-button
+        ><el-button @click="handleReImage" size="small">重复</el-button>
+      </el-row>
+      <el-row>
+        <div
+          style="
+            height: 110px;
+            width: 465px;
+            background-color: #e9e9e9;
+            padding: 12px 20px;
+          "
+        >
+          <div
+            style="
+              display: flex;
+              justify-content: space-between;
+              margin-bottom: 16px;
+              align-items: center;
+            "
+          >
+            <span style="font-weight: bold">答题进度</span
+            ><span style="font-size: 12px" @click="handleClk"
+              >查看全部<el-icon><CaretRight /></el-icon
+            ></span>
+          </div>
+          <div style="height: 24px; overflow: hidden">
+            <span
+              v-for="(item, index) in 20"
+              :key="index"
+              :class="{
+                'answer-num': true,
+                'success-active': index === 0 || index === 1,
+                'error-active': index === 2 || index === 3,
+              }"
+              >{{ index + 1 }}</span
+            >
+          </div>
+        </div>
+      </el-row>
+    </el-main>
+    <answer-dialog ref="answerDialogRef"></answer-dialog>
+    <sound-dialog ref="soundDialogRef"></sound-dialog>
+  </el-container>
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { Edit, CircleClose } from "@element-plus/icons-vue";
+import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
 import sound from "../../components/sound/index.vue";
+import { auditionApi } from "@/serve/api/user";
 let testName = ref("儿童视觉测试");
-const answerDialogRef = ref(null);
-const soundDialogRef = ref(null);
+const answerDialogRef = ref(null) as any;
+const soundDialogRef = ref(null) as any;
 let value1 = ref(true);
 let value2 = ref(true);
+let isOpen = ref(false)
 // answerDialogRef.value.show([])
 let beforeChange1 = (value1) => {
-  console.info(111);
   if (value1) {
     value1 = false;
   } else {
@@ -69,27 +178,68 @@ let beforeChange1 = (value1) => {
   }
   return value1;
 };
-const emit = defineEmits(["handleStart", "handleStop", "handleAudio","handleStopAudio"]);
+type Props = {
+  imageData: any;
+};
+const emit = defineEmits([
+  "handleStart",
+  "handleStop",
+  "handleAudio",
+  "handleStopAudio",
+]);
+const props = defineProps<Props>();
+console.log(props);
+const isCheckFlag = ref(false);
 const handleClk = () => {
   // console.log(answerDialogRef.value);
   answerDialogRef.value.show([]);
 };
 const handleClkItem = (index) => {
-    console.log(index)
-    soundDialogRef.value.show(index)
-}
-const handleStart = ()=> {
+  soundDialogRef.value.show(index);
+};
+const handleStart = () => {
   emit("handleStart");
-}
-const handleStop = ()=> {
+};
+const handleStop = () => {
   emit("handleStop");
-}
-const handleAudio = ()=> {
-  emit("handleAudio");
-}
-const handleStopAudio = ()=> {
+};
+const handleAudio = () => {
+  isOpen.value = !isOpen.value;
+  emit(isOpen.value ? "handleAudio" : "handleStopAudio");
+};
+const handleStopAudio = () => {
   emit("handleStopAudio");
-}
+};
+// 上一个
+const handlePrev = async () => {
+  const res = await auditionApi.prevTest();
+  if (res.code == 0) {
+    isCheckFlag.value = false;
+  }
+};
+// 下一个
+const handleNext = async () => {
+  const res = await auditionApi.nextTest();
+  if (res.code == 0) {
+    isCheckFlag.value = false;
+  }
+};
+// 重复
+const handleReImage = async () => {
+  const res = await auditionApi.reImageTest();
+  if (res.code == 0) {
+    isCheckFlag.value = false;
+  }
+};
+const checkedImg = (index) => {
+  if (isCheckFlag.value == true) return
+  isCheckFlag.value = true;
+  props.imageData.answerList[index].isCheckFlag = true;
+  // if (index + 1 != props.imageData.target) {
+  //   // isCheckFlag.value = true
+  //   // props.imageData.answerList[index].isCheckFlag = false
+  // }
+};
 </script>
 
 <style lang="scss" scoped>
@@ -166,5 +316,21 @@ const handleStopAudio = ()=> {
 .error-active {
   background-color: #d63639;
   color: #fff;
+}
+.is-checked-img-error {
+  border: 1px solid red;
+}
+.is-checked-img-success {
+  border: 1px solid green;
+}
+.test-total-box {
+  width: 84px;
+height: 30px;
+line-height: 30px;
+background: #EDEDED;
+border: 1px solid #CBCBCB;
+border-radius: 3px;
+text-align: center;
+margin-top: 6px;
 }
 </style>

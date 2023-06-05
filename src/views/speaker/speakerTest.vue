@@ -4,7 +4,7 @@
     <el-header>
       <userHeader></userHeader>
     </el-header>
-    <el-main>
+    <el-main ref="main">
       <el-tabs type="border-card">
         <el-tab-pane label="扬声器测听">
           <!-- echarts图表 -->
@@ -13,6 +13,7 @@
         </el-tab-pane>
         <el-tab-pane label="听力测试">
           <hearTest
+            :imageData="imageData"
             @handleStart="handleStart"
             @handleStop="handleStop"
             @handleAudio="handleAudio"
@@ -25,7 +26,7 @@
   </el-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, computed } from "vue";
+import { onMounted, ref, computed, watch, reactive } from "vue";
 import { auditionApi } from "@/serve/api/user";
 import * as echarts from "echarts";
 import userHeader from "../lay/MainHeader.vue";
@@ -34,14 +35,35 @@ import amplifierTest from "./amplifierTest.vue";
 import footer from "../../components/sound/index.vue";
 import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
-import { useStore, mapState } from 'vuex'
+import { useStore, mapState } from "vuex";
 let value = ref("1");
 let isStart = false;
 let store = useStore();
 const route = useRoute();
-const testData = store.getters.getTestData
+const testData = store.getters.getTestData;
+const main = ref();
+let imageData = {};
+if (localStorage.getItem("imageData")) {
+  imageData = reactive(JSON.parse(localStorage.getItem("imageData") || ""));
+}
+if (imageData.answerList && imageData.answerList.length != 0) {
+  for (const item of imageData.answerList) {
+    item.isCheckFlag = false;
+  }
+}
 var rec;
-console.log(testData)
+// console.log(testData);
+//计算属性——完整
+// let imageData = computed({
+//   // 读
+//   get() {
+//     return localStorage.getItem('imageData') ? JSON.parse(localStorage.getItem('imageData') || '') : [];
+//   },
+//   // 写
+//   set(value) {
+//     console.log(value)
+//   },
+// });
 const startTest = async () => {
   //开始
   const res = await auditionApi.startTest(testData[0]);
@@ -56,6 +78,19 @@ const stopTest = async () => {
     isStart = false;
   }
 };
+document.addEventListener(
+  "astilectron-ready",
+  () => {
+    // console.log(1111111);
+    astilectron.onMessage((message) => {
+      console.log(message);
+    });
+  },
+  true
+);
+window.addEventListener("resize", () => {
+  console.log(22222);
+});
 const recOpen = () => {
   rec = Recorder({
     //本配置参数请参考下面的文档，有详细介绍
@@ -80,9 +115,13 @@ const recOpen = () => {
   //var dialog=createDelayDialog(); 我们可以选择性的弹一个对话框：为了防止移动端浏览器存在第三种情况：用户忽略，并且（或者国产系统UC系）浏览器没有任何回调，此处demo省略了弹窗的代码
   rec.open(
     function (success) {
+      ElMessage({
+        message: "已开启录音",
+        type: "success",
+      });
       //打开麦克风授权获得相关资源
       //dialog&&dialog.Cancel(); 如果开启了弹框，此处需要取消
-      rec.start() //此处可以立即开始录音，但不建议这样编写，因为open是一个延迟漫长的操作，通过两次用户操作来分别调用open和start是推荐的最佳流程
+      rec.start(); //此处可以立即开始录音，但不建议这样编写，因为open是一个延迟漫长的操作，通过两次用户操作来分别调用open和start是推荐的最佳流程
 
       success && success();
     },
@@ -100,11 +139,11 @@ const recStart = () => {
 const handleStart = () => {
   if (isStart) return;
   startTest();
-  document.addEventListener("astilectron-ready",  ()=> {
-    astilectron.onMessage((message)=> {
-      console.log(message);
-    });
-  });
+  // document.addEventListener("astilectron-ready",  ()=> {
+  //   astilectron.onMessage((message)=> {
+  //     console.log(message);
+  //   });
+  // });
 };
 const handleStop = () => {
   if (!isStart) return;
@@ -112,38 +151,62 @@ const handleStop = () => {
 };
 
 const handleAudio = async () => {
-  await recOpen()
+  await recOpen();
   // recStart()
 };
 const handleStopAudio = () => {
-  rec.stop(function(blob,duration){
-        
-        //简单利用URL生成本地文件地址，注意不用了时需要revokeObjectURL，否则霸占内存
-        //此地址只能本地使用，比如赋值给audio.src进行播放，赋值给a.href然后a.click()进行下载（a需提供download="xxx.mp3"属性）
-        var localUrl=(window.URL||webkitURL).createObjectURL(blob);
-        console.log(blob,localUrl,"时长:"+duration+"ms");
-        rec.close();//释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
-        rec=null;
-        
-        //已经拿到blob文件对象想干嘛就干嘛：立即播放、上传、下载保存
-        
-        /*** 【立即播放例子】 ***/
-        var audio=document.createElement("audio");
-        audio.controls=true;
-        document.body.appendChild(audio);
-        audio.src=localUrl;
-        audio.play();
-    },function(msg){
-        console.log("录音失败:"+msg);
-        rec.close();//可以通过stop方法的第3个参数来自动调用close
-        rec=null;
-    });
-}
+  rec.stop(
+    async function (blob, duration) {
+      //简单利用URL生成本地文件地址，注意不用了时需要revokeObjectURL，否则霸占内存
+      //此地址只能本地使用，比如赋值给audio.src进行播放，赋值给a.href然后a.click()进行下载（a需提供download="xxx.mp3"属性）
+      console.log(blob);
+      var localUrl = (window.URL || webkitURL).createObjectURL(blob);
+      console.log(blob, localUrl, "时长:" + duration + "ms");
+      rec.close(); //释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
+      rec = null;
+
+      //已经拿到blob文件对象想干嘛就干嘛：立即播放、上传、下载保存
+      const formData = new FormData();
+      formData.append("upfile", blob, "test.mp3");
+      formData.append("resourceId", testData[0].id);
+      console.log(formData.get("upfile"), "upfile");
+      console.log(formData.get("resourceId"), "resourceId");
+      const res = await auditionApi.fileUpload(formData);
+      ElMessage({
+        message: "录音关闭",
+        type: "success",
+      });
+      /*** 【立即播放例子】 ***/
+      var audio = document.createElement("audio");
+      audio.controls = true;
+      document.body.appendChild(audio);
+      audio.src = localUrl;
+      audio.play();
+    },
+    function (msg) {
+      console.log("录音失败:" + msg);
+      rec.close(); //可以通过stop方法的第3个参数来自动调用close
+      rec = null;
+    }
+  );
+};
 onMounted(() => {
-  document.addEventListener("astilectron-ready",  ()=> {
-    astilectron.onMessage((message)=> {
-      console.log(message);
-    });
+  //   document.removeEventListener("astilectron-ready", ()=> {
+  // })
+  //   document.addEventListener("astilectron-ready",  ()=> {
+  //     astilectron.onMessage((message)=> {
+  //       console.log(message);
+  //     });
+  //   });
+  // console.log(main.value.$refs)
+  const imageData: any = ref(
+    JSON.stringify(localStorage.getItem("imageData") || "")
+  );
+  window.addEventListener("setItemEvent", function (e: any) {
+    if (e.key === "imageData") {
+      console.log(imageData);
+      console.log(imageData.value);
+    }
   });
 });
 </script>

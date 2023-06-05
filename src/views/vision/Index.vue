@@ -63,7 +63,8 @@
         </div>
       </div>
     </el-main>
-    <el-footer>
+    <footer-tab></footer-tab>
+    <!-- <el-footer>
       <div
         class="footer-div"
         :class="{ activeColor: active == 1 }"
@@ -88,7 +89,7 @@
         <Monitor class="icon" color="white" />
         <text class="font">言语实景模拟</text>
       </div>
-    </el-footer>
+    </el-footer> -->
     <el-dialog
       v-model="chooseTypeVisble"
       width="40%"
@@ -131,7 +132,7 @@
         <el-button color="#f2f3f5" @click="chooseTypeVisble = false"
           >取消</el-button
         >
-        <el-button color="rgb(180,190,90)" @click="handleNav">确定</el-button>
+        <el-button color="#208571" @click="handleNav">确定</el-button>
       </template>
     </el-dialog>
   </el-container>
@@ -142,10 +143,11 @@ import { Search } from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router'
 import { userApi } from "@/serve/api/user";
 import { useStore } from 'vuex'
+import footerTab from "../../components/footerTab.vue";
 // import { useStore } from '../../store'
   let store = useStore();
   // console.log()
-// const queryData = async () => {
+// const queryData = async () => { 
 //     const res = await userApi.getPageData(params)
 // }
  const router = useRouter()
@@ -249,7 +251,7 @@ const chooseItem = (val) => {
 }
 
 .activeColor {
-  background-color: rgb(180, 190, 90);
+  background-color: #C7D8D4;
 
   .icon {
     color: rgb(30, 25, 25);
@@ -265,7 +267,7 @@ const chooseItem = (val) => {
   height: 800px;
 
   .el-header {
-    background-color: rgb(180, 190, 90);
+    background-color: #208571;
   }
 
   .el-footer {

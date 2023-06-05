@@ -81,6 +81,7 @@ const initChart = () => {
         type: "line",
         stack: "Total",
         data: [120, 132, 101, 134, 90, 230, 210],
+        // symbol: 'triangle',
         itemStyle: {
           normal: {
             color: "#A01616",
