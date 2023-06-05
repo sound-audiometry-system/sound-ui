@@ -6,6 +6,7 @@ import './assets/main.css'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import * as Icons from '@element-plus/icons-vue' // （1）引入
+import './styles/index.scss'
 //必须引入的核心，换成require也是一样的。注意：recorder-core会自动往window下挂载名称为Recorder对象，全局可调用window.Recorder，也许可自行调整相关源码清除全局污染
 import Recorder from 'recorder-core'
 
@@ -19,7 +20,10 @@ import 'recorder-core/src/engine/mp3-engine' //如果此格式有额外的编码
 //可选的插件支持项
 import 'recorder-core/src/extensions/waveview'
 import store from './store'
+import {dispatchEventStroage} from '@/utils/index.ts'
+  
 const app = createApp(App)
+app.use(dispatchEventStroage);
 app.use(store)
 app.use(Recorder);
 for (let icon in Icons) {

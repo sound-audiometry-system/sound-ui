@@ -1,6 +1,6 @@
 import http from '../httpClient'
 import { PageData } from './types/request'
-import { UserInfo } from './types/dataType'
+import { UserInfo, FileUploadInfo } from './types/dataType'
 
 class UserApi {
     /**
@@ -8,8 +8,8 @@ class UserApi {
    * @param params 查询参数
    * @returns
    */
-  getUserInfo(data: object) {
-    return http.request<UserInfo>({
+  getUserInfo(data: UserInfo) {
+    return http.request({
       url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/info',
       method: 'POST',
       data,
@@ -25,8 +25,8 @@ class UserApi {
    * @param data 查询参数
    * @returns
    */
-  getUserPatient(data: object) {
-    return http.request<UserInfo>({
+  getUserPatient(data: UserInfo) {
+    return http.request({
       url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/testList',
       method: 'POST',
       data,
@@ -40,7 +40,7 @@ class AuditionApi {
    * @param data 传递参数
    * @returns
   */
-  startTest(data: object) {
+  startTest(data: any) {
     return http.request({
       url: '/native/play',
       method: 'POST',
@@ -58,6 +58,58 @@ class AuditionApi {
       url: '/native/stop',
       method: 'POST',
     })
+  }
+
+  /** 
+   * 上一个
+   * @param 无参数
+   * @returns
+  */
+  prevTest() {
+    return http.request({
+      url: '/native/prevImageShow',
+      method: 'POST',
+    })
+  }
+
+  /** 
+   * 下一个
+   * @param 无参数
+   * @returns
+  */
+  nextTest(data) {
+    return http.request({
+      url: '/native/nextImageShow',
+      method: 'POST',
+    })
+  }
+
+  /** 
+   * 重播
+   * @param 无参数
+   * @returns
+  */
+  reImageTest() {
+    return http.request({
+      url: '/native/reImageShow',
+      method: 'POST',
+    }) 
+  }
+
+  /** 
+   * 录音文件上传
+   * @param resourceId
+   * @returns
+  */
+  fileUpload(data: any) {
+    return http.request({
+      url: '/native/fileupload',
+      method: 'POST',
+      data,
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    }) 
   }
 }
 

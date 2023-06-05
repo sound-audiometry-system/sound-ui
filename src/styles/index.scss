@@ -1,0 +1,14 @@
+.el-tabs__nav {
+    width: 100%;
+    .el-tabs__item {
+      width: 50%;
+      &.is-active {
+        background-color: #208571 !important;
+        color: #fff !important;
+      }
+    }
+  }
+  .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+    background-color: #208571;
+    color: #fff
+  }

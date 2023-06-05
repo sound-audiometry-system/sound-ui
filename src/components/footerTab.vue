@@ -50,7 +50,7 @@ const chooseItem = (val, route) => {
     align-items: center;
   }
   .activeColor {
-  background-color: rgb(180, 190, 90);
+  background-color: #C7D8D4;
 
   .icon {
     color: rgb(30, 25, 25)

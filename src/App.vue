@@ -13,6 +13,7 @@ body,
   margin-top: 0px;
   margin-left: 0px;
   border-top: 1px solid var(--el-border-color);
-  border-radius: 4px
+  border-radius: 4px;
+  height: 100vh;
 }
 </style>
