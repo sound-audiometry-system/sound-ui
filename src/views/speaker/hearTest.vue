@@ -38,7 +38,7 @@
         </el-row>
         <div style="width: 18%;margin-left: 10px;">
           <p>测试总数</p>
-          <div class="test-total-box">20</div>
+          <div class="test-total-box">{{ answerMarks ? answerMarks.length  : 0 }}</div>
           <div style="margin-top: 10px;"><el-switch v-model="value1" :before-change="beforeChange1" /></div>
           <p style="font-size: 12px;">同时打开两边显示器</p>
         </div>
@@ -71,7 +71,7 @@
           <el-image
             :class="{
               'is-checked-img-error':
-                item.isCheckFlag && index + 1 != item.target,
+                item.isCheckFlag && index + 1 != props.imageData.target,
               'is-checked-img-success':
                 item.isCheckFlag && index + 1 == props.imageData.target,
             }"
@@ -139,12 +139,12 @@
           </div>
           <div style="height: 24px; overflow: hidden">
             <span
-              v-for="(item, index) in 20"
+              v-for="(item, index) in answerMarks"
               :key="index"
               :class="{
-                'answer-num': true,
-                'success-active': index === 0 || index === 1,
-                'error-active': index === 2 || index === 3,
+                'answer-num': item.answerMark == 1,
+                'success-active': item.answerMark == 2,
+                'error-active': item.answerMark == 3,
               }"
               >{{ index + 1 }}</span
             >
@@ -163,12 +163,20 @@ import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
+import { useStore, mapState } from "vuex";
+let store = useStore();
+const testData = store.getters.getTestData;
 let testName = ref("儿童视觉测试");
 const answerDialogRef = ref(null) as any;
 const soundDialogRef = ref(null) as any;
 let value1 = ref(true);
 let value2 = ref(true);
 let isOpen = ref(false)
+const answerMarks = testData.answerList.map(item=> {
+  return {
+    answerMark: 1
+  }
+})
 // answerDialogRef.value.show([])
 let beforeChange1 = (value1) => {
   if (value1) {
@@ -180,6 +188,7 @@ let beforeChange1 = (value1) => {
 };
 type Props = {
   imageData: any;
+  answerIndex: any;
 };
 const emit = defineEmits([
   "handleStart",
@@ -188,7 +197,6 @@ const emit = defineEmits([
   "handleStopAudio",
 ]);
 const props = defineProps<Props>();
-console.log(props);
 const isCheckFlag = ref(false);
 const handleClk = () => {
   // console.log(answerDialogRef.value);
@@ -215,6 +223,7 @@ const handlePrev = async () => {
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
+    props.answerIndex.value--
   }
 };
 // 下一个
@@ -222,6 +231,7 @@ const handleNext = async () => {
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
+    props.answerIndex.value++
   }
 };
 // 重复
@@ -235,6 +245,7 @@ const checkedImg = (index) => {
   if (isCheckFlag.value == true) return
   isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
+  index + 1 == props.imageData.target ? answerMarks[props.answerIndex.value].answerMark = 2 : answerMarks[props.answerIndex.value].answerMark = 3
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
   //   // props.imageData.answerList[index].isCheckFlag = false

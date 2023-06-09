@@ -14,6 +14,7 @@
         <el-tab-pane label="听力测试">
           <hearTest
             :imageData="imageData"
+            :answerIndex="answerIndex"
             @handleStart="handleStart"
             @handleStop="handleStop"
             @handleAudio="handleAudio"
@@ -43,14 +44,7 @@ const route = useRoute();
 const testData = store.getters.getTestData;
 const main = ref();
 let imageData = {};
-if (localStorage.getItem("imageData")) {
-  imageData = reactive(JSON.parse(localStorage.getItem("imageData") || ""));
-}
-if (imageData.answerList && imageData.answerList.length != 0) {
-  for (const item of imageData.answerList) {
-    item.isCheckFlag = false;
-  }
-}
+let answerIndex = ref(0); // 答题进度索引
 var rec;
 // console.log(testData);
 //计算属性——完整
@@ -199,13 +193,24 @@ onMounted(() => {
   //     });
   //   });
   // console.log(main.value.$refs)
-  const imageData: any = ref(
-    JSON.stringify(localStorage.getItem("imageData") || "")
-  );
+  // const imageData: any = ref(
+  //   JSON.stringify(localStorage.getItem("imageData") || "")
+  // );
   window.addEventListener("setItemEvent", function (e: any) {
     if (e.key === "imageData") {
-      console.log(imageData);
-      console.log(imageData.value);
+      answerIndex.value += 1;
+      if (localStorage.getItem("imageData")) {
+        imageData = reactive(
+          JSON.parse(localStorage.getItem("imageData") || "")
+        );
+      }
+      if (imageData.answerList && imageData.answerList.length != 0) {
+        for (const item of imageData.answerList) {
+          item.isCheckFlag = false;
+        }
+      }
+      // console.log(imageData);
+      // console.log(imageData.value);
     }
   });
 });
