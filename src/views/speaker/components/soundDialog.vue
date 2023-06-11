@@ -162,7 +162,7 @@ defineExpose({
 }
 .answer-box {
   width: 100%;
-  // padding: 20px;
+  padding-bottom: 20px;
   /* background-color: #f1f1f1; */
   height: 300px;
 }
