@@ -6,7 +6,7 @@
     :before-close="handleClose"
   >
     <span class="answer-box">
-        <span v-for="(item, index) in 20" class="answer-num">{{ index+1 }}</span>
+        <span v-for="(item, index) in props.answerMarks" class="answer-num">{{ index+1 }}</span>
     </span>
     <!-- <template #footer>
       <span class="dialog-footer">
@@ -21,7 +21,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-
+type Props = {
+  answerMarks: any;
+};
+const props = defineProps<Props>();
 const dialogVisible = ref(false);
 
 const handleClose = (done: () => void) => {

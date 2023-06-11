@@ -152,12 +152,12 @@
         </div>
       </el-row>
     </el-main>
-    <answer-dialog ref="answerDialogRef"></answer-dialog>
+    <answer-dialog ref="answerDialogRef" :answerMarks="answerMarks"></answer-dialog>
     <sound-dialog ref="soundDialogRef"></sound-dialog>
   </el-container>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
@@ -166,17 +166,20 @@ import { auditionApi } from "@/serve/api/user";
 import { useStore, mapState } from "vuex";
 let store = useStore();
 const testData = store.getters.getTestData;
-let testName = ref("儿童视觉测试");
+let testName = ref(testData[0].name);
 const answerDialogRef = ref(null) as any;
 const soundDialogRef = ref(null) as any;
 let value1 = ref(true);
 let value2 = ref(true);
 let isOpen = ref(false)
-const answerMarks = testData.answerList.map(item=> {
+console.log(testData, 'testData')
+// console.log(testData.commands, 'testData')
+const answerMarks = testData[0].commands.map(item=> {
   return {
     answerMark: 1
   }
 })
+console.log(answerMarks, 'answerMarks')
 // answerDialogRef.value.show([])
 let beforeChange1 = (value1) => {
   if (value1) {
@@ -197,6 +200,10 @@ const emit = defineEmits([
   "handleStopAudio",
 ]);
 const props = defineProps<Props>();
+let answerIndex = props.answerIndex
+watch(props.imageData, (newValue,oldValue)=> {
+  isCheckFlag.value = false;
+},{ deep: true })
 const isCheckFlag = ref(false);
 const handleClk = () => {
   // console.log(answerDialogRef.value);
@@ -223,7 +230,7 @@ const handlePrev = async () => {
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    props.answerIndex.value--
+    answerIndex--
   }
 };
 // 下一个
@@ -231,7 +238,7 @@ const handleNext = async () => {
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    props.answerIndex.value++
+    answerIndex++
   }
 };
 // 重复
@@ -245,7 +252,7 @@ const checkedImg = (index) => {
   if (isCheckFlag.value == true) return
   isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
-  index + 1 == props.imageData.target ? answerMarks[props.answerIndex.value].answerMark = 2 : answerMarks[props.answerIndex.value].answerMark = 3
+  index + 1 == props.imageData.target ? answerMarks[answerIndex].answerMark = 2 : answerMarks[answerIndex].answerMark = 3
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
   //   // props.imageData.answerList[index].isCheckFlag = false

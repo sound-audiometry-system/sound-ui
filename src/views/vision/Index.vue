@@ -47,7 +47,7 @@
               <Female class="icon" v-if="item.gender == 1" />
               <Male class="icon" v-else />
               <text
-                style="margin-left: 4%; font-size: revert; font-weight: bold;width: 80%"
+                style="margin-left: 2px; font-size: revert; font-weight: bold;width: 80%"
                 >{{ item.name }}</text
               >
             </div>
@@ -108,7 +108,7 @@
           <div style="margin-left: 2%; display: flex; align-items: center">
             <Female width="1.2em" height="1.2em" v-if="userInfo.gender == 1" />
             <Male width="1.2em" height="1.2em" v-else />
-            <text style="margin-left: 1%; font-weight: bold">{{
+            <text style="font-weight: bold">{{
               userInfo.name
             }}</text>
           </div>
@@ -216,7 +216,7 @@ const handleNav = () => {
 
 //跳转到测试页面
 const toTest = (info) => {
-  inputUserId.value = info.name;
+  // inputUserId.value = info.name;
   userInfo.value = info;
   getUserPatient(info.uid)
   chooseTypeVisble.value = true;
