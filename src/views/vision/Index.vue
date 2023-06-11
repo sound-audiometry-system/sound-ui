@@ -204,6 +204,7 @@ const getUserPatient = async(uid: string | number) => {
 
 const handleNav = () => {
   chooseTypeVisble.value = false;
+  localStorage.setItem("userInfo", JSON.stringify(userSearchData.value))
   const testArr = testData.value.filter(item=> item.id == testResult.value)
   store.commit("setTestData", testArr)
   // if (testResult.value == 1) {
@@ -218,6 +219,7 @@ const handleNav = () => {
 const toTest = (info) => {
   // inputUserId.value = info.name;
   userInfo.value = info;
+  console.log(info)
   getUserPatient(info.uid)
   chooseTypeVisble.value = true;
 };
