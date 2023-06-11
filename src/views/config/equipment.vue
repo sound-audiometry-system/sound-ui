@@ -4,7 +4,7 @@
     <el-col :span="24" style="display: flex;">
       <div style="width: 1040px">
         <label>测试前连接</label>
-        <button type="button">连接</button>
+        <button type="button" @click ="buttClick">连接</button>
       </div>
     </el-col>
   </el-row>
@@ -50,8 +50,21 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import sound from "../../components/sound/index.vue";
+import { auditionApi } from "@/serve/api/user";
+let buttClick = async ()=>{
+  const res = await auditionApi.getDevice()
+  if (res.code == 0) {
+    var deviceset = new Set()
+    res.list.forEach(item=>{
+      deviceset.add(item.substring(0,2))
+    })
+    console.info(deviceset)
+    //渲染已连接的音箱
+  }
+}
 let getBgc = (idex) => {
-  if (idex == 1 || idex == 6) {
+  
+  if (idex == 0 || idex == 6) {
     return "#ffffff";
   }
   if (idex < 6 && idex > 1) {
