@@ -12,7 +12,7 @@
     <el-aside width="540px">
       <el-row style="height: 375px;width: 525px;">
         <el-col :span="24">
-          <sound></sound>
+          <sound :sounds="deviceset"></sound>
         </el-col>
       </el-row>
       <el-row class="xxx-a">
@@ -48,17 +48,18 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, reactive } from "vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
+var deviceset = []
 let buttClick = async ()=>{
   const res = await auditionApi.getDevice()
   if (res.code == 0) {
-    var deviceset = new Set()
-    res.list.forEach(item=>{
-      deviceset.add(item.substring(0,2))
-    })
-    console.info(deviceset)
+    deviceset = res.list
+    // res.list.forEach(item=>{
+    //   deviceset.push(item.substring(0,2))
+    // })
+    console.log(deviceset)
     //渲染已连接的音箱
   }
 }

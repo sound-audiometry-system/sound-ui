@@ -28,51 +28,51 @@ import { findLastKey } from 'lodash';
 const emit = defineEmits(['handleClkItem'])
 const soundList = ref([
   {
-    value: '0',
+    soundVal: '0',
     active: false,
   },
   {
-    value: '1',
+    soundVal: '1',
     active: false,
   },
   {
-    value: '2',
+    soundVal: '2',
     active: false,
   },
   {
-    value: '3',
+    soundVal: '3',
     active: false,
   },
   {
-    value: '4',
+    soundVal: '4',
     active: false,
   },
   {
-    value: '5',
+    soundVal: '5',
     active: false,
   },
   {
-    value: '6',
+    soundVal: '6',
     active: false,
   },
   {
-    value: '7',
+    soundVal: '7',
     active: false,
   },
   {
-    value: '8',
+    soundVal: '8',
     active: false,
   },
   {
-    value: '9',
+    soundVal: '9',
     active: false,
   },
   {
-    value: '10',
+    soundVal: '10',
     active: false,
   },
   {
-    value: '11',
+    soundVal: '11',
     active: false,
   },
 
@@ -81,17 +81,19 @@ type Props = {
   sounds: any;
 };
 const props = defineProps<Props>();
-watch(()=> props.sounds, (newValue, oldValue)=> {
+console.log(props)
+watch(props.sounds, (newValue, oldValue)=> {
   if (props.sounds && props.sounds.length != 0) {
     for (const item of props.sounds) {
     for (const obj of soundList.value) {
-      if (obj.value == item.substring(1,2)) {
-        item.active = true
+      console.log(obj)
+      if (obj.soundVal == item.substring(1,2)) {
+        obj.active = true
       }
     }
   }
   }
-})
+}, {deep: true})
 onMounted(async ()=> {
   // const res = await auditionApi.getDevice()
   // if (res.code == 0) {
