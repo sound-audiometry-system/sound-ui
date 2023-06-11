@@ -179,7 +179,6 @@ const answerMarks = ref(testData[0].commands.map(item=> {
     answerMark: 1
   }
 }))
-console.log(answerMarks, 'answerMarks')
 // answerDialogRef.value.show([])
 let beforeChange1 = (value1) => {
   if (value1) {
@@ -218,6 +217,9 @@ const handleStart = () => {
   emit("handleStart");
 };
 const handleStop = () => {
+  for (const item of answerMarks.value) {
+    item.answerMark = 1
+  }
   emit("handleStop");
 };
 const handleAudio = () => {
@@ -252,7 +254,7 @@ const handleReImage = async () => {
 };
 const checkedImg = (index) => {
   // console.log(props.imageData.answerList[index].isCheckFlag)
-  console.log(isCheckFlag.value)
+  // console.log(isCheckFlag.value)
   if (isCheckFlag.value) return
   isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;

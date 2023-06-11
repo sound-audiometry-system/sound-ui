@@ -72,8 +72,11 @@ const tableData = [
     address: "No. 189, Grove St, Los Angeles",
   },
 ];
+const emit = defineEmits([
+  "handleCalibration",
+]);
 const handleCalibration = (index, row)=> {
-
+  emit("handleCalibration", index, row);
 }
 const currentChange = ()=> {
 

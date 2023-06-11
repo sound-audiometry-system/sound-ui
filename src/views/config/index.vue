@@ -7,7 +7,8 @@
           <equipment />
         </el-tab-pane>
         <el-tab-pane style="width: 1040px" label="测试声音阈校准">
-          <calibration></calibration>
+          <calibration @handleCalibration="handleCalibration" v-if="!isConfig"></calibration>
+          <calibration-config v-else></calibration-config>
         </el-tab-pane>
       </el-tabs>
     </el-main>  
@@ -17,9 +18,15 @@
   </el-container>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue'
 import FooterTab from "../../components/footerTab.vue";
 import equipment from "./equipment.vue";
 import calibration from "./calibration.vue";
+import calibrationConfig from "./calibration-config.vue";
+const isConfig = ref(false)
+const handleCalibration = (index, row)=> {
+  isConfig.value = true
+}
 </script>
 
 <style scoped lang="scss">
