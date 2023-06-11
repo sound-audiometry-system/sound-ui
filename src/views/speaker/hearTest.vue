@@ -142,7 +142,7 @@
               v-for="(item, index) in answerMarks"
               :key="index"
               :class="{
-                'answer-num': item.answerMark == 1,
+                'answer-num': true,
                 'success-active': item.answerMark == 2,
                 'error-active': item.answerMark == 3,
               }"
@@ -174,11 +174,11 @@ let value2 = ref(true);
 let isOpen = ref(false)
 console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
-const answerMarks = testData[0].commands.map(item=> {
+const answerMarks = ref(testData[0].commands.map(item=> {
   return {
     answerMark: 1
   }
-})
+}))
 console.log(answerMarks, 'answerMarks')
 // answerDialogRef.value.show([])
 let beforeChange1 = (value1) => {
@@ -201,10 +201,12 @@ const emit = defineEmits([
 ]);
 const props = defineProps<Props>();
 let answerIndex = props.answerIndex
-watch(props.imageData, (newValue,oldValue)=> {
-  isCheckFlag.value = false;
-},{ deep: true })
 const isCheckFlag = ref(false);
+watch(()=>props.imageData, (newValue,oldValue)=> {
+  answerIndex ++
+  isCheckFlag.value = false;
+  console.log(222222222)
+},{ deep: true })
 const handleClk = () => {
   // console.log(answerDialogRef.value);
   answerDialogRef.value.show([]);
@@ -249,10 +251,13 @@ const handleReImage = async () => {
   }
 };
 const checkedImg = (index) => {
-  if (isCheckFlag.value == true) return
+  // console.log(props.imageData.answerList[index].isCheckFlag)
+  console.log(isCheckFlag.value)
+  if (isCheckFlag.value) return
   isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
-  index + 1 == props.imageData.target ? answerMarks[answerIndex].answerMark = 2 : answerMarks[answerIndex].answerMark = 3
+  index + 1 == props.imageData.target ? answerMarks.value[answerIndex].answerMark = 2 : answerMarks.value[answerIndex].answerMark = 3
+  console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
   //   // props.imageData.answerList[index].isCheckFlag = false

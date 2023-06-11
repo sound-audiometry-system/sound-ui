@@ -170,7 +170,7 @@ defineExpose({
   padding-top: 0 !important;
 }
 :deep(.el-slider__marks) {
-  width: 100%;
+  width: 98%;
 }
 :deep(.el-dialog__body) {
   height: 400px;

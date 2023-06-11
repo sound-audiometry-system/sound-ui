@@ -3,8 +3,8 @@
     <el-footer>
       <div
         class="footer-div"
-        :class="{ activeColor: route.path == '/speaker' }"
-        @click="chooseItem(1, '/speaker')"
+        :class="{ activeColor: route.path == '/' || route.path == '/speaker' }"
+        @click="chooseItem(1, '/')"
       >
         <Tickets class="icon" color="white" />
         <text class="font">听力测试</text>
@@ -19,8 +19,8 @@
       </div>
       <div
         class="footer-div"
-        :class="{ activeColor: active == 3 }"
-        @click="chooseItem(3)"
+        :class="{ activeColor: route.path == '/imitate' }"
+        @click="chooseItem(3, '/imitate')"
       >
         <Monitor class="icon" color="white" />
         <text class="font">言语实景模拟</text>

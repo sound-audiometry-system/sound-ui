@@ -22,6 +22,16 @@ const router = createRouter({
       name:'checkConfig',
       component: () => import('../views/config/index.vue')
     },
+    {
+      path:'/imitate',
+      name:'imitate',
+      component: () => import('../views/imitate/index.vue')
+    },
+    {
+      path:'/imitate-plan',
+      name:'imitatePlan',
+      component: () => import('../views/imitate/imitate-plan.vue')
+    },
     
   ]
 })

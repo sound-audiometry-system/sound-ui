@@ -6,7 +6,11 @@
     :before-close="handleClose"
   >
     <span class="answer-box">
-        <span v-for="(item, index) in props.answerMarks" class="answer-num">{{ index+1 }}</span>
+        <span v-for="(item, index) in props.answerMarks" :class="{
+                'answer-num': true,
+                'success-active': item.answerMark == 2,
+                'error-active': item.answerMark == 3,
+              }">{{ index+1 }}</span>
     </span>
     <!-- <template #footer>
       <span class="dialog-footer">

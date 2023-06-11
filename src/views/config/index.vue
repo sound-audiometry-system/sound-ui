@@ -6,11 +6,11 @@
         <el-tab-pane style="width: 540px" label="设备连接">
           <equipment />
         </el-tab-pane>
-        <el-tab-pane style="width: 540px" label="测试声音阈校准">
+        <el-tab-pane style="width: 1040px" label="测试声音阈校准">
           <calibration></calibration>
         </el-tab-pane>
       </el-tabs>
-    </el-main>
+    </el-main>  
     <el-footer>
       <FooterTab />
     </el-footer>
@@ -32,11 +32,15 @@ import calibration from "./calibration.vue";
     padding: 0px;
 
     .el-tabs {
-      height: 715px;
+      height: 719px;
       :deep(.el-tabs__item) {
         width: 590px;
       }
     }
   }
+}
+:deep(.el-footer) {
+  width: 1080px;
+  padding: 0;
 }
 </style>

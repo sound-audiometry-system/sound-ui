@@ -22,7 +22,16 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, ref } from 'vue'
+import { auditionApi } from "@/serve/api/user";
 const emit = defineEmits(['handleClkItem'])
+const soundList = ref([])
+onMounted(async ()=> {
+  const res = await auditionApi.getDevice()
+  if (res.code == 0) {
+    console.log(res)
+  }
+})
 const handleClkItem = (index: number) => {
     emit('handleClkItem', index)
 }

@@ -16,7 +16,7 @@
         </el-col>
       </el-row>
       <el-row class="xxx-a">
-        <el-col style="background-color: aliceblue;" v-for="index in 12" :key="index" :span="12">
+        <el-col :span="7" style="background-color: aliceblue;" v-for="index in 12" :key="index">
           <div class="config-b" :style="{ 'text-align': 'center', backgroundColor: getBgc(index), }">
             {{ index }}
           </div>
@@ -25,11 +25,21 @@
       </el-row>
     </el-aside>
     <el-main width="540px">
-      <el-row>
+      <el-row style="width: 100%;" :gutter="20">
         <el-col :span="24">显示器</el-col>
         <el-col :span="12" class="monitor-a">
+          <div style="display: flex; align-items: center;margin: 10px 0;">
+            <span style="width: 20px; margin-right: 10px; color: #fff; height: 20px line-height: 20px; background-color: #3457C6; text-align: center;">左</span>
+            <span>显示器</span>
+          </div>
+          <div style="width: 100%; height: 174px; background-color: #000;"></div>
         </el-col>
         <el-col :span="12" class="monitor-a">
+          <div style="display: flex; align-items: center;margin: 10px 0;">
+            <span style="width: 20px; margin-right: 10px; height: 20px line-height: 20px; background-color: #D8D8D8; text-align: center;">右</span>
+            <span>显示器</span>
+          </div>
+          <div style="width: 100%; height: 174px; background-color: #000;"></div>
         </el-col>
       </el-row>
 
@@ -76,7 +86,7 @@ let getBgc = (idex) => {
     justify-content: center;
     width: 540px;
     height: 240px;
-    flex-direction: column;
+    // flex-direction: column;
     flex-wrap: wrap;
     background-color: #f6f6f6;
 
@@ -93,8 +103,10 @@ let getBgc = (idex) => {
       align-content: center;
 
       :deep(.config-b) {
-        width: 28px;
-        height: 28px;
+        width: 24px;
+        height: 24px;
+        line-height: 24px;
+        text-align: center;
         border-radius: 50%;
         background-color: red;
         margin: 3px;

@@ -111,6 +111,18 @@ class AuditionApi {
       },
     }) 
   }
+
+  /** 
+   * 获取音箱列表
+   * @param 无参数
+   * @returns
+  */
+  getDevice() {
+    return http.request({
+      url: '/device/list',
+      method: 'GET',
+    }) 
+  }
 }
 
 export const userApi = new UserApi()
