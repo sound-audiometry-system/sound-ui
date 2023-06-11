@@ -55,6 +55,14 @@
     justify-content: center;
     align-items: center;
   }
+  .success-active {
+    background-color: #3357C6;
+    color: #fff;
+  }
+  .error-active {
+    background-color: #B02222;
+    color: #fff;
+  }
   .dot-control:nth-child(2) {
     left: 73px;
     top: -32px;
