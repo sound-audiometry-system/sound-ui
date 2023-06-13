@@ -61,6 +61,18 @@ class AuditionApi {
   }
 
   /** 
+   * 暂停
+   * @param 无参数
+   * @returns
+  */
+  pauseTest() {
+    return http.request({
+      url: '/native/pause',
+      method: 'POST',
+    })
+  }
+
+  /** 
    * 上一个
    * @param 无参数
    * @returns
@@ -125,8 +137,24 @@ class AuditionApi {
   }
 }
 
+class ImitateApi {
+  /** 
+   * 获取音箱列表
+   * @param type, name
+   * @returns
+  */
+  getListTestMode(data) {
+    return http.request({
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/listTestMode',
+      method: 'POST',
+      data
+    }) 
+  }
+}
+
 export const userApi = new UserApi()
 export const auditionApi = new AuditionApi()
+export const imitateApi = new ImitateApi()
  
 // export default {
 //   userApi,

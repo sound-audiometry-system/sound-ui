@@ -6,9 +6,9 @@
                 <el-col :span="12">
                     <sound></sound>
                     <div style="margin-top: 30px">
-                        <el-button>开始</el-button>
-                        <el-button>暂停</el-button>
-                        <el-button>重复</el-button>
+                        <el-button @click="handleStart">开始</el-button>
+                        <el-button @click="handlePause">暂停</el-button>
+                        <el-button @click="handleRelease">重复</el-button>
                         <el-button type="info">重置</el-button>
                     </div>
                     <div style="margin-top: 14px;width: 100%;height: 322px;background: #FFFFFF;">
@@ -120,10 +120,15 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 import type { CSSProperties } from 'vue'
+import { auditionApi } from "@/serve/api/user";
+import { useStore, mapState } from "vuex";
 import sound from "../../components/sound/index.vue";
 const value1 = ref("1")
 const value = ref('')
 const time = ref('1')
+let store = useStore();
+const imitateData = store.getters.getImitateData;
+let isStart = false;
 const fileOptions = [
   {
     value: '1',
@@ -195,6 +200,28 @@ const marks = reactive<Marks>({
     75: '75',
     80: '80',
 })
+const handleStart = async () => {
+  if (isStart) return;
+  //开始
+  const res = await auditionApi.startTest(imitateData);
+  if (res.code == 0) {
+    isStart = true;
+  }
+};
+const handlePause = async ()=> {
+    if (!isStart) return;
+    //暂停
+  const res = await auditionApi.pauseTest();
+  if (res.code == 0) {
+    isStart = false;
+  }
+}
+
+const handleRelease = async ()=> {
+    //重播
+  const res = await auditionApi.reImageTest();
+}
+
 </script>
 
 <style lang="scss" scoped>

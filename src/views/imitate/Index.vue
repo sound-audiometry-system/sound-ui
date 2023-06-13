@@ -10,6 +10,7 @@
         style="
           width: 50%;
           height: 100%;
+          overflow-y: auto;
           background-color: white;
           flex-direction: column;
         "
@@ -20,19 +21,19 @@
             ref="form"
             label-width="200px"
             class="form"
-            @submit.native.prevent="()=> searchUser"
+            @submit.native.prevent="()=> searchImitate"
           >
             <el-form-item>
               <el-input
-                v-model="imitateId"
+                v-model="imitateName"
                 placeholder="请输入"
                 class="input-with-select"
                 clearable
                 @clear="userSearchData = []"
-                @blur="searchUser"
+                @blur="searchImitate"
               >
                 <template #prepend>
-                  <el-button @click="searchUser" :icon="Search" />
+                  <el-button @click="searchImitate" :icon="Search" />
                 </template>
               </el-input>
             </el-form-item>
@@ -94,7 +95,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useRouter } from 'vue-router'
-import { userApi } from "@/serve/api/user";
+import { imitateApi } from "@/serve/api/user";
 import { useStore } from 'vuex'
 import footerTab from "../../components/footerTab.vue";
 // import { useStore } from '../../store'
@@ -105,22 +106,29 @@ import footerTab from "../../components/footerTab.vue";
 // }
  const router = useRouter()
 const active = ref(1);
-
+let isStart = false;
 const form = reactive({})
 //模拟方案搜索
-const imitateId = ref(null);
+const imitateName = ref("");
 
 //测试列表
 const testData = ref([
   { name: "由远及近的言语模拟", id: 1, questionsControl: true, directControl: true, wrongControl: true, jammingMode: 1, commands: [] },
 ]);
+const getListTestMode = async (name: string = "")=> {
+  const res = await imitateApi.getListTestMode({ type: 2, name: name })
+  console.log(res)
+  if (res.code == 0) {
+    testData.value = res.data
+  }
+}
 //测试结果
 const testResult = ref();
 
 //搜索模拟方案
 const searchImitate = () => {
   //后续为远程搜索用户信息
-  // getUserInfo()
+  getListTestMode(imitateName.value)
 };
 const handleNav = () => {
   // chooseTypeVisble.value = false;
@@ -137,11 +145,14 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // chooseTypeVisble.value = true;
+  store.commit("setTestData", info)
   router.push('/imitate-plan')
 };
 
 onMounted(()=> {
   // 调用模拟列表
+  console.log(22222222)
+  getListTestMode()
 })
 </script>
 <style lang="scss" scoped>

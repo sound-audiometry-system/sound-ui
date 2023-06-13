@@ -195,7 +195,7 @@ const getUserInfo = async() => {
 const getUserPatient = async(uid: string | number) => {
   const res = await userApi.getUserPatient({ uid: uid });
   testData.value = res.data
-  store.commit("setTestData", res.data)
+  // store.commit("setTestData", res.data)
   console.log(store)
   // store['_mutations'].setTestData()
   // console.log(res, '2222222')

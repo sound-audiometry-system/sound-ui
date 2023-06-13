@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, watchEffect } from 'vue'
 import { auditionApi } from "@/serve/api/user";
 import { findLastKey } from 'lodash';
 const emit = defineEmits(['handleClkItem'])
@@ -81,12 +81,11 @@ type Props = {
   sounds: any;
 };
 const props = defineProps<Props>();
-console.log(props)
-watch(props.sounds, (newValue, oldValue)=> {
+// console.log(props)
+watch(()=>props.sounds, (newValue, oldValue)=> {
   if (props.sounds && props.sounds.length != 0) {
     for (const item of props.sounds) {
     for (const obj of soundList.value) {
-      console.log(obj)
       if (obj.soundVal == item.substring(1,2)) {
         obj.active = true
       }
@@ -94,6 +93,9 @@ watch(props.sounds, (newValue, oldValue)=> {
   }
   }
 }, {deep: true})
+// watchEffect(()=> {
+//   console.log(props)
+// })
 onMounted(async ()=> {
   // const res = await auditionApi.getDevice()
   // if (res.code == 0) {
