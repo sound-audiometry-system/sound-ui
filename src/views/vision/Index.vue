@@ -188,7 +188,14 @@ const loadTestData = () => {
 const getUserInfo = async() => {
   const res = await userApi.getUserInfo({ uid: inputUserId.value });
   // console.log(res, '2222222')
-  userSearchData.value = [res.data]
+  if (res.code == 0) {
+    userSearchData.value = [res.data]
+  } else {
+    ElMessage({
+        message: res.msg || "用户不存在",
+        type: "error",
+      });
+  }
 };
 
 // 获取用户配置

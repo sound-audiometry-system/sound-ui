@@ -14,8 +14,13 @@
   <script type="application/javascript">
     document.addEventListener("astilectron-ready", () => {
       astilectron.onMessage((message) => {
+        console.log(message, 'message')
         if (message.cmdType == 'imageDisplay') {
           localStorage.setItem('imageData', JSON.stringify(message))
+        }
+        if (message.cmdType == 'playFinish') {
+          // localStorage.setItem('imageData', JSON.stringify(message))
+          localStorage.setItem('imageData', "")
         }
       });
     })

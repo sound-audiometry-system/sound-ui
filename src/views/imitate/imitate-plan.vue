@@ -118,7 +118,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import type { CSSProperties } from 'vue'
 import { auditionApi } from "@/serve/api/user";
 import { useStore, mapState } from "vuex";
@@ -221,6 +221,18 @@ const handleRelease = async ()=> {
     //重播
   const res = await auditionApi.reImageTest();
 }
+onMounted(()=> {
+    window.addEventListener("setItemEvent", function (e: any) {
+        if (!e.newValue) {
+      isStart = false
+        ElMessage({
+        message: "方案播放完成",
+        type: "success",
+      });
+        return
+    }
+  });
+})
 
 </script>
 

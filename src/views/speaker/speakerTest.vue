@@ -197,6 +197,15 @@ onMounted(() => {
   //   JSON.stringify(localStorage.getItem("imageData") || "")
   // );
   window.addEventListener("setItemEvent", function (e: any) {
+    if (!e.newValue) {
+      isStart = false
+        // imageData = {}
+        ElMessage({
+        message: "方案播放完成",
+        type: "success",
+      });
+        return
+    }
     if (e.key === "imageData") {
       answerIndex.value += 1;
       if (localStorage.getItem("imageData")) {

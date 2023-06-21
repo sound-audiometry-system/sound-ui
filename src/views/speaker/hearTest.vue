@@ -22,7 +22,7 @@
           display: flex;
         "
       >
-        <el-row style="background-color: #000;width: 82%;height: 100%;align-items: center;" align="center" :gutter="10">
+        <el-row style="background-color: #000;width: 82%;height: 100%;align-items: center;overflow: auto;" align="center" :gutter="10">
           <el-col
             v-for="(item, index) in props.imageData.answerList"
             :key="item.id"
@@ -61,6 +61,7 @@
           height: 200px;
           background-color: #8cdcfe;
           padding-top: 6px;
+          overflow: auto;
         "
       >
         <el-col

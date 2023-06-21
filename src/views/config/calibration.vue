@@ -20,7 +20,7 @@
       </el-col>
     </el-row>
     <el-table :height="520" :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="date" label="测试名称" width="180" />
+      <el-table-column prop="name" label="测试名称" width="180" />
       <el-table-column prop="name" label="测试模式" width="180" />
       <el-table-column prop="address" label="测试分类" />
       <el-table-column prop="address" label="状态">
@@ -40,17 +40,18 @@
             </template>
       </el-table-column>
     </el-table>
-    <div style="display: flex;justify-content: flex-end;padding-right: 20px;">
+    <!-- <div style="display: flex;justify-content: flex-end;padding-right: 20px;">
         <el-pagination style="margin-top: 16px;" background layout="prev, pager, next, jumper" :total="1000" @current-change="currentChange" />
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 const value = ref("");
 const radio1 = ref("1");
-const tableData = [
+import { imitateApi } from "@/serve/api/user";
+let tableData = ref([
   {
     date: "2016-05-03",
     name: "Tom",
@@ -71,7 +72,7 @@ const tableData = [
     name: "Tom",
     address: "No. 189, Grove St, Los Angeles",
   },
-];
+]);
 const emit = defineEmits([
   "handleCalibration",
 ]);
@@ -81,6 +82,16 @@ const handleCalibration = (index, row)=> {
 const currentChange = ()=> {
 
 }
+const getListTestMode = async (name: string = "")=> {
+  const res = await imitateApi.getListTestMode({ type: 2, name: name })
+  console.log(res)
+  if (res.code == 0) {
+    tableData.value = res.data
+  }
+}
+onMounted(()=> {
+  getListTestMode()
+})
 </script>
 <style scoped lang="scss">
 .main {
