@@ -150,6 +150,18 @@ class ImitateApi {
       data
     }) 
   }
+   /** 
+   * 上传校准值
+   * @param id, audios
+   * @returns
+  */
+   dbCalibration(data) {
+    return http.request({
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/testModel/dbCalibration',
+      method: 'POST',
+      data
+    }) 
+  }
 }
 
 export const userApi = new UserApi()

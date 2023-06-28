@@ -92,7 +92,8 @@
                   size="small"
                   type="primary"
                   plain
-                  >点击校准</el-button
+                  @click="handleCalibration(item,index)"
+                  >{{isCalibration ? '结束校准' : '点击校准'}}</el-button
                 >
               </div>
             </el-col>
@@ -132,7 +133,7 @@
               style="width: 100%"
               controls-position="right"
               size="small"
-              v-model="queryForm.signal"
+              v-model="queryForm.signalSoundVolume"
               placeholder="52"
           /></el-col>
           <el-col :span="4">（分贝db）</el-col>
@@ -155,7 +156,7 @@
           <el-col>
             <el-slider
               style="width: 96%"
-              v-model="queryForm.signal"
+              v-model="queryForm.signalSoundVolume"
               :min="25"
               :max="80"
               :marks="marks"
@@ -174,7 +175,7 @@
               style="width: 100%"
               controls-position="right"
               size="small"
-              v-model="queryForm.signal"
+              v-model="queryForm.environmentalSoundVolume"
               placeholder="52"
           /></el-col>
           <el-col :span="4">（分贝db）</el-col>
@@ -197,7 +198,7 @@
           <el-col>
             <el-slider
               style="width: 96%"
-              v-model="queryForm.signal"
+              v-model="queryForm.environmentalSoundVolume"
               :min="25"
               :max="80"
               :marks="marks"
@@ -212,18 +213,20 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from "vue";
 import type { CSSProperties } from "vue";
-import { auditionApi } from "@/serve/api/user";
+import { auditionApi,imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
 const value1 = ref("1");
 let isStart = false;
 const queryForm = reactive({
   fileName: null,
   delay: "1",
-  signal: 52,
+  environmentalSoundVolume: 52,
+  signalSoundVolume: 52,
   step: 1,
   ambient: null,
   type: "1",
 });
+const isCalibration = ref(false)
 const props = defineProps({
   testData: {
     type: Object,
@@ -322,6 +325,26 @@ const reImageTest = async ()=> {
 }
 const handleBack = ()=> {
     emit("handleBack", false)
+}
+const handleCalibration = async (item:any, index: number)=> {
+  isCalibration.value = !isCalibration.value
+  const form = {
+    id: props.testData.id,
+    audios: [{
+      index: index + 1,
+      signalSoundVolume: queryForm.signalSoundVolume,
+      environmentalSoundVolume: queryForm.environmentalSoundVolume,
+    }]
+  }
+  if (!isCalibration.value) {
+    const res = await imitateApi.dbCalibration(form);
+    if (res.code == 0) {
+      ElMessage({
+        message: "校准成功",
+        type: "success",
+      });
+    }
+  }
 }
 onMounted(()=> {
     window.addEventListener("setItemEvent", function (e: any) {
