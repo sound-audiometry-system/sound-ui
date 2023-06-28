@@ -93,7 +93,7 @@
                   type="primary"
                   plain
                   @click="handleCalibration(item,index)"
-                  >{{isCalibration ? '结束校准' : '点击校准'}}</el-button
+                  >{{item.isCalibration ? '结束校准' : '点击校准'}}</el-button
                 >
               </div>
             </el-col>
@@ -135,6 +135,8 @@
               size="small"
               v-model="queryForm.signalSoundVolume"
               placeholder="52"
+              :max="100"
+              :min="0"
           /></el-col>
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
@@ -177,6 +179,8 @@
               size="small"
               v-model="queryForm.environmentalSoundVolume"
               placeholder="52"
+              :max="100"
+              :min="0"
           /></el-col>
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
@@ -237,50 +241,62 @@ const devices = ref([
   {
     id1: '001',
     id2: '011',
+    isCalibration: false
   },
   {
     id1: '001',
     id2: '011',
+    isCalibration: false
   },
   {
     id1: '002',
     id2: '012',
+    isCalibration: false
   },
   {
     id1: '003',
     id2: '013',
+    isCalibration: false
   },
   {
     id1: '004',
     id2: '014',
+    isCalibration: false
   },
   {
     id1: '005',
     id2: '015',
+    isCalibration: false
   },
   {
     id1: '006',
     id2: '016',
+    isCalibration: false
   },
   {
     id1: '007',
     id2: '017',
+    isCalibration: false
   },
   {
     id1: '008',
     id2: '018',
+    isCalibration: false
   },
   {
     id1: '009',
     id2: '019',
+    isCalibration: false
   },
   {
     id1: '010',
     id2: '011',
+    isCalibration: false
   },
   {
     id1: '001',
     id2: '011',
+    isCalibration: false
   },
 ])
 interface Mark {
@@ -327,7 +343,7 @@ const handleBack = ()=> {
     emit("handleBack", false)
 }
 const handleCalibration = async (item:any, index: number)=> {
-  isCalibration.value = !isCalibration.value
+  item.isCalibration = !item.isCalibration
   const form = {
     id: props.testData.id,
     audios: [{
@@ -336,7 +352,7 @@ const handleCalibration = async (item:any, index: number)=> {
       environmentalSoundVolume: queryForm.environmentalSoundVolume,
     }]
   }
-  if (!isCalibration.value) {
+  if (!item.isCalibration) {
     const res = await imitateApi.dbCalibration(form);
     if (res.code == 0) {
       ElMessage({
@@ -347,6 +363,7 @@ const handleCalibration = async (item:any, index: number)=> {
   }
 }
 onMounted(()=> {
+  
     window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       isStart = false
