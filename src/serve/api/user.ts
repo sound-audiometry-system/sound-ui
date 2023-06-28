@@ -131,7 +131,7 @@ class AuditionApi {
   */
   getDevice() {
     return http.request({
-      url: '/device/list',
+      url: '/device/info',
       method: 'GET',
     }) 
   }

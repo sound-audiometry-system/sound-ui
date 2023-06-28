@@ -83,7 +83,7 @@ const currentChange = ()=> {
 
 }
 const getListTestMode = async (name: string = "")=> {
-  const res = await imitateApi.getListTestMode({ type: 2, name: name })
+  const res = await imitateApi.getListTestMode({ type: 1, name: name })
   console.log(res)
   if (res.code == 0) {
     tableData.value = res.data
