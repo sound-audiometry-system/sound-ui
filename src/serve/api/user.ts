@@ -152,12 +152,24 @@ class ImitateApi {
   }
    /** 
    * 上传校准值
-   * @param id, audios
+   * @param id
    * @returns
   */
    dbCalibration(data) {
     return http.request({
       url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/testModel/dbCalibration',
+      method: 'POST',
+      data
+    }) 
+  }
+  /** 
+   * 保存点
+   * @param id
+   * @returns
+  */
+  saveAdjustValue(data) {
+    return http.request({
+      url: '/native/saveAdjustValue',
       method: 'POST',
       data
     }) 

@@ -1,6 +1,6 @@
 <!-- 测试声音阈校准 -->
 <template>
-  <div class="main">
+  <div v-loading="loading" class="main">
     <el-row :gutter="20">
       <el-col :span="16">
         <el-input
@@ -20,8 +20,8 @@
       </el-col>
     </el-row>
     <el-table :height="520" :data="tableData" stripe style="width: 100%">
-      <el-table-column prop="name" label="测试名称" width="180" />
-      <el-table-column prop="name" label="测试模式" width="180" />
+      <el-table-column prop="name" label="测试名称" min-width="180" />
+      <el-table-column prop="name" label="测试模式" min-width="180" />
       <el-table-column prop="address" label="测试分类" />
       <el-table-column prop="address" label="状态">
         <template #default="scope">
@@ -50,6 +50,7 @@ import { onMounted, ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 const value = ref("");
 const radio1 = ref("1");
+let loading = ref(false)
 import { imitateApi } from "@/serve/api/user";
 let tableData = ref([
   {
@@ -83,8 +84,10 @@ const currentChange = ()=> {
 
 }
 const getListTestMode = async (name: string = "")=> {
+  loading.value = true
   const res = await imitateApi.getListTestMode({ type: 1, name: name })
   console.log(res)
+  loading.value = false
   if (res.code == 0) {
     tableData.value = res.data
   }

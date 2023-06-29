@@ -53,10 +53,10 @@
                 "
                 >{{ index + 1 }}</span
               >
-              <span>{{ index + 1 }}号音响</span>
+              <span>{{ index }}号音响</span>
             </el-col>
             <el-col :span="3">
-              <el-radio-group disabled v-model="value1" class="ml-4">
+              <el-radio-group disabled v-model="queryForm.signalSoundVolume" class="ml-4">
                 <el-radio label="1" size="large">言语声</el-radio>
               </el-radio-group>
             </el-col>
@@ -65,12 +65,12 @@
                 style="width: 100%"
                 controls-position="right"
                 size="small"
-                v-model="queryForm.signal"
+                v-model="queryForm.signalSoundVolume"
                 placeholder="52"
             /></el-col>
             <el-col :span="4">(分贝db)</el-col>
             <el-col :span="3">
-              <el-radio-group disabled v-model="value1" class="ml-4">
+              <el-radio-group disabled v-model="queryForm.environmentalSoundVolume" class="ml-4">
                 <el-radio label="1" size="large">环境声</el-radio>
               </el-radio-group>
             </el-col>
@@ -79,7 +79,7 @@
                 style="width: 100%"
                 controls-position="right"
                 size="small"
-                v-model="queryForm.signal"
+                v-model="queryForm.environmentalSoundVolume"
                 placeholder="52"
             /></el-col>
             <el-col :span="4">(分贝db)</el-col>
@@ -118,7 +118,7 @@
         >
           <el-button @click="handleStart">播放</el-button>
           <el-button @click="handleSave">保存</el-button>
-          <el-button @click="reImageTest">重复</el-button>
+          <el-button @click="handleStart">重复</el-button>
           <el-button @click="handleBack">退出</el-button>
         </div>
         <el-row
@@ -137,6 +137,7 @@
               placeholder="52"
               :max="100"
               :min="0"
+              :step="queryForm.step"
           /></el-col>
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
@@ -153,7 +154,7 @@
             >(步幅)</el-col
           >
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button>保存点 [Enter]</el-button></el-col
+            ><el-button @click="handleSaveItem">保存点 [Enter]</el-button></el-col
           >
           <el-col>
             <el-slider
@@ -181,6 +182,7 @@
               placeholder="52"
               :max="100"
               :min="0"
+              :step="queryForm.step1"
           /></el-col>
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
@@ -190,14 +192,14 @@
               style="width: 100%"
               controls-position="right"
               size="small"
-              v-model="queryForm.step"
+              v-model="queryForm.step1"
               placeholder="52"
           /></el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="2"
             >(步幅)</el-col
           >
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button>保存点 [Enter]</el-button></el-col
+            ><el-button @click="handleSaveItem">保存点 [Enter]</el-button></el-col
           >
           <el-col>
             <el-slider
@@ -227,6 +229,7 @@ const queryForm = reactive({
   environmentalSoundVolume: 52,
   signalSoundVolume: 52,
   step: 1,
+  step1: 1,
   ambient: null,
   type: "1",
 });
@@ -303,6 +306,7 @@ interface Mark {
   style: CSSProperties;
   label: string;
 }
+let audioIndex = 12
 type Marks = Record<number, Mark | string>;
 const marks = reactive<Marks>({
   30: "30",
@@ -342,7 +346,30 @@ const reImageTest = async ()=> {
 const handleBack = ()=> {
     emit("handleBack", false)
 }
+const handleSaveItem = async ()=> {
+  if (audioIndex == 12) {
+    ElMessage({
+        message: "请先选择音响校准",
+        type: "warning",
+      });
+      return
+  }
+  const form = {
+    id: props.testData.id,
+      index: audioIndex,
+      signalSoundVolume: queryForm.signalSoundVolume,
+      environmentalSoundVolume: queryForm.environmentalSoundVolume,
+  }
+  const res = await imitateApi.saveAdjustValue(form);
+    if (res.code == 0) {
+      ElMessage({
+        message: "保存成功",
+        type: "success",
+      });
+    }
+}
 const handleCalibration = async (item:any, index: number)=> {
+  audioIndex = index
   item.isCalibration = !item.isCalibration
   const form = {
     id: props.testData.id,
@@ -353,12 +380,13 @@ const handleCalibration = async (item:any, index: number)=> {
     }]
   }
   if (!item.isCalibration) {
-    const res = await imitateApi.dbCalibration(form);
+    const res = await imitateApi.dbCalibration(form.id);
     if (res.code == 0) {
       ElMessage({
-        message: "校准成功",
+        message: "校准值上传成功",
         type: "success",
       });
+      audioIndex = 12
     }
   }
 }
