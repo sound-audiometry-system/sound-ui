@@ -97,13 +97,15 @@
                 >
               </div>
             </el-col>
-            <el-col :span="9" style="color: #989898"> 未校准 </el-col>
-            <el-col :span="8" style="color: #989898"> 未校准 </el-col>
+            <el-col v-if="!item?.signalCalibrated" :span="9" style="color: #989898"> 未校准 </el-col>
+            <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #989898"> 未校准 </el-col>
+            <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
+            <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
           </el-row>
         </div>
       </el-col>
       <el-col :span="12">
-        <sound></sound>
+        <sound :device-config="devices"></sound>
         <div
           style="
             width: 396px;
@@ -130,6 +132,7 @@
           >
           <el-col :span="4"
             ><el-input-number
+            :disabled="!isCalibration"
               style="width: 100%"
               controls-position="right"
               size="small"
@@ -142,6 +145,7 @@
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
             ><el-input-number
+            :disabled="!isCalibration"
               :min="1"
               :max="10"
               style="width: 100%"
@@ -154,7 +158,7 @@
             >(步幅)</el-col
           >
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button @click="handleSaveItem">保存点 [Enter]</el-button></el-col
+            ><el-button :disabled="!isCalibration" @click="handleSaveItem">保存点 [Enter]</el-button></el-col
           >
           <el-col>
             <el-slider
@@ -163,6 +167,7 @@
               :min="25"
               :max="80"
               :marks="marks"
+              :disabled="!isCalibration"
             />
           </el-col>
         </el-row>
@@ -175,6 +180,7 @@
           >
           <el-col :span="4"
             ><el-input-number
+            :disabled="!isCalibration"
               style="width: 100%"
               controls-position="right"
               size="small"
@@ -187,6 +193,7 @@
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
             ><el-input-number
+            :disabled="!isCalibration"
               :min="1"
               :max="10"
               style="width: 100%"
@@ -199,7 +206,7 @@
             >(步幅)</el-col
           >
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button @click="handleSaveItem">保存点 [Enter]</el-button></el-col
+            ><el-button :disabled="!isCalibration" @click="handleSaveItem">保存点 [Enter]</el-button></el-col
           >
           <el-col>
             <el-slider
@@ -208,6 +215,7 @@
               :min="25"
               :max="80"
               :marks="marks"
+              :disabled="!isCalibration"
             />
           </el-col>
         </el-row>
@@ -369,6 +377,7 @@ const handleSaveItem = async ()=> {
     }
 }
 const handleCalibration = async (item:any, index: number)=> {
+  isCalibration.value = !isCalibration.value
   audioIndex = index
   item.isCalibration = !item.isCalibration
   const form = {
@@ -412,7 +421,7 @@ onMounted(()=> {
 
 .main {
   width: 100%;
-  background-color: #f2f2f2;
+  // background-color: #f2f2f2;
   margin: 20px 20px 0px 20px;
 }
 :deep(.el-slider__marks) {

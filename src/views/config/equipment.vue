@@ -69,7 +69,7 @@ let buttClick = async () => {
   //   // deviceset.value = ["012", "013"];
   //   // console.log(deviceset)
   // }, 1000);
-  const res = await auditionApi.getDevice();
+  const res = await auditionApi.getDevice({id: '011'});
   
   if (res.code == 0) {
     deviceset.value = res.list
