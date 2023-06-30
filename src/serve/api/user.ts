@@ -129,10 +129,11 @@ class AuditionApi {
    * @param 无参数
    * @returns
   */
-  getDevice() {
+  getDevice(params) {
     return http.request({
       url: '/device/info',
       method: 'GET',
+      params
     }) 
   }
 }

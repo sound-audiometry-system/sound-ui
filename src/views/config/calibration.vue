@@ -25,8 +25,8 @@
       <el-table-column prop="address" label="测试分类" />
       <el-table-column prop="address" label="状态">
         <template #default="scope">
-          <span class="status-box1 status">已校准</span>
-          <!-- <span class="status-box2 status">未校准</span> -->
+          <span v-if="scope.row.calibrated" class="status-box1 status">已校准</span>
+          <span v-if="!scope.row.calibrated" class="status-box2 status">未校准</span>
         </template>
       </el-table-column>
       <el-table-column prop="address" label="操作">
