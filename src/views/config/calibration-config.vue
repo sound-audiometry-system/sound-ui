@@ -51,9 +51,9 @@
                   text-align: center;
                   line-height: 22px;
                 "
-                >{{ index + 1 }}</span
+                >{{ item.index }}</span
               >
-              <span>{{ index }}号音响</span>
+              <span>{{ item.index }}号音响</span>
             </el-col>
             <el-col :span="3">
               <el-radio-group disabled v-model="queryForm.signalSoundVolume" class="ml-4">
@@ -99,8 +99,8 @@
             </el-col>
             <el-col v-if="!item?.signalCalibrated" :span="9" style="color: #989898"> 未校准 </el-col>
             <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #989898"> 未校准 </el-col>
-            <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
-            <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
+            <el-col v-if="item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
+            <el-col v-if="item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
           </el-row>
         </div>
       </el-col>
@@ -225,7 +225,7 @@
 </template>
     
 <script setup lang="ts">
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, watch } from "vue";
 import type { CSSProperties } from "vue";
 import { auditionApi,imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
@@ -242,12 +242,10 @@ const queryForm = reactive({
   type: "1",
 });
 const isCalibration = ref(false)
-const props = defineProps({
-  testData: {
-    type: Object,
-    default: [],
-  },
-});
+type Props = {
+  testData: any;
+};
+const props = defineProps<Props>();
 const devices = ref([
   {
     id1: '001',
@@ -329,11 +327,17 @@ const marks = reactive<Marks>({
   75: "75",
   80: "80",
 });
+watch(()=>props.testData, (newValue, oldValue)=> {
+  console.log(newValue.indexs)
+  console.log(11111)
+  devices.value = newValue.indexs
+  console.log(devices)
+}, {deep: true, immediate: true})
 const emit = defineEmits([
     "handleBack"
 ])
 const handleStart = async () => {
-    // console.log(props.testData)
+    console.log(props.testData)
   const res = await auditionApi.startTest(props.testData);
   if (res.code == 0) {
     isStart = true;

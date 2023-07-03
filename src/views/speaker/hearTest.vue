@@ -205,7 +205,7 @@ const isCheckFlag = ref(false);
 watch(()=>props.imageData, (newValue,oldValue)=> {
   answerIndex ++
   isCheckFlag.value = false;
-  console.log(222222222)
+  // console.log(222222222)
 },{ deep: true })
 const handleClk = () => {
   // console.log(answerDialogRef.value);

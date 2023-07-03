@@ -146,7 +146,7 @@ class ImitateApi {
   */
   getListTestMode(data) {
     return http.request({
-      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/listTestMode',
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/testModel/listTestCalibrationMode',
       method: 'POST',
       data
     }) 
