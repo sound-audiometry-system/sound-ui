@@ -305,7 +305,8 @@ const checkedImg = (index) => {
 
 .el-container {
   height: 580px;
-
+  margin: 0 auto;
+  margin-top: 50px;
   .el-aside {
     width: 500px;
   }

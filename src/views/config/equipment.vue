@@ -64,21 +64,93 @@ import { ref, reactive } from "vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
 let deviceset = ref([]);
+const devices = [
+{
+    soundVal: '001',
+    soundVal2: '002',
+    active: false,
+  },
+  {
+    soundVal: '011',
+    soundVal2: '012',
+    active: false,
+  },
+  {
+    soundVal: '021',
+    soundVal2: '022',
+    active: false,
+  },
+  {
+    soundVal: '031',
+    soundVal2: '032',
+    active: false,
+  },
+  {
+    soundVal: '041',
+    soundVal2: '042',
+    active: false,
+  },
+  {
+    soundVal: '051',
+    soundVal2: '052',
+    active: false,
+  },
+  {
+    soundVal: '061',
+    soundVal2: '062',
+    active: false,
+  },
+  {
+    soundVal: '071',
+    soundVal2: '072',
+    active: false,
+  },
+  {
+    soundVal: '081',
+    soundVal2: '082',
+    active: false,
+  },
+  {
+    soundVal: '091',
+    soundVal2: '092',
+    active: false,
+  },
+  {
+    soundVal: '101',
+    soundVal2: '102',
+    active: false,
+  },
+  {
+    soundVal: '111',
+    soundVal2: '112',
+    active: false,
+  },
+]
+const getDevice = async (id)=> {
+  const res = await auditionApi.getDevice({id: id})
+  // if (res.code == 0) {
+  //   deviceset.value = res.list
+  //   // res.list.forEach(item=>{
+  //   //   deviceset.push(item.substring(0,2))
+  //   // })
+  //   // console.log(deviceset);
+  //   //渲染已连接的音箱
+  // }
+}
 let buttClick = async () => {
   // window.setTimeout(() => {
   //   // deviceset.value = ["012", "013"];
   //   // console.log(deviceset)
   // }, 1000);
-  const res = await auditionApi.getDevice({id: '011'});
-  
-  if (res.code == 0) {
-    deviceset.value = res.list
-    // res.list.forEach(item=>{
-    //   deviceset.push(item.substring(0,2))
-    // })
-    // console.log(deviceset);
-    //渲染已连接的音箱
+  // const res = await auditionApi.getDevice({id: '011'});
+  for (const item of devices) {
+    getDevice(item.soundVal)
+    if (item.soundVal2) {
+      getDevice(item.soundVal2)
+    }
   }
+  
+  
 };
 let getBgc = (idex) => {
   if (idex == 0 || idex == 6) {
@@ -96,7 +168,8 @@ let getBgc = (idex) => {
 .el-container {
   width: 1080px;
   height: 625px;
-
+  margin: 0 auto;
+  margin-top: 50px;
   .el-main {
     display: flex;
     width: 540px;

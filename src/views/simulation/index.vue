@@ -36,7 +36,8 @@ const activeName = ref('first')
 .el-container {
     width: 1080px;
     height: 800px;
-
+    margin: 0 auto;
+  margin-top: 50px;
     // .el-tabs{
     //     height: 740px;
     // }

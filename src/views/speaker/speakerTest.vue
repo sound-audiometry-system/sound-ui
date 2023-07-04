@@ -228,6 +228,8 @@ onMounted(() => {
 .el-container {
   width: 1080px;
   height: 820px;
+  margin: 0 auto;
+  margin-top: 50px;
   .el-tabs {
     height: 700px;
   }

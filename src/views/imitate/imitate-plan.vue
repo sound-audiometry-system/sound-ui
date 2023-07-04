@@ -272,7 +272,8 @@ onMounted(()=> {
 .el-container {
     width: 1180px;
     height: 800px;
-
+    margin: 0 auto;
+  margin-top: 50px;
     .el-header {
         background-color: #208571;
         line-height: 60px;

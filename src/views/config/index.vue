@@ -38,7 +38,8 @@ const handleBack = ()=> {
 .el-container {
   width: 1080px;
   height: 803px;
-
+  margin: 0 auto;
+  margin-top: 50px;
   .el-main {
     height: 655px;
     padding: 0px;
