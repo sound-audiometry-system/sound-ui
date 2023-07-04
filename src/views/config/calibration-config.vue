@@ -25,7 +25,7 @@
         :span="12"
       >
         <div
-          v-for="(item,index) in devices"
+          v-for="(item, index) in devices"
           :key="index"
           :gutter="10"
           style="
@@ -56,7 +56,11 @@
               <span>{{ item.index }}号音响</span>
             </el-col>
             <el-col :span="3">
-              <el-radio-group disabled v-model="queryForm.signalSoundVolume" class="ml-4">
+              <el-radio-group
+                disabled
+                v-model="queryForm.signalSoundVolume"
+                class="ml-4"
+              >
                 <el-radio label="1" size="large">言语声</el-radio>
               </el-radio-group>
             </el-col>
@@ -70,7 +74,11 @@
             /></el-col>
             <el-col :span="4">(分贝db)</el-col>
             <el-col :span="3">
-              <el-radio-group disabled v-model="queryForm.environmentalSoundVolume" class="ml-4">
+              <el-radio-group
+                disabled
+                v-model="queryForm.environmentalSoundVolume"
+                class="ml-4"
+              >
                 <el-radio label="1" size="large">环境声</el-radio>
               </el-radio-group>
             </el-col>
@@ -92,15 +100,39 @@
                   size="small"
                   type="primary"
                   plain
-                  @click="handleCalibration(item,index)"
-                  >{{item.isCalibration ? '结束校准' : '点击校准'}}</el-button
+                  @click="handleCalibration(item, index)"
+                  >{{ item.isCalibration ? "结束校准" : "点击校准" }}</el-button
                 >
               </div>
             </el-col>
-            <el-col v-if="!item?.signalCalibrated" :span="9" style="color: #989898"> 未校准 </el-col>
-            <el-col v-if="!item?.signalCalibrated" :span="8" style="color: #989898"> 未校准 </el-col>
-            <el-col v-if="item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
-            <el-col v-if="item?.signalCalibrated" :span="8" style="color: #078f44"> 已校准 </el-col>
+            <el-col
+              v-if="!item?.signalCalibrated"
+              :span="9"
+              style="color: #989898"
+            >
+              未校准
+            </el-col>
+            <el-col
+              v-if="!item?.signalCalibrated"
+              :span="8"
+              style="color: #989898"
+            >
+              未校准
+            </el-col>
+            <el-col
+              v-if="item?.signalCalibrated"
+              :span="8"
+              style="color: #078f44"
+            >
+              已校准
+            </el-col>
+            <el-col
+              v-if="item?.signalCalibrated"
+              :span="8"
+              style="color: #078f44"
+            >
+              已校准
+            </el-col>
           </el-row>
         </div>
       </el-col>
@@ -132,7 +164,7 @@
           >
           <el-col :span="4"
             ><el-input-number
-            :disabled="!isCalibration"
+              :disabled="!isCalibration"
               style="width: 100%"
               controls-position="right"
               size="small"
@@ -145,7 +177,7 @@
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
             ><el-input-number
-            :disabled="!isCalibration"
+              :disabled="!isCalibration"
               :min="1"
               :max="10"
               style="width: 100%"
@@ -158,7 +190,9 @@
             >(步幅)</el-col
           >
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button :disabled="!isCalibration" @click="handleSaveItem">保存点 [Enter]</el-button></el-col
+            ><el-button :disabled="!isCalibration" @click="handleSaveItem"
+              >保存点 [Enter]</el-button
+            ></el-col
           >
           <el-col>
             <el-slider
@@ -180,7 +214,7 @@
           >
           <el-col :span="4"
             ><el-input-number
-            :disabled="!isCalibration"
+              :disabled="!isCalibration"
               style="width: 100%"
               controls-position="right"
               size="small"
@@ -193,7 +227,7 @@
           <el-col :span="4">（分贝db）</el-col>
           <el-col :span="4"
             ><el-input-number
-            :disabled="!isCalibration"
+              :disabled="!isCalibration"
               :min="1"
               :max="10"
               style="width: 100%"
@@ -206,7 +240,9 @@
             >(步幅)</el-col
           >
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button :disabled="!isCalibration" @click="handleSaveItem">保存点 [Enter]</el-button></el-col
+            ><el-button :disabled="!isCalibration" @click="handleSaveItem"
+              >保存点 [Enter]</el-button
+            ></el-col
           >
           <el-col>
             <el-slider
@@ -223,11 +259,11 @@
     </el-row>
   </div>
 </template>
-    
+
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from "vue";
 import type { CSSProperties } from "vue";
-import { auditionApi,imitateApi } from "@/serve/api/user";
+import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
 const value1 = ref("1");
 let isStart = false;
@@ -240,79 +276,81 @@ const queryForm = reactive({
   step1: 1,
   ambient: null,
   type: "1",
+  signalCalibrated: false,
+  environmentalCalibrated: false,
 });
-const isCalibration = ref(false)
+const isCalibration = ref(false);
 type Props = {
   testData: any;
 };
 const props = defineProps<Props>();
 const devices = ref([
   {
-    id1: '001',
-    id2: '011',
-    isCalibration: false
+    id1: "001",
+    id2: "011",
+    isCalibration: false,
   },
   {
-    id1: '001',
-    id2: '011',
-    isCalibration: false
+    id1: "001",
+    id2: "011",
+    isCalibration: false,
   },
   {
-    id1: '002',
-    id2: '012',
-    isCalibration: false
+    id1: "002",
+    id2: "012",
+    isCalibration: false,
   },
   {
-    id1: '003',
-    id2: '013',
-    isCalibration: false
+    id1: "003",
+    id2: "013",
+    isCalibration: false,
   },
   {
-    id1: '004',
-    id2: '014',
-    isCalibration: false
+    id1: "004",
+    id2: "014",
+    isCalibration: false,
   },
   {
-    id1: '005',
-    id2: '015',
-    isCalibration: false
+    id1: "005",
+    id2: "015",
+    isCalibration: false,
   },
   {
-    id1: '006',
-    id2: '016',
-    isCalibration: false
+    id1: "006",
+    id2: "016",
+    isCalibration: false,
   },
   {
-    id1: '007',
-    id2: '017',
-    isCalibration: false
+    id1: "007",
+    id2: "017",
+    isCalibration: false,
   },
   {
-    id1: '008',
-    id2: '018',
-    isCalibration: false
+    id1: "008",
+    id2: "018",
+    isCalibration: false,
   },
   {
-    id1: '009',
-    id2: '019',
-    isCalibration: false
+    id1: "009",
+    id2: "019",
+    isCalibration: false,
   },
   {
-    id1: '010',
-    id2: '011',
-    isCalibration: false
+    id1: "010",
+    id2: "011",
+    isCalibration: false,
   },
   {
-    id1: '001',
-    id2: '011',
-    isCalibration: false
+    id1: "001",
+    id2: "011",
+    isCalibration: false,
   },
-])
+]);
 interface Mark {
   style: CSSProperties;
   label: string;
 }
-let audioIndex = 12
+let audioIndex = '12';
 type Marks = Record<number, Mark | string>;
 const marks = reactive<Marks>({
   30: "30",
@@ -327,17 +365,15 @@ const marks = reactive<Marks>({
   75: "75",
   80: "80",
 });
-watch(()=>props.testData, (newValue, oldValue)=> {
-  console.log(newValue.indexs)
-  console.log(11111)
-  devices.value = newValue.indexs
-  console.log(devices)
-}, {deep: true, immediate: true})
-const emit = defineEmits([
-    "handleBack"
-])
+watch(
+  () => props.testData,
+  (newValue, oldValue) => {
+    devices.value = newValue.indexs;
+  },
+  { deep: true, immediate: true }
+);
+const emit = defineEmits(["handleBack"]);
 const handleStart = async () => {
-    console.log(props.testData)
   const res = await auditionApi.startTest(props.testData);
   if (res.code == 0) {
     isStart = true;
@@ -345,53 +381,58 @@ const handleStart = async () => {
 };
 const handleSave = async () => {
   const res = await auditionApi.stopTest();
+  console.log(res);
   if (res.code == 0) {
     isStart = false;
   }
 };
-const reImageTest = async ()=> {
-    const res = await auditionApi.reImageTest();
+const reImageTest = async () => {
+  const res = await auditionApi.reImageTest();
   if (res.code == 0) {
     isStart = true;
   }
-}
-const handleBack = ()=> {
-    emit("handleBack", false)
-}
-const handleSaveItem = async ()=> {
-  if (audioIndex == 12) {
+};
+const handleBack = () => {
+  emit("handleBack", false);
+};
+const handleSaveItem = async () => {
+  if (audioIndex == '12') {
     ElMessage({
-        message: "请先选择音响校准",
-        type: "warning",
-      });
-      return
+      message: "请先选择音响校准",
+      type: "warning",
+    });
+    return;
   }
   const form = {
     id: props.testData.id,
-      index: audioIndex,
-      signalSoundVolume: queryForm.signalSoundVolume,
-      environmentalSoundVolume: queryForm.environmentalSoundVolume,
-  }
+    index: audioIndex,
+    signalSoundVolume: queryForm.signalSoundVolume,
+    environmentalSoundVolume: queryForm.environmentalSoundVolume,
+    signalCalibrated: queryForm.signalCalibrated,
+    environmentalCalibrated: queryForm.environmentalCalibrated,
+  };
   const res = await imitateApi.saveAdjustValue(form);
-    if (res.code == 0) {
-      ElMessage({
-        message: "保存成功",
-        type: "success",
-      });
-    }
-}
-const handleCalibration = async (item:any, index: number)=> {
-  isCalibration.value = !isCalibration.value
-  audioIndex = index
-  item.isCalibration = !item.isCalibration
+  if (res.code == 0) {
+    ElMessage({
+      message: "保存成功",
+      type: "success",
+    });
+  }
+};
+const handleCalibration = async (item: any, index: number) => {
+  isCalibration.value = !isCalibration.value;
+  audioIndex = index+'';
+  item.isCalibration = !item.isCalibration;
   const form = {
     id: props.testData.id,
-    audios: [{
-      index: index + 1,
-      signalSoundVolume: queryForm.signalSoundVolume,
-      environmentalSoundVolume: queryForm.environmentalSoundVolume,
-    }]
-  }
+    audios: [
+      {
+        index: (index + 1)+'',
+        signalSoundVolume: queryForm.signalSoundVolume,
+        environmentalSoundVolume: queryForm.environmentalSoundVolume,
+      },
+    ],
+  };
   if (!item.isCalibration) {
     const res = await imitateApi.dbCalibration(form.id);
     if (res.code == 0) {
@@ -399,23 +440,22 @@ const handleCalibration = async (item:any, index: number)=> {
         message: "校准值上传成功",
         type: "success",
       });
-      audioIndex = 12
+      audioIndex = '12';
     }
   }
-}
-onMounted(()=> {
-  
-    window.addEventListener("setItemEvent", function (e: any) {
+};
+onMounted(() => {
+  window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
-      isStart = false
-        // imageData = {}
-        ElMessage({
+      isStart = false;
+      // imageData = {}
+      ElMessage({
         message: "方案播放完成",
         type: "success",
       });
     }
   });
-})
+});
 </script>
 
 <style lang="scss" scoped>

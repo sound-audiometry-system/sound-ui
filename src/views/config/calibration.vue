@@ -21,9 +21,9 @@
     </el-row>
     <el-table :height="520" :data="tableData" stripe style="width: 100%">
       <el-table-column prop="name" label="测试名称" min-width="180" />
-      <el-table-column prop="name" label="测试模式" min-width="180" />
-      <el-table-column prop="address" label="测试分类" />
-      <el-table-column prop="address" label="状态">
+      <el-table-column prop="level1EntryName" label="测试模式" min-width="180" />
+      <el-table-column prop="level2EntryName" label="测试分类" />
+      <el-table-column  label="状态">
         <template #default="scope">
           <span v-if="scope.row.calibrated" class="status-box1 status"
             >已校准</span
