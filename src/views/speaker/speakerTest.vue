@@ -15,6 +15,7 @@
           <hearTest
             :imageData="imageData"
             :answerIndex="answerIndex"
+            :isPlay="isPlay"
             @handleStart="handleStart"
             @handleStop="handleStop"
             @handleAudio="handleAudio"
@@ -39,6 +40,7 @@ import { useRoute } from "vue-router";
 import { useStore, mapState } from "vuex";
 let value = ref("1");
 let isStart = false;
+let isPlay = ref(false)
 let store = useStore();
 const route = useRoute();
 const testData = store.getters.getTestData;
@@ -63,6 +65,7 @@ const startTest = async () => {
   const res = await auditionApi.startTest(testData[0]);
   if (res.code == 0) {
     isStart = true;
+    isPlay.value = true
   }
 };
 const stopTest = async () => {
@@ -70,6 +73,7 @@ const stopTest = async () => {
   const res = await auditionApi.stopTest();
   if (res.code == 0) {
     isStart = false;
+    isPlay.value = true
   }
 };
 document.addEventListener(
@@ -77,13 +81,13 @@ document.addEventListener(
   () => {
     // console.log(1111111);
     astilectron.onMessage((message) => {
-      console.log(message);
+      // console.log(message);
     });
   },
   true
 );
 window.addEventListener("resize", () => {
-  console.log(22222);
+  // console.log(22222);
 });
 const recOpen = () => {
   rec = Recorder({
@@ -199,6 +203,7 @@ onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       isStart = false
+      isPlay.value = true
         // imageData = {}
         ElMessage({
         message: "方案播放完成",

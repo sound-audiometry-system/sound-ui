@@ -34,7 +34,7 @@ const activeName = ref('first')
 
 <style lang="scss" scoped>
 .el-container {
-    width: 1080px;
+    width: 1px;
     height: 800px;
     margin: 0 auto;
   margin-top: 50px;

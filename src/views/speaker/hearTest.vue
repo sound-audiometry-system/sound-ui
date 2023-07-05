@@ -192,6 +192,7 @@ let beforeChange1 = (value1) => {
 type Props = {
   imageData: any;
   answerIndex: any;
+  isPlay: any
 };
 const emit = defineEmits([
   "handleStart",

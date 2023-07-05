@@ -145,7 +145,7 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // chooseTypeVisble.value = true;
-  store.commit("setTestData", info)
+  store.commit("setImitateData", info)
   router.push('/imitate-plan')
 };
 
