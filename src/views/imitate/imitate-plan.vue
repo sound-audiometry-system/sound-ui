@@ -128,6 +128,7 @@ const value = ref('')
 const time = ref('1')
 let store = useStore();
 const imitateData = store.getters.getImitateData;
+console.log(imitateData)
 let isStart = false;
 const fileOptions = [
   {
@@ -204,7 +205,7 @@ const marks = reactive<Marks>({
 const handleStart = async () => {
   if (isStart) return;
   //开始
-  const res = await auditionApi.startTest(imitateData);
+  const res = await auditionApi.startTest({ ...imitateData, test: false });
   if (res.code == 0) {
     isStart = true;
   }
@@ -213,9 +214,9 @@ const handlePause = async ()=> {
     if (!isStart) return;
     //暂停
   const res = await auditionApi.pauseTest();
-  if (res.code == 0) {
+//   if (res.code == 0) {
     isStart = false;
-  }
+//   }
 }
 
 const handleRelease = async ()=> {

@@ -47,7 +47,7 @@ body,
 .container {
   // height: 100%;
   width: 1920px; /* 设计稿宽度 */
-  height: 1080px; /* 设计稿高度 */
+  height: 1680px; /* 设计稿高度 */
   transform-origin: left top;
   transform: scale(1); /* 初始缩放比例 */
   transition: transform 0.3s ease-out;

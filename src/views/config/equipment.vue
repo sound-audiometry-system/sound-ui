@@ -128,6 +128,11 @@ const devices = [
 ]
 const getDevice = async (id)=> {
   const res = await auditionApi.getDevice({id: id})
+  if (res.code == 0 && res.online) {
+    var idstr = id.substring(0,2)
+    if (deviceset.includes(idstr)) return
+    deviceset.push(idstr)
+  }
   // if (res.code == 0) {
   //   deviceset.value = res.list
   //   // res.list.forEach(item=>{
