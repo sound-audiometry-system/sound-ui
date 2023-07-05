@@ -151,7 +151,7 @@ const toTest = (info) => {
 
 onMounted(()=> {
   // 调用模拟列表
-  console.log(22222222)
+  // console.log(22222222)
   getListTestMode()
 })
 </script>

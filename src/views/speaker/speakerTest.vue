@@ -204,6 +204,7 @@ onMounted(() => {
         message: "方案播放完成",
         type: "success",
       });
+      imageData = reactive({})
         return
     }
     if (e.key === "imageData") {

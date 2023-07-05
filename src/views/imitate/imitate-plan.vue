@@ -48,7 +48,7 @@
                             <el-row class="el-row-box" style="display: flex; align-items: center;margin-top: 4px;">
                                 <el-col style="font-size: 14px;color: #3A3A3A;" :span="4">环境声</el-col>
                                 <el-col :span="5"><el-input-number style="width: 100%" controls-position="right"
-                                        size="small" v-model="queryForm.signal" placeholder="52" /></el-col>
+                                        size="small" v-model="queryForm.signal2" placeholder="52" /></el-col>
                                 <el-col :span="6">（分贝dB）</el-col>
                                 <el-col :span="5"><el-input-number :min="1" :max="10" style="width: 100%"
                                         controls-position="right" size="small" v-model="queryForm.step"
@@ -56,7 +56,7 @@
                                 <el-col style="font-size: 14px;color: #B0B0B0;" :span="4">（步幅）</el-col>
                             </el-row>
                             <div>
-                                <el-slider style="width: 100%" v-model="queryForm.signal" :min="0" :max="80"
+                                <el-slider style="width: 100%" v-model="queryForm.signal2" :min="0" :max="80"
                                     :marks="marks" />
                             </div>
                         </div>
@@ -177,6 +177,7 @@ const queryForm = reactive({
     fileName: null,
     delay: '1',
     signal: 52,
+    signal2: 52,
     step: 1,
     ambient: null,
     type: '1',

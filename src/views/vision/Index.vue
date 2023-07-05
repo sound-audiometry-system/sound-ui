@@ -59,7 +59,7 @@
               >开始测试</el-button
             >
           </div>
-          <el-empty description="暂无" v-else />
+          <el-empty description="暂无数据" v-else />
         </div>
       </div>
     </el-main>
@@ -166,7 +166,7 @@ const userInfo = ref({
 
 //搜索的用户结果,sex为1为男性，sex为2为女性
 const userSearchData = ref([
-  { gender: 1, name: "000032" },    
+  // { gender: 1, name: "000032" },    
 ]);
 //测试列表
 const testData = ref([
