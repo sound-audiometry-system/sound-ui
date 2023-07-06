@@ -102,7 +102,7 @@
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
       <div style="height: 280px; width: 465px">
-        <sound @handleClkItem="handleClkItem"></sound>
+        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay" size="small" @click="handleStart">开始</el-button>
@@ -174,6 +174,7 @@ let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false)
+let soundIndex = ref(0)
 console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
 const answerMarks = ref(testData[0].commands.map(item=> {
@@ -275,6 +276,10 @@ onMounted(()=> {
     }
     if (e.key === "imageData") {
       answerMarks.value[answerIndex].answerMark = 2
+    }
+    // 1111
+    if (e.key === "audiostart") {
+      
     }
   });
 })

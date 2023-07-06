@@ -8,7 +8,7 @@
       <el-col class="dot" :span="12">
         <div class="dot-outer">
           <div class="dot-center"><img src="../../assets/header.png" width="30" alt=""></div>
-          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="{ 'dot-control': true, 'error-active': item.active && index <= 4, 'success-active': item.active && index > 5 && index <= 10,'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated }">
+          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="{ 'dot-control': true, 'error-active': item.active && index <= 4, 'success-active': item.active && index > 5 && index <= 10,'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index  }">
             {{ index }}
           </div>
         </div>
@@ -80,6 +80,7 @@ const soundList = ref([
 type Props = {
   sounds: any;
   deviceConfig:any;
+  soundIndex: Number;
 };
 const props = defineProps<Props>();
 // console.log(props)
