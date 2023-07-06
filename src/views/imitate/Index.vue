@@ -189,8 +189,8 @@ onMounted(()=> {
 }
 
 .el-container {
-  width: 1080px;
-  height: 800px;
+  width: 1920px;
+  height: 1080px;
   margin: 0 auto;
   margin-top: 50px;
   .el-header {

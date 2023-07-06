@@ -2,38 +2,31 @@
 <template>
   <el-row>
     <el-col :span="24" style="display: flex">
-      <div style="width: 1040px">
+      <div style="width: 1920px">
         <label>测试前连接</label>
         <button type="button" @click="buttClick">连接</button>
       </div>
     </el-col>
   </el-row>
   <el-container>
-    <el-aside width="540px">
-      <el-row style="height: 375px; width: 525px">
+    <el-aside>
+      <el-row style="height: 425px; width: 525px">
         <el-col :span="24">
           <sound :sounds="deviceset"></sound>
         </el-col>
       </el-row>
       <el-row class="xxx-a">
-        <el-col
-          :span="7"
-          style="background-color: aliceblue"
-          v-for="index in 12"
-          :key="index"
-        >
-          <div
-            class="config-b"
-            :style="{ 'text-align': 'center', backgroundColor: getBgc(index) }"
-          >
-            {{ index }}
-          </div>
-          {{ index }} 号音响
+        <el-col :span="6" v-for="index in 12" :key="index" >
+          <div style="background-color: aliceblue;">
+            <div class="config-b" :style="{ 'display': 'inline-block','text-align': 'center', backgroundColor: getBgc(index-1) }" >
+              {{ index-1 }}
+            </div><label>{{ index-1 }} 号音响</label>
+        </div>
         </el-col>
       </el-row>
     </el-aside>
-    <el-main width="540px">
-      <el-row style="width: 100%" :gutter="20">
+    <el-main >
+      <el-row :gutter="20">
         <el-col :span="24">显示器</el-col>
         <el-col :span="12" class="monitor-a">
           <div style="display: flex; align-items: center; margin: 10px 0">
@@ -43,7 +36,7 @@
             >
             <span>显示器</span>
           </div>
-          <div style="width: 100%; height: 174px; background-color: #000"></div>
+          <div style="width: 400px; height: 300px; background-color: #000"></div>
         </el-col>
         <el-col :span="12" class="monitor-a">
           <div style="display: flex; align-items: center; margin: 10px 0">
@@ -53,7 +46,7 @@
             >
             <span>显示器</span>
           </div>
-          <div style="width: 100%; height: 174px; background-color: #000"></div>
+          <div style="width: 400px; height: 300px; background-color: #000"></div>
         </el-col>
       </el-row>
     </el-main>
@@ -171,19 +164,22 @@ let getBgc = (idex) => {
 </script>
 <style scoped lang="scss">
 .el-container {
-  width: 1080px;
-  height: 625px;
+  width: 100%;
+  height: 95%;
   margin: 0 auto;
   margin-top: 50px;
+  .el-aside{
+    width: 960px;
+  }
   .el-main {
     display: flex;
-    width: 540px;
-    height: 200px;
+    width: 100%;
+    height: 405px;
     margin: 2px;
 
     :deep(.el-col .monitor) {
-      width: 260px;
-      height: 200px;
+      width: 400px;
+      height: 300px;
       background-color: aqua;
     }
   }
@@ -191,9 +187,9 @@ let getBgc = (idex) => {
   .xxx-a {
     display: flex;
     align-items: center;
-    justify-content: center;
-    width: 540px;
-    height: 240px;
+    justify-content: space-around;
+    width: 920px;
+    height: 375px;
     // flex-direction: column;
     flex-wrap: wrap;
     background-color: #f6f6f6;
@@ -201,12 +197,10 @@ let getBgc = (idex) => {
     .el-col {
       margin-left: 3px;
       display: flex;
-      justify-content: space-around;
       width: 100px;
       height: 32px;
       // margin-bottom: 3px;
       flex-direction: row;
-      justify-content: space-around;
       align-items: center;
       align-content: center;
 
@@ -225,7 +219,6 @@ let getBgc = (idex) => {
       height: 48px;
       width: 540px;
       display: flex;
-
       flex-direction: row;
       justify-content: space-around;
       align-items: center;
