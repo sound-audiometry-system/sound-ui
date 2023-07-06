@@ -256,6 +256,9 @@ const handleReImage = async () => {
     isCheckFlag.value = false;
   }
 };
+const mod =(n, m)=> {
+  return ((n % m) + m) % m;
+}
 const checkedImg = (index) => {
   // console.log(props.imageData.answerList[index].isCheckFlag)
   // console.log(isCheckFlag.value)
@@ -279,7 +282,7 @@ onMounted(()=> {
     }
     // 1111
     if (e.key === "audiostart") {
-      
+      soundIndex.value = mod(e.target, 2)
     }
   });
 })
