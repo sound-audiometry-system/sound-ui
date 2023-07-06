@@ -108,7 +108,7 @@
         <el-button :disabled="props.isPlay" size="small" @click="handleStart">开始</el-button>
         <el-button size="small" @click="handleSave">保存</el-button>
         <el-button size="small" @click="handleSave">保存并生成记录</el-button>
-        <el-button size="small" @click="handleStop">提前结束</el-button>
+        <el-button size="small" @click="handleSave">提前结束</el-button>
         <el-button size="small">测试文件</el-button>
       </el-row>
       <el-row class="el-btn b">
