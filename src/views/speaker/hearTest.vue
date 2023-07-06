@@ -174,7 +174,7 @@ let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false)
-let soundIndex = ref(0)
+let soundIndex = ref(30)
 console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
 const answerMarks = ref(testData[0].commands.map(item=> {
@@ -257,7 +257,7 @@ const handleReImage = async () => {
   }
 };
 const mod =(n, m)=> {
-  return ((n % m) + m) % m;
+  return Number.parseInt(n/m);
 }
 const checkedImg = (index) => {
   // console.log(props.imageData.answerList[index].isCheckFlag)
