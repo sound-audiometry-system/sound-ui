@@ -73,7 +73,7 @@ const startTest = async (value1, value2) => {
   const res = await auditionApi.startTest({...testData[0],test: test, leftHide: !value1, rightHide: !value2});
   if (res.code == 0) {
     isStart = true;
-    isPlay.value = false
+    // isPlay.value = false
   }
 };
 const stopTest = async () => {
