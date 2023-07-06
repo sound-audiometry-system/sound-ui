@@ -106,7 +106,7 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Female width="1.2em" height="1.2em" v-if="userInfo.gender == 1" />
+            <Female width="1.2em" height="1.2em" v-if="userInfo.gender == '1'" />
             <Male width="1.2em" height="1.2em" v-else />
             <text style="font-weight: bold">{{
               userInfo.name
@@ -234,11 +234,14 @@ const toTest = (info) => {
 //footer下面图标切换颜色
 const chooseItem = (val) => {
   active.value = val;
-  console.log(active, 'active')
   //后续为头部切换页面
 };
 </script>
 <style lang="scss" scoped>
+
+
+
+
 .font {
   font-size: small;
   font-weight: bold;
@@ -272,12 +275,13 @@ const chooseItem = (val) => {
 }
 
 .el-container {
-  width: 1080px;
-  height: 800px;
+  width: 100%;
+  height: 95%;
   margin: 0 auto;
   margin-top: 50px;
   .el-header {
     background-color: #208571;
+    
   }
 
   .el-footer {

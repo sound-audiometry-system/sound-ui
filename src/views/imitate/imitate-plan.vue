@@ -121,7 +121,7 @@
 import { ref, reactive, onMounted } from "vue";
 import type { CSSProperties } from 'vue'
 import { auditionApi } from "@/serve/api/user";
-import { useStore, mapState } from "vuex";
+import { useStore } from "vuex";
 import sound from "../../components/sound/index.vue";
 const value1 = ref("1")
 const value = ref('')
@@ -272,8 +272,8 @@ onMounted(()=> {
 }
 
 .el-container {
-    width: 1180px;
-    height: 800px;
+    width: 1920px;
+    height: 1080px;
     margin: 0 auto;
   margin-top: 50px;
     .el-header {

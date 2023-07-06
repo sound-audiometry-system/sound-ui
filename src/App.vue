@@ -28,22 +28,12 @@ export default {
 </script>
 
 <template>
-  <div v-scale class="container">
+  <div class="container">
     <RouterView />
   </div>
 </template>
 
 <style lang="scss" scoped>
-html,
-body,
-#app {
-  margin-top: 0px;
-  margin-left: 0px;
-  border-top: 1px solid var(--el-border-color);
-  border-radius: 4px;
-  height: 100vh;
-  overflow: hidden;
-}
 .container {
   // height: 100%;
   width: 1920px; /* 设计稿宽度 */
