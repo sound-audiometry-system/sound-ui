@@ -5,17 +5,18 @@
             <el-icon size="24">
                 <Avatar />
             </el-icon>
-            <label style="margin-left: 10px; line-height: 48px;">张三</label>
+            <label style="margin-left: 10px; line-height: 48px;">{{ userInfo[0].name }}</label>
         </el-col>
-        <el-col :span="6">
+        <!-- <el-col :span="6">
             <el-button link>测试</el-button>
-        </el-col>
+        </el-col> -->
         <el-col :span="12">
             <div class="grid-content ep-bg-purple" />
         </el-col>
     </el-row>
 </template>
 <script setup lang="ts">
+const userInfo = JSON.parse(localStorage.getItem("userInfo")) || ""
 </script>
 <style scoped lang="scss">
 .el-col {

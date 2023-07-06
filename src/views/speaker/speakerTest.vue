@@ -175,11 +175,11 @@ const handleStopAudio = () => {
         type: "success",
       });
       /*** 【立即播放例子】 ***/
-      var audio = document.createElement("audio");
-      audio.controls = true;
-      document.body.appendChild(audio);
-      audio.src = localUrl;
-      audio.play();
+      // var audio = document.createElement("audio");
+      // audio.controls = true;
+      // document.body.appendChild(audio);
+      // audio.src = localUrl;
+      // audio.play();
     },
     function (msg) {
       console.log("录音失败:" + msg);
