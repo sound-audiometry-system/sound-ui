@@ -88,7 +88,7 @@ const handleSave = async ()=> {
   //保存
   // console.log(testData[0].commands)
   //commands
-  const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands });
+  const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands, operator: 'admin' });
   if (res.code == 0) {
     isStart = false;
     isPlay.value = false

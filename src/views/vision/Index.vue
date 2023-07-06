@@ -150,6 +150,7 @@ import footerTab from "../../components/footerTab.vue";
 // const queryData = async () => { 
 //     const res = await userApi.getPageData(params)
 // }
+const userInfo1 = JSON.parse(localStorage.getItem("userInfo")) || ""
  const router = useRouter()
 const active = ref(1);
 

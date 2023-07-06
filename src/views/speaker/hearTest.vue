@@ -283,6 +283,7 @@ onMounted(()=> {
     // 1111
     if (e.key === "audiostart") {
       soundIndex.value = mod(e.target, 2)
+      console.log(soundIndex.value)
     }
   });
 })
