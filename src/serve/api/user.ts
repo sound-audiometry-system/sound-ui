@@ -73,6 +73,19 @@ class AuditionApi {
   }
 
   /** 
+   * 上传测试结果
+   * @param data 传递参数
+   * @returns
+  */
+  report(data: any) {
+    return http.request({
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/test/report',
+      method: 'POST',
+      data,
+    })
+  }
+
+  /** 
    * 上一个
    * @param 无参数
    * @returns

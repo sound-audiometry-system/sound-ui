@@ -6,7 +6,7 @@
     <el-aside>
       <div class="es-switch">
         <span
-          ><el-switch v-model="value1" :before-change="beforeChange1" />
+          ><el-switch v-model="value1" />
           <label style="font-size: 16px">左显示器</label></span
         >
         <span
@@ -39,7 +39,7 @@
         <div style="width: 18%;margin-left: 10px;">
           <p>测试总数</p>
           <div class="test-total-box">{{ answerMarks ? answerMarks.length  : 0 }}</div>
-          <div style="margin-top: 10px;"><el-switch v-model="value1" :before-change="beforeChange1" /></div>
+          <div style="margin-top: 10px;"><el-switch v-model="value3" @change="beforeChange1" /></div>
           <p style="font-size: 12px;">同时打开两边显示器</p>
         </div>
       </div>
@@ -105,9 +105,9 @@
         <sound @handleClkItem="handleClkItem"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button size="small" @click="handleStart">开始</el-button>
-        <el-button size="small" @click="handleStop">保存</el-button>
-        <el-button size="small" @click="handleStop">保存并生成记录</el-button>
+        <el-button :disabled="props.isPlay" size="small" @click="handleStart">开始</el-button>
+        <el-button size="small" @click="handleSave">保存</el-button>
+        <el-button size="small" @click="handleSave">保存并生成记录</el-button>
         <el-button size="small" @click="handleStop">提前结束</el-button>
         <el-button size="small">测试文件</el-button>
       </el-row>
@@ -158,7 +158,7 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
@@ -172,6 +172,7 @@ const answerDialogRef = ref(null) as any;
 const soundDialogRef = ref(null) as any;
 let value1 = ref(true);
 let value2 = ref(true);
+let value3 = ref(true);
 let isOpen = ref(false)
 console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
@@ -181,13 +182,9 @@ const answerMarks = ref(testData[0].commands.map(item=> {
   }
 }))
 // answerDialogRef.value.show([])
-let beforeChange1 = (value1) => {
-  if (value1) {
-    value1 = false;
-  } else {
-    value1 = true;
-  }
-  return value1;
+let beforeChange1 = () => {
+  value1.value = value3.value
+  value2.value = value3.value
 };
 type Props = {
   imageData: any;
@@ -199,6 +196,7 @@ const emit = defineEmits([
   "handleStop",
   "handleAudio",
   "handleStopAudio",
+  "handleSave"
 ]);
 const props = defineProps<Props>();
 let answerIndex = props.answerIndex
@@ -216,7 +214,7 @@ const handleClkItem = (index) => {
   soundDialogRef.value.show(index);
 };
 const handleStart = () => {
-  emit("handleStart");
+  emit("handleStart", value1.value, value2.value);
 };
 const handleStop = () => {
   for (const item of answerMarks.value) {
@@ -224,6 +222,9 @@ const handleStop = () => {
   }
   emit("handleStop");
 };
+const handleSave = ()=> {
+  emit("handleSave");
+}
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
   emit(isOpen.value ? "handleAudio" : "handleStopAudio");
@@ -261,12 +262,22 @@ const checkedImg = (index) => {
   isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
   index + 1 == props.imageData.target ? answerMarks.value[answerIndex].answerMark = 2 : answerMarks.value[answerIndex].answerMark = 3
-  console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
+  // console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
   //   // props.imageData.answerList[index].isCheckFlag = false
   // }
 };
+onMounted(()=> {
+  window.addEventListener("setItemEvent", function (e: any) {
+    if (!e.newValue) {
+        return
+    }
+    if (e.key === "imageData") {
+      answerMarks.value[answerIndex].answerMark = 2
+    }
+  });
+})
 </script>
 
 <style lang="scss" scoped>

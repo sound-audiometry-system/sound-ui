@@ -18,6 +18,7 @@
             :isPlay="isPlay"
             @handleStart="handleStart"
             @handleStop="handleStop"
+            @handleSave="handleSave"
             @handleAudio="handleAudio"
             @handleStopAudio="handleStopAudio"
           ></hearTest>
@@ -41,6 +42,7 @@ import { useStore, mapState } from "vuex";
 let value = ref("1");
 let isStart = false;
 let isPlay = ref(false)
+let isOpen = false
 let store = useStore();
 const route = useRoute();
 const testData = store.getters.getTestData;
@@ -48,6 +50,7 @@ const main = ref();
 let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 var rec;
+const userInfo = JSON.parse(localStorage.getItem("userInfo")) || ""
 // console.log(testData);
 //计算属性——完整
 // let imageData = computed({
@@ -60,12 +63,17 @@ var rec;
 //     console.log(value)
 //   },
 // });
-const startTest = async () => {
+const startTest = async (value1, value2) => {
   //开始
-  const res = await auditionApi.startTest(testData[0]);
+  let test = false
+  isPlay.value = true
+  if (!value1 && !value2) {
+    test = true
+  }
+  const res = await auditionApi.startTest({...testData[0],test: test, leftHide: !value1, rightHide: !value2});
   if (res.code == 0) {
     isStart = true;
-    isPlay.value = true
+    isPlay.value = false
   }
 };
 const stopTest = async () => {
@@ -73,9 +81,19 @@ const stopTest = async () => {
   const res = await auditionApi.stopTest();
   if (res.code == 0) {
     isStart = false;
-    isPlay.value = true
+    isPlay.value = false
   }
 };
+const handleSave = async ()=> {
+  //保存
+  // console.log(testData[0].commands)
+  //commands
+  const res = await auditionApi.report({ uid: userInfo.uid, testId:testData[0].id,answerList: testData[0].commands });
+  if (res.code == 0) {
+    isStart = false;
+    isPlay.value = false
+  }
+}
 document.addEventListener(
   "astilectron-ready",
   () => {
@@ -90,6 +108,7 @@ window.addEventListener("resize", () => {
   // console.log(22222);
 });
 const recOpen = () => {
+  isOpen = true
   rec = Recorder({
     //本配置参数请参考下面的文档，有详细介绍
     type: "mp3",
@@ -134,9 +153,9 @@ const recStart = () => {
   //打开了录音后才能进行start、stop调用
   rec.start();
 };
-const handleStart = () => {
+const handleStart = (value1, value2) => {
   if (isStart) return;
-  startTest();
+  startTest(value1, value2);
   // document.addEventListener("astilectron-ready",  ()=> {
   //   astilectron.onMessage((message)=> {
   //     console.log(message);
@@ -170,6 +189,7 @@ const handleStopAudio = () => {
       console.log(formData.get("upfile"), "upfile");
       console.log(formData.get("resourceId"), "resourceId");
       const res = await auditionApi.fileUpload(formData);
+      isOpen = false
       ElMessage({
         message: "录音关闭",
         type: "success",
@@ -185,6 +205,7 @@ const handleStopAudio = () => {
       console.log("录音失败:" + msg);
       rec.close(); //可以通过stop方法的第3个参数来自动调用close
       rec = null;
+      isOpen = false
     }
   );
 };
@@ -203,12 +224,16 @@ onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       isStart = false
-      isPlay.value = true
+      isPlay.value = false
         // imageData = {}
         ElMessage({
         message: "方案播放完成",
         type: "success",
       });
+      handleSave()
+      if (!isOpen) {
+        handleStopAudio()
+      }
       imageData = reactive({})
         return
     }
