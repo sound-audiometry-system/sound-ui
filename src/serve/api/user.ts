@@ -10,7 +10,8 @@ class UserApi {
    */
   getUserInfo(data: UserInfo) {
     return http.request({
-      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/info',
+      // url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/patient/info',
+      url: '/hy_saas_client_gateway/whym/hearing_service/api/patient/info',
       method: 'POST',
       data,
       // headers: {
@@ -40,11 +41,12 @@ class AuditionApi {
    * @param data 传递参数
    * @returns
   */
-  startTest(data: any) {
+  startTest(data: any, params) {
     return http.request({
       url: '/native/play',
       method: 'POST',
       data,
+      params
     })
   }
 

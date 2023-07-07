@@ -50,13 +50,13 @@ const main = ref();
 let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 var rec;
-const userInfo = JSON.parse(localStorage.getItem("userInfo")) || ""
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || ""
 // console.log(testData);
 //计算属性——完整
 // let imageData = computed({
 //   // 读
 //   get() {
-//     return localStorage.getItem('imageData') ? JSON.parse(localStorage.getItem('imageData') || '') : [];
+//     return sessionStorage.getItem('imageData') ? JSON.parse(sessionStorage.getItem('imageData') || '') : [];
 //   },
 //   // 写
 //   set(value) {
@@ -64,16 +64,23 @@ const userInfo = JSON.parse(localStorage.getItem("userInfo")) || ""
 //   },
 // });
 const startTest = async (value1, value2) => {
+  let params = {};
+  if (!value1) {
+    params['leftHide'] = value1;
+  }
+  if ( !value2) {
+    params['rightHide'] = value2;
+  }
   //开始
-  let test = false
   isPlay.value = true
   if (!value1 && !value2) {
-    test = true
+    params['test'] = true;
   }
-  const res = await auditionApi.startTest({...testData[0],test: test, leftHide: !value1, rightHide: !value2});
+  console.info("startParam ------------>",params)
+  const res = await auditionApi.startTest(testData[0],params);
   if (res.code == 0) {
     isStart = true;
-    isPlay.value = false
+    // isPlay.value = false
   }
 };
 const stopTest = async () => {
@@ -88,7 +95,7 @@ const handleSave = async ()=> {
   //保存
   // console.log(testData[0].commands)
   //commands
-  const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands });
+  const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands, operator: 'admin',reason: '提前结束' });
   if (res.code == 0) {
     isStart = false;
     isPlay.value = false
@@ -219,7 +226,7 @@ onMounted(() => {
   //   });
   // console.log(main.value.$refs)
   // const imageData: any = ref(
-  //   JSON.stringify(localStorage.getItem("imageData") || "")
+  //   JSON.stringify(sessionStorage.getItem("imageData") || "")
   // );
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
@@ -239,9 +246,9 @@ onMounted(() => {
     }
     if (e.key === "imageData") {
       answerIndex.value += 1;
-      if (localStorage.getItem("imageData")) {
+      if (sessionStorage.getItem("imageData")) {
         imageData = reactive(
-          JSON.parse(localStorage.getItem("imageData") || "")
+          JSON.parse(sessionStorage.getItem("imageData") || "")
         );
       }
       if (imageData.answerList && imageData.answerList.length != 0) {

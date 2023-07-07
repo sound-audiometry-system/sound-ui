@@ -16,7 +16,7 @@
     </el-row>
 </template>
 <script setup lang="ts">
-const userInfo = JSON.parse(localStorage.getItem("userInfo")) || ""
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || ""
 </script>
 <style scoped lang="scss">
 .el-col {

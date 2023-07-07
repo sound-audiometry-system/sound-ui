@@ -124,13 +124,11 @@ const options = [
     label: '5',
   },
 ]
-const getUserPatient = ()=> {
-  userApi.getUserPatient({ uid: '1' })
-}
+
 const handleClose = (done: () => void) => {
   done();
 };
-getUserPatient()
+
 const show = (index) => {
   dialogVisible.value = true;
   soundIndex.value = index;

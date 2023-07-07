@@ -1,4 +1,3 @@
-
 <!--  -->
 <template>
   <el-container>
@@ -20,12 +19,12 @@
             ref="form"
             label-width="200px"
             class="form"
-            @submit.native.prevent="()=> searchUser"
+            @submit.native.prevent="() => searchUser"
           >
             <el-form-item>
               <el-input
                 v-model="inputUserId"
-                placeholder="请输入"
+                placeholder="请输入用户ID"
                 class="input-with-select"
                 clearable
                 @clear="userSearchData = []"
@@ -47,7 +46,12 @@
               <Female class="icon" v-if="item.gender == 1" />
               <Male class="icon" v-else />
               <text
-                style="margin-left: 2px; font-size: revert; font-weight: bold;width: 80%"
+                style="
+                  margin-left: 2px;
+                  font-size: revert;
+                  font-weight: bold;
+                  width: 80%;
+                "
                 >{{ item.name }}</text
               >
             </div>
@@ -106,11 +110,13 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Female width="1.2em" height="1.2em" v-if="userInfo.gender == '1'" />
+            <Female
+              width="1.2em"
+              height="1.2em"
+              v-if="userInfo.gender == '1'"
+            />
             <Male width="1.2em" height="1.2em" v-else />
-            <text style="font-weight: bold">{{
-              userInfo.name
-            }}</text>
+            <text style="font-weight: bold">{{ userInfo.name }}</text>
           </div>
         </div>
         <text style="font-weight: bold; margin-top: 2%">测试选择</text>
@@ -137,40 +143,52 @@
     </el-dialog>
   </el-container>
 </template>
-<script setup lang="ts" >
+<script setup lang="ts">
 import { ref, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 import { userApi } from "@/serve/api/user";
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 import footerTab from "../../components/footerTab.vue";
 // import { useStore } from '../../store'
-  let store = useStore();
-  // console.log()
-// const queryData = async () => { 
+let store = useStore();
+// console.log()
+// const queryData = async () => {
 //     const res = await userApi.getPageData(params)
 // }
- const router = useRouter()
+const router = useRouter();
 const active = ref(1);
 
-const form = reactive({})
+const form = reactive({});
 
 const chooseTypeVisble = ref(false);
+
 //定义输入的用户id
 const inputUserId = ref(null);
 //存储选择的用户信息
-const userInfo = ref({
-  name: null,
-  gender: "",
-});
-
+// const userInfo = ;
+const userInfo =
+  JSON.parse(sessionStorage.getItem("userInfo")) ||
+  ref({
+    name: null,
+    gender: "",
+  });
 //搜索的用户结果,sex为1为男性，sex为2为女性
 const userSearchData = ref([
-  // { gender: 1, name: "000032" },    
+  // { gender: 1, name: "000032" },
 ]);
+userSearchData.value = userInfo;
 //测试列表
 const testData = ref([
-  { name: "听力测试", id: 1, questionsControl: true, directControl: true, wrongControl: true, jammingMode: 1, commands: [] },
+  {
+    name: "听力测试",
+    id: 1,
+    questionsControl: true,
+    directControl: true,
+    wrongControl: true,
+    jammingMode: 1,
+    commands: [],
+  },
 ]);
 //测试结果
 const testResult = ref();
@@ -178,32 +196,32 @@ const testResult = ref();
 //远程搜索用户信息
 const searchUser = () => {
   //后续为远程搜索用户信息
-  getUserInfo()
+  getUserInfo();
 };
 
 const loadTestData = () => {
   //后续为远程获取测试结果
 };
 
-const getUserInfo = async() => {
+const getUserInfo = async () => {
   const res = await userApi.getUserInfo({ uid: inputUserId.value });
   // console.log(res, '2222222')
   if (res.code == 0) {
-    userSearchData.value = [res.data]
+    userSearchData.value = [res.data];
   } else {
     ElMessage({
-        message: res.msg || "用户不存在",
-        type: "error",
-      });
+      message: res.msg || "用户不存在",
+      type: "error",
+    });
   }
 };
 
 // 获取用户配置
-const getUserPatient = async(uid: string | number) => {
+const getUserPatient = async (uid: string | number) => {
   const res = await userApi.getUserPatient({ uid: uid });
-  testData.value = res.data
+  testData.value = res.data;
   // store.commit("setTestData", res.data)
-  console.log(store)
+  console.log(store);
   // store['_mutations'].setTestData()
   // console.log(res, '2222222')
   // userSearchData.value = [res.data]
@@ -211,11 +229,11 @@ const getUserPatient = async(uid: string | number) => {
 
 const handleNav = () => {
   chooseTypeVisble.value = false;
-  localStorage.setItem("userInfo", JSON.stringify(userSearchData.value))
-  const testArr = testData.value.filter(item=> item.id == testResult.value)
-  store.commit("setTestData", testArr)
+  sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
+  const testArr = testData.value.filter((item) => item.id == testResult.value);
+  store.commit("setTestData", testArr);
   // if (testResult.value == 1) {
-    router.push({ path: "/speaker" });
+  router.push({ path: "/speaker" });
   // }
 };
 //加载测试数据
@@ -226,8 +244,8 @@ const handleNav = () => {
 const toTest = (info) => {
   // inputUserId.value = info.name;
   userInfo.value = info;
-  console.log(info)
-  getUserPatient(info.uid)
+  console.log(info);
+  getUserPatient(info.uid);
   chooseTypeVisble.value = true;
 };
 
@@ -238,10 +256,6 @@ const chooseItem = (val) => {
 };
 </script>
 <style lang="scss" scoped>
-
-
-
-
 .font {
   font-size: small;
   font-weight: bold;
@@ -263,7 +277,7 @@ const chooseItem = (val) => {
 }
 
 .activeColor {
-  background-color: #C7D8D4;
+  background-color: #c7d8d4;
 
   .icon {
     color: rgb(30, 25, 25);
@@ -281,7 +295,6 @@ const chooseItem = (val) => {
   margin-top: 50px;
   .el-header {
     background-color: #208571;
-    
   }
 
   .el-footer {
