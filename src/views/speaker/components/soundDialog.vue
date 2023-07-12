@@ -2,7 +2,8 @@
   <el-dialog
     v-model="dialogVisible"
     :title="soundIndex + '号音响'"
-    width="20%"
+    width="35%"
+    style="height: 460px;"
     :before-close="handleClose"
   >
     <div class="answer-box">
@@ -171,6 +172,6 @@ defineExpose({
   width: 98%;
 }
 :deep(.el-dialog__body) {
-  height: 400px;
+  height: 500px;
 }
 </style>

@@ -25,7 +25,6 @@
         </el-tab-pane>
       </el-tabs>
     </el-main>
-    <footer-tab></footer-tab>
   </el-container>
 </template>
 <script lang="ts" setup>
@@ -264,12 +263,12 @@ onMounted(() => {
 </script>
 <style lang="scss" scoped>
 .el-container {
-  width: 1080px;
-  height: 820px;
+  width: 1920px;
+  height: 1080px;
   margin: 0 auto;
   margin-top: 50px;
   .el-tabs {
-    height: 700px;
+    height: 1000px;
   }
   .el-main {
     padding-block: inherit;
