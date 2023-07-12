@@ -1,6 +1,6 @@
 export const dispatchEventStroage = () => {
-  const signSetItem = localStorage.setItem;
-  localStorage.setItem = function (key: string, val:any) {
+  const signSetItem = sessionStorage.setItem;
+  sessionStorage.setItem = function (key: string, val:any) {
     let setEvent:any = new Event("setItemEvent");
     setEvent.key = key;
     setEvent.newValue = val;

@@ -108,7 +108,7 @@
         <el-button :disabled="props.isPlay" size="small" @click="handleStart">开始</el-button>
         <el-button size="small" @click="handleSave">保存</el-button>
         <el-button size="small" @click="handleSave">保存并生成记录</el-button>
-        <el-button size="small" @click="handleSave">提前结束</el-button>
+        <el-button size="small" @click="handleStop">提前结束</el-button>
         <el-button size="small">测试文件</el-button>
       </el-row>
       <el-row class="el-btn b">
@@ -257,7 +257,7 @@ const handleReImage = async () => {
   }
 };
 const mod =(n, m)=> {
-  return Number.parseInt(n/m);
+  return parseInt(n/m);
 }
 const checkedImg = (index) => {
   // console.log(props.imageData.answerList[index].isCheckFlag)
@@ -281,9 +281,11 @@ onMounted(()=> {
       answerMarks.value[answerIndex].answerMark = 2
     }
     // 1111
-    if (e.key === "audiostart") {
-      soundIndex.value = mod(e.target, 2)
-      console.log(soundIndex.value)
+    if (e.key === "audioStart") {
+      let item = JSON.parse(e.newValue)
+      console.info("==========>",item)
+      console.info("mod==========>",mod(item.target,2))
+      soundIndex.value = mod(item.target,2)
     }
   });
 })

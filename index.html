@@ -31,11 +31,14 @@
       astilectron.onMessage((message) => {
         console.log(message, 'message')
         if (message.cmdType == 'imageDisplay') {
-          localStorage.setItem('imageData', JSON.stringify(message))
+          sessionStorage.setItem('imageData', JSON.stringify(message))
+        }
+        if (message.cmdType == 'audioStart') {
+          sessionStorage.setItem('audioStart', JSON.stringify(message))
         }
         if (message.cmdType == 'playFinish') {
-          // localStorage.setItem('imageData', JSON.stringify(message))
-          localStorage.setItem('imageData', "")
+          // sessionStorage.setItem('imageData', JSON.stringify(message))
+          sessionStorage.setItem('imageData', "")
         }
       });
     })
