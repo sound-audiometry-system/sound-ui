@@ -2,22 +2,15 @@
   <div class="main">
     <div>
       <span>测试名称</span>
-      <span
-        class="ml-10"
-        style="
-          display: inline-block;
-          width: 90%;
-          background: #ececec;
-          border: 1px solid #b5b5b5;
-          border-radius: 3px;
-        "
-        >{{ props.testData.name }}</span
-      >
+      <span class="ml-10" style="display: inline-block;width: 82%;background: #ececec;border: 1px solid #b5b5b5;border-radius: 3px;">{{ props.testData.name }}</span>
+      <el-button type="success" @click="handleSave" class="ml-10">保存</el-button>
+      <el-button @click="handleBack" class="ml-10">退出</el-button>
+      
     </div>
     <el-row :gutter="20" style="margin-top: 20px">
       <el-col
         style="
-          height: 580px;
+          height: 780px;
           background-color: #fff;
           padding: 10px 0;
           overflow: auto;
@@ -140,30 +133,25 @@
         <sound :device-config="devices"></sound>
         <div
           style="
-            width: 396px;
-            margin-top: 20px;
+            width: 230px;
+            margin-top: 40px;
             margin-left: 20px;
             height: 61px;
             display: flex;
             align-items: center;
             background: #d8d8d8;
-            justify-content: center;
+            justify-content: space-around;
           "
         >
-          <el-button @click="handleStart">播放</el-button>
-          <el-button @click="handleSave">保存</el-button>
-          <el-button @click="handleStart">重复</el-button>
-          <el-button @click="handleBack">退出</el-button>
+          <el-button size="large" @click="handleStart">播放</el-button>
+          <!-- <el-button @click="handleSave">保存</el-button> -->
+          <el-button size="large" @click="handleStart">重复</el-button>
+          <!-- <el-button @click="handleBack">退出</el-button> -->
         </div>
-        <el-row
-          class="el-row-box"
-          style="display: flex; margin-top: 20px; align-items: center"
-        >
-          <el-col style="font-size: 14px; color: #3a3a3a" :span="3"
-            >信号声</el-col
-          >
-          <el-col :span="4"
-            ><el-input-number
+        <el-row class="el-row-box" style="display: flex; margin-top: 180px; align-items: center">
+          <el-col style="font-size: 14px; color: #3a3a3a" :span="3">信号声</el-col>
+          <el-col :span="4">
+            <el-input-number
               :disabled="!isCalibration"
               style="width: 100%"
               controls-position="right"
@@ -205,10 +193,7 @@
             />
           </el-col>
         </el-row>
-        <el-row
-          class="el-row-box"
-          style="display: flex; margin-top: 40px; align-items: center"
-        >
+        <el-row class="el-row-box" style="display: flex; margin-top: 60px; align-items: center">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3"
             >环境声</el-col
           >
