@@ -1,6 +1,7 @@
 <template>
   <el-form-item label="测试名称">
-    <el-input disabled v-model="testName" />
+    <el-input style="width: 1720px;" disabled v-model="testName" />
+    <el-button style="float: left;margin-left: 5px;" type="primary" >返回</el-button>
   </el-form-item>
   <el-container>
     <el-aside>
@@ -16,8 +17,8 @@
       <div
         style="
           margin-left: 10px;
-          width: 420px;
-          height: 240px;
+          width: 920px;
+          height: 410px;
           padding: 0 6px;
           display: flex;
         "
@@ -46,10 +47,10 @@
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button size="small" style="margin-right: 5px"
-          ><el-icon style="color: red; margin-right: 2px">
-            <CircleClose /> </el-icon
-          >错误</el-button
+        <el-button  size="large" style="margin-right: 5px">
+          <el-icon style="color: red; margin-right: 2px">
+            <CircleClose /> 
+          </el-icon>错误</el-button
         >
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
@@ -57,8 +58,8 @@
         :gutter="10"
         style="
           margin-left: 10px;
-          width: 400px;
-          height: 200px;
+          width: 920px;
+          height: 300px;
           background-color: #8cdcfe;
           padding-top: 6px;
           overflow: auto;
@@ -101,27 +102,26 @@
         ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
-      <div style="height: 280px; width: 465px">
+      <div style="height: 320px; width: 530px">
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button :disabled="props.isPlay" size="small" @click="handleStart">开始</el-button>
-        <el-button size="small" @click="handleSave">保存</el-button>
-        <el-button size="small" @click="handleSave">保存并生成记录</el-button>
-        <el-button size="small" @click="handleStop">提前结束</el-button>
-        <el-button size="small">测试文件</el-button>
+        <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
+        <el-button size="large" plain @click="handleSave">保存</el-button>
+        <el-button  size="large" plain @click="handleStop">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button @click="handlePrev" size="small">上一个</el-button
-        ><el-button @click="handleNext" size="small">下一个</el-button
-        ><el-button @click="handleReImage" size="small">重复</el-button>
+        <el-button @click="handlePrev" >上一个(左键)</el-button
+        ><el-button @click="handleNext" >下一个(右键)</el-button
+        ><el-button @click="handleReImage">重复</el-button>
       </el-row>
       <el-row>
         <div
           style="
-            height: 110px;
-            width: 465px;
+            height: 347px;
+            width: 950px;
             background-color: #e9e9e9;
+            margin-top: 15px;
             padding: 12px 20px;
           "
         >
@@ -294,7 +294,7 @@ onMounted(()=> {
 <style lang="scss" scoped>
 .error-a {
   margin-left: 10px;
-  width: 400px;
+  width: 920px;
   height: 45px;
   background-color: #e0e0e0;
   margin-top: 35px;
@@ -327,11 +327,11 @@ onMounted(()=> {
 }
 
 .el-container {
-  height: 580px;
+  height: 840px;
   margin: 0 auto;
   margin-top: 50px;
   .el-aside {
-    width: 500px;
+    width: 960px;
   }
   .el-main {
     padding: 0px;
