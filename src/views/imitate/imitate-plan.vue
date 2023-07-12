@@ -310,6 +310,7 @@ onMounted(()=> {
 }
 
 .el-row-box {
+    margin-top: 200px;
     .el-input {
         width: 60px;
     }
