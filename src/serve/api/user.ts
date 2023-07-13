@@ -94,7 +94,7 @@ class AuditionApi {
   */
   prevTest() {
     return http.request({
-      url: '/native/prevImageShow',
+      url: '/v2/native/prev',
       method: 'POST',
     })
   }
@@ -106,7 +106,7 @@ class AuditionApi {
   */
   nextTest(data) {
     return http.request({
-      url: '/native/nextImageShow',
+      url: '/v2/native/next',
       method: 'POST',
     })
   }
@@ -118,7 +118,7 @@ class AuditionApi {
   */
   reImageTest() {
     return http.request({
-      url: '/native/reImageShow',
+      url: '/v2/native/replay',
       method: 'POST',
     }) 
   }
