@@ -1,7 +1,7 @@
 <template>
   <el-form-item label="测试名称">
     <el-input style="width: 1720px;" disabled v-model="testName" />
-    <el-button style="float: left;margin-left: 5px;" type="primary" >返回</el-button>
+    <el-button style="float: left;margin-left: 5px;" type="primary" @click="$router.back()">返回</el-button>
   </el-form-item>
   <el-container>
     <el-aside>
