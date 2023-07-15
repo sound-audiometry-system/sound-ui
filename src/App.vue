@@ -28,7 +28,7 @@ export default {
 </script>
 
 <template>
-  <div class="container">
+  <div v-scale class="container">
     <RouterView />
   </div>
 </template>

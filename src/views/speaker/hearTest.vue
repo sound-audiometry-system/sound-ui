@@ -29,8 +29,8 @@
             :key="item.id"
             :span="8"
           >
+          <!-- @click="checkedImg(index)" -->
             <el-image
-              @click="checkedImg(index)"
               style="width: 100%; height: 160px"
               :src="item.sourceUrl"
               :fit="item.label"
@@ -47,7 +47,7 @@
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button  size="large" style="margin-right: 5px">
+        <el-button @click="handleCheck"  size="large" style="margin-right: 5px">
           <el-icon style="color: red; margin-right: 2px">
             <CircleClose /> 
           </el-icon>错误</el-button
@@ -71,6 +71,7 @@
           :span="8"
         >
           <el-image
+          @click="checkedImg"
             :class="{
               'is-checked-img-error':
                 item.isCheckFlag && index + 1 != props.imageData.target,
@@ -202,6 +203,7 @@ const emit = defineEmits([
 const props = defineProps<Props>();
 let answerIndex = props.answerIndex
 const isCheckFlag = ref(false);
+const isCheck = ref(false)
 watch(()=>props.imageData, (newValue,oldValue)=> {
   answerIndex ++
   isCheckFlag.value = false;
@@ -233,6 +235,10 @@ const handleAudio = () => {
 const handleStopAudio = () => {
   emit("handleStopAudio");
 };
+const handleCheck = ()=> {
+  isCheckFlag.value = true
+  emit("handleStop");
+}
 // 上一个
 const handlePrev = async () => {
   const res = await auditionApi.prevTest();
@@ -262,10 +268,11 @@ const mod =(n, m)=> {
 const checkedImg = (index) => {
   // console.log(props.imageData.answerList[index].isCheckFlag)
   // console.log(isCheckFlag.value)
-  if (isCheckFlag.value) return
-  isCheckFlag.value = true;
+  if (!isCheckFlag.value) return
+  // isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
   index + 1 == props.imageData.target ? answerMarks.value[answerIndex].answerMark = 2 : answerMarks.value[answerIndex].answerMark = 3
+  isCheckFlag.value = false
   // console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
