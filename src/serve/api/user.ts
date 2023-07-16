@@ -43,7 +43,7 @@ class AuditionApi {
   */
   startTest(data: any, params) {
     return http.request({
-      url: '/native/play',
+      url: '/v2/native/play',
       method: 'POST',
       data,
       params
@@ -57,7 +57,7 @@ class AuditionApi {
   */
   stopTest() {
     return http.request({
-      url: '/native/stop',
+      url: '/v2/native/stop',
       method: 'POST',
     })
   }

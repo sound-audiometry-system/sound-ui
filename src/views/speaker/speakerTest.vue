@@ -75,7 +75,7 @@ const startTest = async (value1, value2) => {
   if (!value1 && !value2) {
     params['test'] = true;
   }
-  console.info("startParam ------------>",params)
+  // console.info("startParam ------------>",params)
   const res = await auditionApi.startTest(testData[0],params);
   if (res.code == 0) {
     isStart = true;

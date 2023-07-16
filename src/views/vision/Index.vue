@@ -178,6 +178,7 @@ const userSearchData = ref([
   // { gender: 1, name: "000032" },
 ]);
 userSearchData.value = userInfo;
+inputUserId.value = userInfo[0]?.uid;
 //测试列表
 const testData = ref([
   {
