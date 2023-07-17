@@ -44,7 +44,7 @@
             :key="idx"
             v-if="testData.length > 0"
           >
-            <div style="display: flex; align-items: center; margin: 2% 2% 0 2%">
+            <div style="display: flex; align-items: center; margin: 2% 2% 0 2%;width: 240px;">
               <text
                 style="margin-left: 2px; font-size: revert; font-weight: bold;"
                 >{{ item.name }}</text

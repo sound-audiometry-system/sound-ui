@@ -42,7 +42,7 @@
             :key="idx"
             v-if="userSearchData.length > 0"
           >
-            <div style="display: flex; align-items: center; margin: 2% 2% 0 2%">
+            <div style="display: flex; align-items: center; margin: 2% 2% 0 2%;width: 240px;">
               <Female class="icon" v-if="item.gender == 1" />
               <Male class="icon" v-else />
               <text
