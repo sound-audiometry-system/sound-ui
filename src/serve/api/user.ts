@@ -69,7 +69,19 @@ class AuditionApi {
   */
   pauseTest() {
     return http.request({
-      url: '/native/pause',
+      url: '/v2/native/pause',
+      method: 'POST',
+    })
+  }
+
+  /** 
+   * 恢复
+   * @param 无参数
+   * @returns
+  */
+  resumeTest() {
+    return http.request({
+      url: '/v2/native/resume',
       method: 'POST',
     })
   }

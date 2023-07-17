@@ -116,7 +116,7 @@
               v-if="userInfo.gender == '1'"
             />
             <Male width="1.2em" height="1.2em" v-else />
-            <text style="font-weight: bold">{{ userInfo.name }}</text>
+            <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
           </div>
         </div>
         <text style="font-weight: bold; margin-top: 2%">测试选择</text>
@@ -177,8 +177,9 @@ const userInfo =
 const userSearchData = ref([
   // { gender: 1, name: "000032" },
 ]);
-userSearchData.value = userInfo;
 inputUserId.value = userInfo[0]?.uid;
+userSearchData.value = userInfo;
+
 //测试列表
 const testData = ref([
   {

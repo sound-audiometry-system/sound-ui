@@ -18,17 +18,47 @@
             :isPlay="isPlay"
             @handleStart="handleStart"
             @handleStop="handleStop"
-            @handleSave="handleSave"
+            @handleSave="handleOpen"
             @handleAudio="handleAudio"
             @handleStopAudio="handleStopAudio"
+            @handlePause="handlePause"
+            @handleResume="handleResume"
           ></hearTest>
         </el-tab-pane>
       </el-tabs>
     </el-main>
+    <el-dialog
+      v-model="dialogVisible"
+      title="保存本次测试"
+      width="30%"
+      :before-close="handleClose"
+    >
+      <el-form
+        ref="ruleFormRef"
+        :model="form"
+        label-width="120px"
+        label-position="top"
+        :rules="rules"
+      >
+        <el-form-item label="操作人姓名" prop="operator">
+          <el-input v-model="form.operator" />
+        </el-form-item>
+        <el-form-item label="结果分析与建议" prop="reason">
+          <el-input v-model="form.reason" type="textarea" rows="5" />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handleSave(ruleFormRef)"> 保 存 </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </el-container>
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, computed, watch, reactive } from "vue";
+import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
 import * as echarts from "echarts";
 import userHeader from "../lay/MainHeader.vue";
@@ -39,17 +69,35 @@ import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
 import { useStore, mapState } from "vuex";
 let value = ref("1");
+
 let isStart = false;
-let isPlay = ref(false)
-let isOpen = false
+let isPlay = ref(false);
+const dialogVisible = ref(false);
+let isOpen = false;
 let store = useStore();
 const route = useRoute();
 const testData = store.getters.getTestData;
 const main = ref();
 let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
+const ruleFormRef = ref<FormInstance>();
 var rec;
-const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || ""
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || "";
+interface RuleForm {
+  operator: string
+}
+const form = reactive({
+  uid: userInfo[0].uid,
+  testId: testData[0].id,
+  answerList: testData[0].signalSoundConfig,
+  operator: "",
+  reason: "",
+});
+const rules = reactive<FormRules<RuleForm>>({
+  operator: [
+    { required: true, message: '请输入操作人姓名', trigger: 'blur' },
+  ],
+})
 // console.log(testData);
 //计算属性——完整
 // let imageData = computed({
@@ -65,41 +113,74 @@ const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || ""
 const startTest = async (value1, value2) => {
   let params = {};
   if (!value1) {
-    params['leftHide'] = value1;
+    params["leftHide"] = value1;
   }
-  if ( !value2) {
-    params['rightHide'] = value2;
+  if (!value2) {
+    params["rightHide"] = value2;
   }
   //开始
-  isPlay.value = true
+  isPlay.value = true;
   if (!value1 && !value2) {
-    params['test'] = true;
+    params["test"] = true;
   }
   // console.info("startParam ------------>",params)
-  const res = await auditionApi.startTest(testData[0],params);
+  const res = await auditionApi.startTest(testData[0], params);
   if (res.code == 0) {
     isStart = true;
     // isPlay.value = false
   }
+};
+const handleClose = () => {
+  dialogVisible.value = false;
 };
 const stopTest = async () => {
   //结束
   const res = await auditionApi.stopTest();
   if (res.code == 0) {
     isStart = false;
-    isPlay.value = false
+    isPlay.value = false;
   }
 };
-const handleSave = async ()=> {
+const handlePause = async () => {
+  const res = await auditionApi.pauseTest();
+};
+
+const handleResume = async () => {
+  const res = await auditionApi.resumeTest();
+};
+const handleOpen=()=> {
+  dialogVisible.value = true
+}
+const handleSave = async (formEl:FormInstance | undefined) => {
+  if (!formEl) return
   //保存
   // console.log(testData[0].commands)
   //commands
-  const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands, operator: 'admin',reason: '提前结束' });
-  if (res.code == 0) {
-    isStart = false;
-    isPlay.value = false
-  }
-}
+  // const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands, operator: 'admin',reason: '提前结束' });
+  // if (res.code == 0) {
+  //   isStart = false;
+  //   isPlay.value = false
+  // }
+  formEl.validate(async (valid, fields) => {
+    if (valid) {
+      const res = await auditionApi.report(form);
+      if (res.code == 0) {
+        isStart = false;
+        isPlay.value = false;
+        dialogVisible.value = false
+        ElMessage({
+        message: "保存成功",
+        type: "success",
+      });
+      }
+    } else {
+      ElMessage({
+        message: "数据填写有误",
+        type: "warning",
+      });
+    }
+  });
+};
 document.addEventListener(
   "astilectron-ready",
   () => {
@@ -114,7 +195,7 @@ window.addEventListener("resize", () => {
   // console.log(22222);
 });
 const recOpen = () => {
-  isOpen = true
+  isOpen = true;
   rec = Recorder({
     //本配置参数请参考下面的文档，有详细介绍
     type: "mp3",
@@ -178,6 +259,7 @@ const handleAudio = async () => {
   // recStart()
 };
 const handleStopAudio = () => {
+  if (!isOpen) return;
   rec.stop(
     async function (blob, duration) {
       //简单利用URL生成本地文件地址，注意不用了时需要revokeObjectURL，否则霸占内存
@@ -195,7 +277,7 @@ const handleStopAudio = () => {
       console.log(formData.get("upfile"), "upfile");
       console.log(formData.get("resourceId"), "resourceId");
       const res = await auditionApi.fileUpload(formData);
-      isOpen = false
+      isOpen = false;
       ElMessage({
         message: "录音关闭",
         type: "success",
@@ -211,7 +293,7 @@ const handleStopAudio = () => {
       console.log("录音失败:" + msg);
       rec.close(); //可以通过stop方法的第3个参数来自动调用close
       rec = null;
-      isOpen = false
+      isOpen = false;
     }
   );
 };
@@ -229,19 +311,19 @@ onMounted(() => {
   // );
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
-      isStart = false
-      isPlay.value = false
-        // imageData = {}
-        ElMessage({
+      isStart = false;
+      isPlay.value = false;
+      // imageData = {}
+      ElMessage({
         message: "方案播放完成",
         type: "success",
       });
-      handleSave()
+      handleSave();
       if (!isOpen) {
-        handleStopAudio()
+        handleStopAudio();
       }
-      imageData = reactive({})
-        return
+      imageData = reactive({});
+      return;
     }
     if (e.key === "imageData") {
       answerIndex.value += 1;

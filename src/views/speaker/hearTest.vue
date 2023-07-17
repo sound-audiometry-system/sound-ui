@@ -109,7 +109,7 @@
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
         <el-button size="large" plain @click="handleSave">保存</el-button>
-        <el-button  size="large" plain @click="handleStop">提前结束</el-button>
+        <el-button  size="large" plain @click="handleSave">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
         <el-button @click="handlePrev" >上一个(左键)</el-button
@@ -178,7 +178,7 @@ let isOpen = ref(false)
 let soundIndex = ref(30)
 console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
-const answerMarks = ref(testData[0].commands.map(item=> {
+const answerMarks = ref(testData[0].signalSoundConfig.map(item=> {
   return {
     answerMark: 1
   }
@@ -198,7 +198,9 @@ const emit = defineEmits([
   "handleStop",
   "handleAudio",
   "handleStopAudio",
-  "handleSave"
+  "handleSave",
+  "handlePause",
+  "handleResume"
 ]);
 const props = defineProps<Props>();
 let answerIndex = props.answerIndex
@@ -237,7 +239,7 @@ const handleStopAudio = () => {
 };
 const handleCheck = ()=> {
   isCheckFlag.value = true
-  emit("handleStop");
+  emit("handlePause");
 }
 // 上一个
 const handlePrev = async () => {
@@ -273,6 +275,7 @@ const checkedImg = (index) => {
   props.imageData.answerList[index].isCheckFlag = true;
   index + 1 == props.imageData.target ? answerMarks.value[answerIndex].answerMark = 2 : answerMarks.value[answerIndex].answerMark = 3
   isCheckFlag.value = false
+  emit('handleResume')
   // console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
