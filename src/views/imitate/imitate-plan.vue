@@ -172,7 +172,7 @@
   let soundIndex = ref(30)
   console.log(testData, 'testData')
   // console.log(testData.commands, 'testData')
-  const answerMarks = ref(testData[0].commands.map(item=> {
+  const answerMarks = ref(testData[0].signalSoundConfig.map(item=> {
     return {
       answerMark: 1
     }

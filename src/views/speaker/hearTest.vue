@@ -176,7 +176,7 @@ let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false)
 let soundIndex = ref(30)
-console.log(testData, 'testData')
+// console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
 const answerMarks = ref(testData[0].signalSoundConfig.map(item=> {
   return {
