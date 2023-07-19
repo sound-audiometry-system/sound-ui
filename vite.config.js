@@ -17,7 +17,7 @@ const addPrefixPlugin = (prefix) => ({
 export default defineConfig({
   plugins: [
     vue(),
-    addPrefixPlugin("/static"),
+    // addPrefixPlugin("/static"),
     // ...
     AutoImport({
       resolvers: [ElementPlusResolver()],

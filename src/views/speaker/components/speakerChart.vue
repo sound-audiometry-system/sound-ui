@@ -3,7 +3,7 @@
   <div
     id="myChart"
     ref="chartRef"
-    :style="{ width: '536px', height: '486px' }"
+    :style="{ width: '940px', height: '486px' }"
   ></div>
 </template>
   <script setup lang="ts">

@@ -38,25 +38,12 @@
               </el-input>
             </el-form-item>
           </el-form>
-          <div
-            class="userItem"
-            v-for="(item, idx) in testData"
-            :key="idx"
-            v-if="testData.length > 0"
-          >
+          <div class="userItem" v-for="(item, idx) in testData" :key="idx" v-if="testData.length > 0">
             <div style="display: flex; align-items: center; margin: 2% 2% 0 2%;width: 240px;">
-              <text
-                style="margin-left: 2px; font-size: revert; font-weight: bold;"
-                >{{ item.name }}</text
-              >
+              <text style="margin-left: 2px; font-size: revert; font-weight: bold;"
+                >{{ item.name }}</text>
             </div>
-            <el-button
-              type="success"
-              size="small"
-              style="text-align: end; margin-right: 2%"
-              @click="toTest(item)"
-              >开始模拟</el-button
-            >
+            <el-button type="success" size="small" style="text-align: end; margin-right: 2%" @click="toTest(item)">开始模拟</el-button>
           </div>
           <el-empty description="暂无" v-else />
         </div>
@@ -112,14 +99,11 @@ const form = reactive({})
 const imitateName = ref("");
 
 //测试列表
-const testData = ref([
-  { name: "由远及近的言语模拟", id: 1, questionsControl: true, directControl: true, wrongControl: true, jammingMode: 1, commands: [] },
-]);
+const testData = ref([]);
 const getListTestMode = async (name: string = "")=> {
   const res = await imitateApi.getListTestMode({ type: 2, name: name })
-  console.log(res)
   if (res.code == 0) {
-    testData.value = res.data
+    testData.value = res.data.records
   }
 }
 //测试结果
@@ -145,6 +129,7 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // chooseTypeVisble.value = true;
+  console.log("testInfo ============>              "+info)
   store.commit("setImitateData", info)
   router.push('/imitate-plan')
 };

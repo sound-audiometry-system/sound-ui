@@ -1,53 +1,48 @@
 <template>
+    <!-- <el-row style="background-color: rgb(32,133, 113);width: 100%; "> </el-row> -->
+    <el-row>
+    <el-col :span="24" style="background-color: rgb(32,133, 113);width: 100%;height: 50px; "></el-col>
+  </el-row>
     <el-form-item label="测试名称">
       <el-input style="width: 1720px;" disabled v-model="testName" />
-      <el-button style="float: left;margin-left: 5px;" type="primary" >返回</el-button>
+      <el-button style="float: left;margin-left: 5px;" type="primary" @click="$router.back()">返回</el-button>
     </el-form-item>
     <el-container>
       <el-aside>
         <div class="es-switch">
           <span
-            ><el-switch v-model="value1" />
+            ><el-switch v-model="value1" disabled />
             <label style="font-size: 16px">左显示器</label></span
           >
           <span
-            ><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
+            ><el-switch v-model="value2" class="ml-2" disabled /><label>右显示器</label>
           </span>
         </div>
-        <div
-          style="
-            margin-left: 10px;
-            width: 920px;
-            height: 410px;
-            padding: 0 6px;
-            display: flex;
-          "
-        >
+        <div style="margin-left: 10px; width: 920px;height: 410px;padding: 0 6px;display: flex;">
           <el-row style="background-color: #000;width: 82%;height: 100%;align-items: center;overflow: auto;" align="center" :gutter="10">
-            <el-col
+            <!-- <el-col
               v-for="(item, index) in props.imageData.answerList"
               :key="item.id"
-              :span="8"
-            >
+              :span="8" >
               <el-image
                 @click="checkedImg(index)"
                 style="width: 100%; height: 160px"
                 :src="item.sourceUrl"
                 :fit="item.label"
               />
-            </el-col>
+            </el-col> -->
           </el-row>
           <div style="width: 18%;margin-left: 10px;">
             <p>测试总数</p>
-            <div class="test-total-box">{{ answerMarks ? answerMarks.length  : 0 }}</div>
-            <div style="margin-top: 10px;"><el-switch v-model="value3" @change="beforeChange1" /></div>
+            <div class="test-total-box">{{ 0 }}</div>
+            <div style="margin-top: 10px;"><el-switch v-model="value3" disabled/></div>
             <p style="font-size: 12px;">同时打开两边显示器</p>
           </div>
         </div>
   
         <el-row class="error-a">
           <label style="margin-left: 5px; font-size: large">错误走向</label>
-          <el-button  size="large" style="margin-right: 5px">
+          <el-button  size="large" style="margin-right: 5px" disabled>
             <el-icon style="color: red; margin-right: 2px">
               <CircleClose /> 
             </el-icon>错误</el-button
@@ -65,11 +60,10 @@
             overflow: auto;
           "
         >
-          <el-col
+          <!-- <el-col
             v-for="(item, index) in props.imageData.answerList"
             :key="item.id"
-            :span="8"
-          >
+            :span="8">
             <el-image
               :class="{
                 'is-checked-img-error':
@@ -93,7 +87,7 @@
                 ><CircleCheck
               /></el-icon>
             </div>
-          </el-col>
+          </el-col> -->
         </el-row>
       </el-aside>
   
@@ -107,48 +101,22 @@
         </div>
         <el-row class="el-btn a">
           <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
-          <el-button size="large" plain @click="handleSave">保存</el-button>
-          <el-button  size="large" plain @click="handleStop">提前结束</el-button>
+          <el-button size="large" plain  disabled>保存</el-button>
+          <el-button  size="large" plain disabled>提前结束</el-button>
         </el-row>
         <el-row class="el-btn b">
-          <el-button @click="handlePrev" >上一个(左键)</el-button
-          ><el-button @click="handleNext" >下一个(右键)</el-button
-          ><el-button @click="handleReImage">重复</el-button>
+          <el-button @click="handlePrev" disabled>上一个(左键)</el-button
+          ><el-button @click="handleNext" disabled>下一个(右键)</el-button
+          ><el-button @click="handleReImage" disabled>重复</el-button>
         </el-row>
         <el-row>
-          <div
-            style="
-              height: 347px;
-              width: 950px;
-              background-color: #e9e9e9;
-              margin-top: 15px;
-              padding: 12px 20px;
-            "
-          >
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 16px;
-                align-items: center;
-              "
-            >
+          <div style="height: 347px;width: 950px;background-color: #e9e9e9;margin-top: 15px;padding: 12px 20px;">
+            <div style="display: flex;justify-content: space-between;margin-bottom: 16px;align-items: center;">
               <span style="font-weight: bold">答题进度</span
-              ><span style="font-size: 12px" @click="handleClk"
-                >查看全部<el-icon><CaretRight /></el-icon
+              ><span style="font-size: 12px">查看全部<el-icon><CaretRight /></el-icon
               ></span>
             </div>
             <div style="height: 24px; overflow: hidden">
-              <span
-                v-for="(item, index) in answerMarks"
-                :key="index"
-                :class="{
-                  'answer-num': true,
-                  'success-active': item.answerMark == 2,
-                  'error-active': item.answerMark == 3,
-                }"
-                >{{ index + 1 }}</span
-              >
             </div>
           </div>
         </el-row>
@@ -163,25 +131,16 @@
   import { auditionApi } from "@/serve/api/user";
   import { useStore, mapState } from "vuex";
   let store = useStore();
-  const testData = store.getters.getTestData;
-  let testName = ref(testData[0].name);
-  let value1 = ref(true);
-  let value2 = ref(true);
-  let value3 = ref(true);
+  const testData = store.getters.getImitateData;
+  let testName = ref(testData.name);
+  let value1 = ref(false);
+  let value2 = ref(false);
+  let value3 = ref(false);
   let isOpen = ref(false)
   let soundIndex = ref(30)
-  console.log(testData, 'testData')
   // console.log(testData.commands, 'testData')
-  const answerMarks = ref(testData[0].signalSoundConfig.map(item=> {
-    return {
-      answerMark: 1
-    }
-  }))
   // answerDialogRef.value.show([])
-  let beforeChange1 = () => {
-    value1.value = value3.value
-    value2.value = value3.value
-  };
+  
   type Props = {
     imageData: any;
     answerIndex: any;
@@ -205,18 +164,13 @@
 //   const handleClk = () => {
 //     // console.log(answerDialogRef.value);
 //   };
-//   const handleClkItem = (index) => {
-//     soundDialogRef.value.show(index);
-//   };
+  const handleClkItem = (index) => {
+    soundDialogRef.value.show(index);
+  };
   const handleStart = () => {
     emit("handleStart", value1.value, value2.value);
   };
-  const handleStop = () => {
-    for (const item of answerMarks.value) {
-      item.answerMark = 1
-    }
-    emit("handleStop");
-  };
+  
   const handleSave = ()=> {
     emit("handleSave");
   }
@@ -253,26 +207,11 @@
   const mod =(n, m)=> {
     return parseInt(n/m);
   }
-  const checkedImg = (index) => {
-    // console.log(props.imageData.answerList[index].isCheckFlag)
-    // console.log(isCheckFlag.value)
-    if (isCheckFlag.value) return
-    isCheckFlag.value = true;
-    props.imageData.answerList[index].isCheckFlag = true;
-    index + 1 == props.imageData.target ? answerMarks.value[answerIndex].answerMark = 2 : answerMarks.value[answerIndex].answerMark = 3
-    // console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
-    // if (index + 1 != props.imageData.target) {
-    //   // isCheckFlag.value = true
-    //   // props.imageData.answerList[index].isCheckFlag = false
-    // }
-  };
+  
   onMounted(()=> {
     window.addEventListener("setItemEvent", function (e: any) {
       if (!e.newValue) {
           return
-      }
-      if (e.key === "imageData") {
-        answerMarks.value[answerIndex].answerMark = 2
       }
       // 1111
       if (e.key === "audioStart") {
