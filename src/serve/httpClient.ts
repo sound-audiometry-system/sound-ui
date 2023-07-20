@@ -66,8 +66,8 @@ class Api {
 // const baseUrl = 'http://192.168.2.178:8081'
 // const baseUrl = 'http://192.168.10.18:8081'
 // const baseUrl = 'https://192.168.2.171:8080'
-const baseUrl = 'https://localhost:8080'
-// const baseUrl = 'http://localhost:8081'
+// const baseUrl = 'https://localhost:8080'
+const baseUrl = 'http://localhost:8081'
 // const baseUrl = 'https://192.168.163.26:8080'
 // const baseUrl = 'http://192.168.10.18:8081'
 const api = new Api({
@@ -148,11 +148,15 @@ function httpErrorStatusHandle(error: any) {
   if (error.message.includes('timeout')) message = '网络请求超时！'
   if (error.message.includes('Network'))
     message = window.navigator.onLine ? '服务端异常！' : '您断网了！'
- 
-  ElMessage({
-    type: 'error',
-    message,
-  })
+  if (document.getElementsByClassName('el-message').length === 0) {
+    ElMessage({
+      type: 'error',
+      message,
+    })
+  } else {
+    this.$message.closeAll()
+  }
+  
 }
  
 const pendingMap = new Map()
