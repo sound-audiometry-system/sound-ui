@@ -36,28 +36,13 @@
               </el-input>
             </el-form-item>
           </el-form>
-          <div
-            class="userItem"
-            v-for="(item, idx) in userSearchData"
-            :key="idx"
-            v-if="userSearchData.length > 0"
-          >
-            <div style="display: flex; align-items: center; margin: 2% 2% 0 2%;width: 240px;">
-              <Female class="icon" v-if="item.gender == 1" />
-              <Male class="icon" v-else />
-              <text
-                style="
-                  margin-left: 2px;
-                  font-size: revert;
-                  font-weight: bold;
-                  width: 80%;
-                "
-                >{{ item.name }}</text
-              >
+          <div class="userItem" v-for="(item, idx) in userSearchData" :key="idx" v-if="userSearchData.length > 0">
+            <div style="display: flex; align-items: center; margin: 2px 0px 2px 15px;width: 240px;">
+              <Male class="icon" v-if="item.gender == 1" />
+              <Female class="icon" v-else />
+              <text style=" margin-left: 2px;font-size: large;font-weight: bold;width: 80%;">{{ item.name }}</text>
             </div>
-            <el-button
-              type="success"
-              size="small"
+            <el-button type="success"
               style="text-align: end; margin-right: 2%"
               @click="toTest(item)"
               >开始测试</el-button
@@ -110,22 +95,17 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Female
+            <Male
               width="1.2em"
               height="1.2em"
               v-if="userInfo.gender == '1'"
             />
-            <Male width="1.2em" height="1.2em" v-else />
+            <Female width="1.2em" height="1.2em" v-else />
             <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
           </div>
         </div>
         <text style="font-weight: bold; margin-top: 2%">测试选择</text>
-        <el-select
-          v-model="testResult"
-          placeholder="请选择"
-          style="margin-top: 2%"
-          no-data-text="暂无数据"
-        >
+        <el-select v-model="testResult" :popper-append-to-body="false" placeholder="请选择" style="margin-top: 2%" no-data-text="暂无数据" >
           <el-option
             v-for="(item, idx) in testData"
             :key="idx"
@@ -258,6 +238,12 @@ const chooseItem = (val) => {
 };
 </script>
 <style lang="scss" scoped>
+.el-select-dropdown__item.hover,
+.el-select-dropdown__item:hover{
+  color:#eff4f5;
+  background-color: rgba(32, 133, 112, 1);
+}
+
 .font {
   font-size: small;
   font-weight: bold;
@@ -266,11 +252,12 @@ const chooseItem = (val) => {
 
 .userItem {
   display: flex;
-  margin-top: 3%;
+  margin-top: 2%;
   background-color: #f2f3f5;
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  line-height: 40px;
 }
 
 .icon {

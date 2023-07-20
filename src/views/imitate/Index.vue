@@ -4,34 +4,12 @@
   <el-container>
     <el-header></el-header>
     <el-main
-      style="display: flex; justify-content: center; background-color: #f2f3f5"
-    >
-      <div
-        style="
-          width: 50%;
-          height: 100%;
-          overflow-y: auto;
-          background-color: white;
-          flex-direction: column;
-        "
-      >
+      style="display: flex; justify-content: center; background-color: #f2f3f5">
+      <div style=" width: 50%;height: 100%;overflow-y: auto;background-color: white;flex-direction: column;">
         <div style="display: flex; margin: 3% 3% 0 3%; flex-direction: column">
-          <el-form
-            :model="form"
-            ref="form"
-            label-width="200px"
-            class="form"
-            @submit.native.prevent="()=> searchImitate"
-          >
+          <el-form :model="form" ref="form" label-width="200px" class="form" @submit.native.prevent="()=> searchImitate">
             <el-form-item>
-              <el-input
-                v-model="imitateName"
-                placeholder="请输入"
-                class="input-with-select"
-                clearable
-                @clear="userSearchData = []"
-                @blur="searchImitate"
-              >
+              <el-input v-model="imitateName" placeholder="请输入" class="input-with-select" clearable @clear="userSearchData = []" @blur="searchImitate">
                 <template #prepend>
                   <el-button @click="searchImitate" :icon="Search" />
                 </template>
@@ -39,11 +17,11 @@
             </el-form-item>
           </el-form>
           <div class="userItem" v-for="(item, idx) in testData" :key="idx" v-if="testData.length > 0">
-            <div style="display: flex; align-items: center; margin: 2% 2% 0 2%;width: 240px;">
-              <text style="margin-left: 2px; font-size: revert; font-weight: bold;"
+            <div style="display: flex; align-items: center; margin: 2px 0px 2px 15px;width: 240px;">
+              <text style="margin-left: 2px; font-size: large; font-weight: bold;"
                 >{{ item.name }}</text>
             </div>
-            <el-button type="success" size="small" style="text-align: end; margin-right: 2%" @click="toTest(item)">开始模拟</el-button>
+            <el-button type="success" style="text-align: end; margin-right: 2%" @click="toTest(item)">开始模拟</el-button>
           </div>
           <el-empty description="暂无" v-else />
         </div>
@@ -149,11 +127,12 @@ onMounted(()=> {
 
 .userItem {
   display: flex;
-  margin-top: 3%;
+  margin-top: 2%;
   background-color: #f2f3f5;
   width: 100%;
   justify-content: space-between;
   align-items: center;
+  line-height: 40px;
 }
 
 .icon {
@@ -177,7 +156,6 @@ onMounted(()=> {
   width: 1920px;
   height: 1080px;
   margin: 0 auto;
-  margin-top: 50px;
   .el-header {
     background-color: #208571;
   }
