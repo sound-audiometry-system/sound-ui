@@ -19,7 +19,7 @@
         </div>
       </el-col>
     </el-row>
-    <el-table :height="835" :data="tableData" stripe style="width: 100%">
+    <el-table :height="770" :data="tableData" stripe style="width: 100%">
       <el-table-column prop="name" label="测试名称" min-width="180" />
       <el-table-column prop="level1EntryName" label="测试模式" min-width="180" />
       <el-table-column prop="level2EntryName" label="测试分类" />
