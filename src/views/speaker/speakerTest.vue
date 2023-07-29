@@ -43,8 +43,11 @@
         <el-form-item label="操作人姓名" prop="operator">
           <el-input v-model="form.operator" />
         </el-form-item>
-        <el-form-item label="结果分析与建议" prop="reason">
+        <el-form-item v-if="openType == 2" label="结束原因" prop="reason">
           <el-input v-model="form.reason" type="textarea" rows="5" />
+        </el-form-item>
+        <el-form-item v-if="openType == 1" label="结果分析与建议" prop="advice">
+          <el-input v-model="form.advice" type="textarea" rows="5" />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -83,6 +86,7 @@ let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || "";
+const openType = ref(1)
 interface RuleForm {
   operator: string
 }
@@ -92,10 +96,14 @@ const form = reactive({
   answerList: testData[0].signalSoundConfig,
   operator: "",
   reason: "",
+  advice: ""
 });
 const rules = reactive<FormRules<RuleForm>>({
   operator: [
     { required: true, message: '请输入操作人姓名', trigger: 'blur' },
+  ],
+  reason: [
+    { required: true, message: '请填写结束原因', trigger: 'blur' },
   ],
 })
 // console.log(testData);
@@ -148,7 +156,8 @@ const handlePause = async () => {
 const handleResume = async () => {
   const res = await auditionApi.resumeTest();
 };
-const handleOpen=()=> {
+const handleOpen=(type)=> {
+  openType.value = type
   dialogVisible.value = true
 }
 const handleSave = async (formEl:FormInstance | undefined) => {
@@ -168,6 +177,7 @@ const handleSave = async (formEl:FormInstance | undefined) => {
         isStart = false;
         isPlay.value = false;
         dialogVisible.value = false
+        handleStop()
         ElMessage({
         message: "保存成功",
         type: "success",
@@ -350,7 +360,7 @@ onMounted(() => {
   margin: 0 auto;
   margin-top: 50px;
   .el-tabs {
-    height: 1000px;
+    height: 900px;
   }
   .el-main {
     padding-block: inherit;

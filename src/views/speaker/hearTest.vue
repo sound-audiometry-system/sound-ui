@@ -18,7 +18,7 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 385px;
+          height: 330px;
           padding: 0 6px;
           display: flex;
         "
@@ -59,7 +59,7 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 250px;
+          height: 300px;
           background-color: #8cdcfe;
           padding-top: 6px;
           overflow: auto;
@@ -71,7 +71,7 @@
           :span="8"
         >
           <el-image
-          @click="checkedImg"
+          @click="checkedImg(index)"
             :class="{
               'is-checked-img-error':
                 item.isCheckFlag && index + 1 != props.imageData.target,
@@ -103,13 +103,13 @@
         ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
-      <div style="height: 290px; width: 530px">
+      <div style="height: 320px; width: 530px">
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
-        <el-button size="large" plain @click="handleSave">保存</el-button>
-        <el-button  size="large" plain @click="handleSave">提前结束</el-button>
+        <el-button size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button  size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
         <el-button @click="handlePrev" >上一个(左键)</el-button
@@ -119,7 +119,7 @@
       <el-row>
         <div
           style="
-            height: 300px;
+            height: 270px;
             width: 950px;
             background-color: #e9e9e9;
             margin-top: 15px;
@@ -227,8 +227,8 @@ const handleStop = () => {
   }
   emit("handleStop");
 };
-const handleSave = ()=> {
-  emit("handleSave");
+const handleSave = (type:number)=> {
+  emit("handleSave", type);
 }
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
@@ -351,7 +351,7 @@ onMounted(()=> {
 .es-switch {
   display: flex;
   justify-content: space-between;
-  width: 290px;
+  width: 320px;
   margin-left: 10px;
 }
 
