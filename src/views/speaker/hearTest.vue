@@ -18,7 +18,7 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 410px;
+          height: 385px;
           padding: 0 6px;
           display: flex;
         "
@@ -59,7 +59,7 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 300px;
+          height: 250px;
           background-color: #8cdcfe;
           padding-top: 6px;
           overflow: auto;
@@ -103,7 +103,7 @@
         ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
-      <div style="height: 320px; width: 530px">
+      <div style="height: 290px; width: 530px">
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
       </div>
       <el-row class="el-btn a">
@@ -119,7 +119,7 @@
       <el-row>
         <div
           style="
-            height: 347px;
+            height: 300px;
             width: 950px;
             background-color: #e9e9e9;
             margin-top: 15px;
@@ -351,7 +351,7 @@ onMounted(()=> {
 .es-switch {
   display: flex;
   justify-content: space-between;
-  width: 320px;
+  width: 290px;
   margin-left: 10px;
 }
 
