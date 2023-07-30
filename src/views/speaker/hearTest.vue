@@ -114,8 +114,8 @@
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
-        <el-button size="large" plain @click="handleSave">保存</el-button>
-        <el-button  size="large" plain @click="handleSave">提前结束</el-button>
+        <el-button size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button  size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
         <el-button @click="handlePrev">上一个(左键)</el-button
