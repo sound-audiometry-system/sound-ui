@@ -90,7 +90,7 @@ let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || "";
-const openType = ref(1);
+const openType = ref(0);
 const handleTestStop = inject<() => void>('handleStop');
 interface RuleForm {
   operator: string;
@@ -330,7 +330,7 @@ onMounted(() => {
         message: "方案播放完成",
         type: "success",
       });
-      handleOpen(1);
+      openType.value == 0 && handleOpen(1);
       if (!isOpen) {
         handleStopAudio();
       }
