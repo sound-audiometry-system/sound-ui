@@ -28,19 +28,8 @@
           display: flex;
         "
       >
-        <el-row
-          style="
-            background-color: #000;
-            width: 82%;
-            height: 100%;
-            align-items: center;
-            overflow: auto;
-          "
-          align="center"
-          :gutter="10"
-        >
-          <el-col
-            v-for="(item, index) in props.imageData.answerList"
+        <el-row style="background-color: #000; width: 82%; height: 100%; align-items: center; overflow: auto;" align="center" :gutter="10">
+          <el-col v-for="(item, index) in props.imageData.answerList"
             :key="item.id"
             :span="8"
           >
@@ -67,10 +56,7 @@
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
         <el-button @click="handleCheck" size="large" style="margin-right: 5px">
-          <el-icon style="color: red; margin-right: 2px">
-            <CircleClose /> </el-icon
-          >错误</el-button
-        >
+          <el-icon style="color: red; margin-right: 2px"><CircleClose /></el-icon>错误</el-button>
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
       <el-row
