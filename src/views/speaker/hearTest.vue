@@ -1,7 +1,12 @@
 <template>
   <el-form-item label="测试名称">
-    <el-input style="width: 1720px;" disabled v-model="testName" />
-    <el-button style="float: left;margin-left: 5px;" type="primary" @click="$router.back()">返回</el-button>
+    <el-input style="width: 1720px" disabled v-model="testName" />
+    <el-button
+      style="float: left; margin-left: 5px"
+      type="primary"
+      @click="$router.back()"
+      >返回</el-button
+    >
   </el-form-item>
   <el-container>
     <el-aside>
@@ -18,18 +23,28 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 330px;
+          height: 385px;
           padding: 0 6px;
           display: flex;
         "
       >
-        <el-row style="background-color: #000;width: 82%;height: 100%;align-items: center;overflow: auto;" align="center" :gutter="10">
+        <el-row
+          style="
+            background-color: #000;
+            width: 82%;
+            height: 100%;
+            align-items: center;
+            overflow: auto;
+          "
+          align="center"
+          :gutter="10"
+        >
           <el-col
             v-for="(item, index) in props.imageData.answerList"
             :key="item.id"
             :span="8"
           >
-          <!-- @click="checkedImg(index)" -->
+            <!-- @click="checkedImg(index)" -->
             <el-image
               style="width: 100%; height: 160px"
               :src="item.sourceUrl"
@@ -37,20 +52,24 @@
             />
           </el-col>
         </el-row>
-        <div style="width: 18%;margin-left: 10px;">
+        <div style="width: 18%; margin-left: 10px">
           <p>测试总数</p>
-          <div class="test-total-box">{{ answerMarks ? answerMarks.length  : 0 }}</div>
-          <div style="margin-top: 10px;"><el-switch v-model="value3" @change="beforeChange1" /></div>
-          <p style="font-size: 12px;">同时打开两边显示器</p>
+          <div class="test-total-box">
+            {{ answerMarks ? answerMarks.length : 0 }}
+          </div>
+          <div style="margin-top: 10px">
+            <el-switch v-model="value3" @change="beforeChange1" />
+          </div>
+          <p style="font-size: 12px">同时打开两边显示器</p>
         </div>
       </div>
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button @click="handleCheck"  size="large" style="margin-right: 5px">
+        <el-button @click="handleCheck" size="large" style="margin-right: 5px">
           <el-icon style="color: red; margin-right: 2px">
-            <CircleClose /> 
-          </el-icon>错误</el-button
+            <CircleClose /> </el-icon
+          >错误</el-button
         >
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
@@ -71,7 +90,7 @@
           :span="8"
         >
           <el-image
-          @click="checkedImg(index)"
+          @click="checkedImg"
             :class="{
               'is-checked-img-error':
                 item.isCheckFlag && index + 1 != props.imageData.target,
@@ -100,26 +119,27 @@
 
     <el-main>
       <el-button @click="handleAudio" style="margin: 3px 0px 5px 0px" link
-        ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
+        ><el-icon style="margin-right: 2px; color: #134efe" circle
+          ><Microphone /></el-icon
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
-      <div style="height: 320px; width: 530px">
+      <div style="height: 290px; width: 530px">
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
-        <el-button size="large" plain @click="handleSave(1)">保存</el-button>
-        <el-button  size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button size="large" plain @click="handleSave">保存</el-button>
+        <el-button  size="large" plain @click="handleSave">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button @click="handlePrev" >上一个(左键)</el-button
-        ><el-button @click="handleNext" >下一个(右键)</el-button
+        <el-button @click="handlePrev">上一个(左键)</el-button
+        ><el-button @click="handleNext">下一个(右键)</el-button
         ><el-button @click="handleReImage">重复</el-button>
       </el-row>
       <el-row>
         <div
           style="
-            height: 270px;
+            height: 300px;
             width: 950px;
             background-color: #e9e9e9;
             margin-top: 15px;
@@ -154,12 +174,15 @@
         </div>
       </el-row>
     </el-main>
-    <answer-dialog ref="answerDialogRef" :answerMarks="answerMarks"></answer-dialog>
+    <answer-dialog
+      ref="answerDialogRef"
+      :answerMarks="answerMarks"
+    ></answer-dialog>
     <sound-dialog ref="soundDialogRef"></sound-dialog>
   </el-container>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, provide } from "vue";
 import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
@@ -174,24 +197,26 @@ const soundDialogRef = ref(null) as any;
 let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
-let isOpen = ref(false)
-let soundIndex = ref(30)
+let isOpen = ref(false);
+let soundIndex = ref(30);
 // console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
-const answerMarks = ref(testData[0].signalSoundConfig.map(item=> {
-  return {
-    answerMark: 1
-  }
-}))
+const answerMarks = ref(
+  testData[0].signalSoundConfig.map((item) => {
+    return {
+      answerMark: 1,
+    };
+  })
+);
 // answerDialogRef.value.show([])
 let beforeChange1 = () => {
-  value1.value = value3.value
-  value2.value = value3.value
+  value1.value = value3.value;
+  value2.value = value3.value;
 };
 type Props = {
   imageData: any;
   answerIndex: any;
-  isPlay: any
+  isPlay: any;
 };
 const emit = defineEmits([
   "handleStart",
@@ -200,17 +225,21 @@ const emit = defineEmits([
   "handleStopAudio",
   "handleSave",
   "handlePause",
-  "handleResume"
+  "handleResume",
 ]);
 const props = defineProps<Props>();
-let answerIndex = props.answerIndex
+let answerIndex = props.answerIndex;
 const isCheckFlag = ref(false);
-const isCheck = ref(false)
-watch(()=>props.imageData, (newValue,oldValue)=> {
-  answerIndex ++
-  isCheckFlag.value = false;
-  // console.log(222222222)
-},{ deep: true })
+const isCheck = ref(false);
+watch(
+  () => props.imageData,
+  (newValue, oldValue) => {
+    answerIndex++;
+    isCheckFlag.value = false;
+    // console.log(222222222)
+  },
+  { deep: true }
+);
 const handleClk = () => {
   // console.log(answerDialogRef.value);
   answerDialogRef.value.show([]);
@@ -223,12 +252,15 @@ const handleStart = () => {
 };
 const handleStop = () => {
   for (const item of answerMarks.value) {
-    item.answerMark = 1
+    item.answerMark = 1;
   }
-  emit("handleStop");
+  // emit("handleStop");
 };
-const handleSave = (type:number)=> {
+const handleSave = (type: number) => {
   emit("handleSave", type);
+};
+const handleSave = ()=> {
+  emit("handleSave");
 }
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
@@ -237,16 +269,16 @@ const handleAudio = () => {
 const handleStopAudio = () => {
   emit("handleStopAudio");
 };
-const handleCheck = ()=> {
-  isCheckFlag.value = true
+const handleCheck = () => {
+  isCheckFlag.value = true;
   emit("handlePause");
-}
+};
 // 上一个
 const handlePrev = async () => {
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    answerIndex--
+    answerIndex--;
   }
 };
 // 下一个
@@ -254,7 +286,7 @@ const handleNext = async () => {
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    answerIndex++
+    answerIndex++;
   }
 };
 // 重复
@@ -264,41 +296,47 @@ const handleReImage = async () => {
     isCheckFlag.value = false;
   }
 };
-const mod =(n, m)=> {
-  return parseInt(n/m);
-}
+const mod = (n, m) => {
+  return parseInt(n / m);
+};
 const checkedImg = (index) => {
   // console.log(props.imageData.answerList[index].isCheckFlag)
   // console.log(isCheckFlag.value)
-  if (!isCheckFlag.value) return
+  if (!isCheckFlag.value) return;
   // isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
-  index + 1 == props.imageData.target ? answerMarks.value[answerIndex].answerMark = 2 : answerMarks.value[answerIndex].answerMark = 3
-  isCheckFlag.value = false
-  emit('handleResume')
+  index + 1 == props.imageData.target
+    ? (answerMarks.value[answerIndex].answerMark = 2)
+    : (answerMarks.value[answerIndex].answerMark = 3);
+  isCheckFlag.value = false;
+  emit("handleResume");
   // console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
   // if (index + 1 != props.imageData.target) {
   //   // isCheckFlag.value = true
   //   // props.imageData.answerList[index].isCheckFlag = false
   // }
 };
-onMounted(()=> {
+provide('handleStop', handleStop)
+onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
-        return
+      for (const item of answerMarks.value) {
+        item.answerMark = 1;
+      }
+      return;
     }
     if (e.key === "imageData") {
-      answerMarks.value[answerIndex].answerMark = 2
+      answerMarks.value[answerIndex].answerMark = 2;
     }
     // 1111
     if (e.key === "audioStart") {
-      let item = JSON.parse(e.newValue)
-      console.info("==========>",item)
-      console.info("mod==========>",mod(item.target,2))
-      soundIndex.value = mod(item.target,2)
+      let item = JSON.parse(e.newValue);
+      console.info("==========>", item);
+      console.info("mod==========>", mod(item.target, 2));
+      soundIndex.value = mod(item.target, 2);
     }
   });
-})
+});
 </script>
 
 <style lang="scss" scoped>
@@ -385,12 +423,12 @@ onMounted(()=> {
 }
 .test-total-box {
   width: 84px;
-height: 30px;
-line-height: 30px;
-background: #EDEDED;
-border: 1px solid #CBCBCB;
-border-radius: 3px;
-text-align: center;
-margin-top: 6px;
+  height: 30px;
+  line-height: 30px;
+  background: #ededed;
+  border: 1px solid #cbcbcb;
+  border-radius: 3px;
+  text-align: center;
+  margin-top: 6px;
 }
 </style>
