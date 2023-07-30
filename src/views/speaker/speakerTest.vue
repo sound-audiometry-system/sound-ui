@@ -13,6 +13,7 @@
         </el-tab-pane>
         <el-tab-pane label="听力测试">
           <hearTest
+            ref="childRef"
             :imageData="imageData"
             :answerIndex="answerIndex"
             :isPlay="isPlay"
@@ -53,14 +54,16 @@
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
-          <el-button type="primary" @click="handleSave(ruleFormRef)"> 保 存 </el-button>
+          <el-button type="primary" @click="handleSave(ruleFormRef)">
+            保 存
+          </el-button>
         </span>
       </template>
     </el-dialog>
   </el-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, computed, watch, reactive } from "vue";
+import { onMounted, ref, computed, watch, reactive, inject } from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
 import * as echarts from "echarts";
@@ -81,14 +84,16 @@ let store = useStore();
 const route = useRoute();
 const testData = store.getters.getTestData;
 const main = ref();
+const childRef = ref(null);
 let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || "";
-const openType = ref(1)
+const openType = ref(1);
+const handleTestStop = inject<() => void>('handleStop');
 interface RuleForm {
-  operator: string
+  operator: string;
 }
 const form = reactive({
   uid: userInfo[0].uid,
@@ -96,16 +101,12 @@ const form = reactive({
   answerList: testData[0].signalSoundConfig,
   operator: "",
   reason: "",
-  advice: ""
+  advice: "",
 });
 const rules = reactive<FormRules<RuleForm>>({
-  operator: [
-    { required: true, message: '请输入操作人姓名', trigger: 'blur' },
-  ],
-  reason: [
-    { required: true, message: '请填写结束原因', trigger: 'blur' },
-  ],
-})
+  operator: [{ required: true, message: "请输入操作人姓名", trigger: "blur" }],
+  reason: [{ required: true, message: "请填写结束原因", trigger: "blur" }],
+});
 // console.log(testData);
 //计算属性——完整
 // let imageData = computed({
@@ -156,12 +157,12 @@ const handlePause = async () => {
 const handleResume = async () => {
   const res = await auditionApi.resumeTest();
 };
-const handleOpen=(type)=> {
-  openType.value = type
-  dialogVisible.value = true
-}
-const handleSave = async (formEl:FormInstance | undefined) => {
-  if (!formEl) return
+const handleOpen = (type) => {
+  openType.value = type;
+  dialogVisible.value = true;
+};
+const handleSave = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
   //保存
   // console.log(testData[0].commands)
   //commands
@@ -176,12 +177,13 @@ const handleSave = async (formEl:FormInstance | undefined) => {
       if (res.code == 0) {
         isStart = false;
         isPlay.value = false;
-        dialogVisible.value = false
-        handleStop()
+        dialogVisible.value = false;
+        handleStop();
+        handleTestStop?.()
         ElMessage({
-        message: "保存成功",
-        type: "success",
-      });
+          message: "保存成功",
+          type: "success",
+        });
       }
     } else {
       ElMessage({
@@ -260,7 +262,7 @@ const handleStart = (value1, value2) => {
   // });
 };
 const handleStop = () => {
-  if (!isStart) return;
+  // if (!isStart) return;
   stopTest();
 };
 
@@ -328,7 +330,7 @@ onMounted(() => {
         message: "方案播放完成",
         type: "success",
       });
-      handleSave();
+      handleOpen(1);
       if (!isOpen) {
         handleStopAudio();
       }
