@@ -90,6 +90,8 @@ let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || "";
+const openType = ref(0);
+const handleTestStop = inject<() => void>('handleStop');
 interface RuleForm {
   operator: string;
 }
@@ -99,12 +101,12 @@ const form = reactive({
   answerList: testData[0].signalSoundConfig,
   operator: "",
   reason: "",
+  advice: "",
 });
 const rules = reactive<FormRules<RuleForm>>({
-  operator: [
-    { required: true, message: '请输入操作人姓名', trigger: 'blur' },
-  ],
-})
+  operator: [{ required: true, message: "请输入操作人姓名", trigger: "blur" }],
+  reason: [{ required: true, message: "请填写结束原因", trigger: "blur" }],
+});
 // console.log(testData);
 //计算属性——完整
 // let imageData = computed({
@@ -155,11 +157,12 @@ const handlePause = async () => {
 const handleResume = async () => {
   const res = await auditionApi.resumeTest();
 };
-const handleOpen=()=> {
-  dialogVisible.value = true
-}
-const handleSave = async (formEl:FormInstance | undefined) => {
-  if (!formEl) return
+const handleOpen = (type) => {
+  openType.value = type;
+  dialogVisible.value = true;
+};
+const handleSave = async (formEl: FormInstance | undefined) => {
+  if (!formEl) return;
   //保存
   // console.log(testData[0].commands)
   //commands
@@ -174,7 +177,9 @@ const handleSave = async (formEl:FormInstance | undefined) => {
       if (res.code == 0) {
         isStart = false;
         isPlay.value = false;
-        dialogVisible.value = false
+        dialogVisible.value = false;
+        handleStop();
+        handleTestStop?.()
         ElMessage({
           message: "保存成功",
           type: "success",
@@ -325,7 +330,7 @@ onMounted(() => {
         message: "方案播放完成",
         type: "success",
       });
-      handleOpen(1);
+      openType.value == 0 && handleOpen(1);
       if (!isOpen) {
         handleStopAudio();
       }
@@ -357,7 +362,7 @@ onMounted(() => {
   margin: 0 auto;
   margin-top: 50px;
   .el-tabs {
-    height: 900px;
+    height: 1000px;
   }
   .el-main {
     padding-block: inherit;

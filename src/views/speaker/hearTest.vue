@@ -314,9 +314,12 @@ onMounted(() => {
     // 1111
     if (e.key === "audioStart") {
       let item = JSON.parse(e.newValue);
-      console.info("==========>", item);
-      console.info("mod==========>", mod(item.target, 2));
+      // console.info("==========>", item);
+      // console.info("mod==========>", mod(item.target, 2));
       soundIndex.value = mod(item.target, 2);
+    }
+    if(e.key === 'audioStop') {
+      handleStop()
     }
   });
 });
