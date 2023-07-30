@@ -245,9 +245,6 @@ const handleStop = () => {
 const handleSave = (type: number) => {
   emit("handleSave", type);
 };
-const handleSave = ()=> {
-  emit("handleSave");
-}
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
   emit(isOpen.value ? "handleAudio" : "handleStopAudio");
