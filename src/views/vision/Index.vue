@@ -42,11 +42,10 @@
               <Female class="icon" v-else />
               <text style=" margin-left: 2px;font-size: large;font-weight: bold;width: 80%;">{{ item.name }}</text>
             </div>
-            <el-button type="success"
-              style="text-align: end; margin-right: 2%"
-              @click="toTest(item)"
-              >开始测试</el-button
-            >
+            <div style="display: flex;align-items: center; margin-right: 15px;">
+              <el-button type="warning" style="text-align: end;" @click="toTest(item)" >扬声器测听</el-button>
+              <el-button type="success" style="text-align: end;" @click="toTest(item)" >开始测试</el-button>
+            </div>
           </div>
           <el-empty description="暂无数据" v-else />
         </div>
@@ -254,8 +253,8 @@ const chooseItem = (val) => {
   display: flex;
   margin-top: 2%;
   background-color: #f2f3f5;
-  width: 100%;
   justify-content: space-between;
+  width: 100%;
   align-items: center;
   line-height: 40px;
 }

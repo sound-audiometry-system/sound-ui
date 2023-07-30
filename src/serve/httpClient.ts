@@ -69,7 +69,7 @@ class Api {
 // const baseUrl = 'https://localhost:8080'
 // const baseUrl = 'http://localhost:8081'
 // const baseUrl = 'https://192.168.10.54:8080'
-const baseUrl = 'http://192.168.0.102:8081'
+const baseUrl = 'https://192.168.0.102:8080'
 const api = new Api({
   baseURL: baseUrl,
   timeout: 10 * 1000,
