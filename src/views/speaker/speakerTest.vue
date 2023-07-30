@@ -5,13 +5,13 @@
       <userHeader></userHeader>
     </el-header>
     <el-main ref="main">
-      <el-tabs type="border-card">
-        <el-tab-pane label="扬声器测听">
+      <el-tabs v-model="typeName" type="border-card">
+        <el-tab-pane name="1" label="扬声器测听">
           <!-- echarts图表 -->
           <amplifier-test></amplifier-test>
           <!-- <div id="echarts-a" style="width: 600px;height:400px;"></div> -->
         </el-tab-pane>
-        <el-tab-pane label="听力测试">
+        <el-tab-pane name="2" label="听力测试">
           <hearTest
             ref="childRef"
             :imageData="imageData"
@@ -75,13 +75,14 @@ import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
 import { useStore, mapState } from "vuex";
 let value = ref("1");
-
+const typeName = ref('1')
 let isStart = false;
 let isPlay = ref(false);
 const dialogVisible = ref(false);
 let isOpen = false;
 let store = useStore();
 const route = useRoute();
+if(route.query.type) typeName.value=route.query.type
 const testData = store.getters.getTestData;
 const main = ref();
 const childRef = ref(null);
@@ -373,3 +374,4 @@ onMounted(() => {
   background-color: #f5f5f5;
 }
 </style>
+  

@@ -76,7 +76,7 @@
           :span="8"
         >
           <el-image
-          @click="checkedImg"
+          @click="checkedImg(index)"
             :class="{
               'is-checked-img-error':
                 item.isCheckFlag && index + 1 != props.imageData.target,

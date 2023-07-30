@@ -43,7 +43,7 @@
               <text style=" margin-left: 2px;font-size: large;font-weight: bold;width: 80%;">{{ item.name }}</text>
             </div>
             <div style="display: flex;align-items: center; margin-right: 15px;">
-              <el-button type="warning" style="text-align: end;" @click="toTest(item)" >扬声器测听</el-button>
+              <el-button type="warning" style="text-align: end;" @click="router.push({ path: "/speaker", query:{ type: '1' } });" >扬声器测听</el-button>
               <el-button type="success" style="text-align: end;" @click="toTest(item)" >开始测试</el-button>
             </div>
           </div>
@@ -171,6 +171,10 @@ const testData = ref([
     commands: [],
   },
 ]);
+const handleNavHead = ()=> {
+  
+}
+
 //测试结果
 const testResult = ref();
 
@@ -214,7 +218,7 @@ const handleNav = () => {
   const testArr = testData.value.filter((item) => item.id == testResult.value);
   store.commit("setTestData", testArr);
   // if (testResult.value == 1) {
-  router.push({ path: "/speaker" });
+  router.push({ path: "/speaker", query:{ type: '2' } });
   // }
 };
 //加载测试数据
