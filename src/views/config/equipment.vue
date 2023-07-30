@@ -10,7 +10,7 @@
   </el-row>
   <el-container>
     <el-aside>
-      <el-row style="height: 425px; width: 525px">
+      <el-row style="height: 400px; width: 525px">
         <el-col :span="24">
           <sound :sounds="deviceset"></sound>
         </el-col>
@@ -189,7 +189,7 @@ let getBgc = (idex) => {
     align-items: center;
     justify-content: space-around;
     width: 920px;
-    height: 375px;
+    height: 356px;
     // flex-direction: column;
     flex-wrap: wrap;
     background-color: #f6f6f6;

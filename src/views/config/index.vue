@@ -42,18 +42,18 @@ const handleBack = () => {
 
 <style scoped lang="scss">
 .el-container {
-  width: 100%;
-  height: 95%;
+  width: 1920px;
+  height: 967px;
   margin: 0 auto;
   margin-top: 50px;
   transform: scale(1);
   .el-main {
     width: 1920px;
-    height: 940px;
+    height: 906px;
     padding: 0px;
     .el-tabs {
       width: 1920px;
-      height: 960px;
+    height: 906px;
       // :deep(.el-tabs__item) {
       //   width: 590px;
       // }

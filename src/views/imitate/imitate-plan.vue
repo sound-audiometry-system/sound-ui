@@ -18,7 +18,7 @@
             ><el-switch v-model="value2" class="ml-2" disabled /><label>右显示器</label>
           </span>
         </div>
-        <div style="margin-left: 10px; width: 920px;height: 410px;padding: 0 6px;display: flex;">
+        <div style="margin-left: 10px; width: 920px;height: 385px;padding: 0 6px;display: flex;">
           <el-row style="background-color: #000;width: 82%;height: 100%;align-items: center;overflow: auto;" align="center" :gutter="10">
             <!-- <el-col
               v-for="(item, index) in props.imageData.answerList"
@@ -96,7 +96,7 @@
           ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
           >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
         >
-        <div style="height: 320px; width: 530px">
+        <div style="height: 290px; width: 530px">
           <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
         </div>
         <el-row class="el-btn a">
