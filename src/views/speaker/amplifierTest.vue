@@ -1,5 +1,14 @@
 <template>
-  <div style="margin-top: 40px">
+  <el-container>
+    <el-header>
+      <userHeader></userHeader>
+      <div class="titleItem">
+        <span>扬声器测试</span>
+      </div>
+      <el-button size="large" style="float: right; margin-top: 3px;" @click="$router.back()">返回</el-button>
+    </el-header>
+    <el-main>
+  <div style="margin-top: 80px;">
     <el-row :gutter="10">
       <el-col :span="13"
         ><speaker-chart></speaker-chart>
@@ -42,13 +51,33 @@
       </el-col>
     </el-row>
   </div>
+</el-main>
+</el-container>
 </template>
 <script setup lang="ts">
 import sound from "../../components/sound/index.vue";
 import speakerChart from "./components/speakerChart.vue";
+import userHeader from "../lay/MainHeader.vue";
 </script>
 
 <style lang="scss" scoped>
+.titleItem {
+  display: flex;
+  align-items: center;
+  width: 1893px;
+  height: 60px;
+  background-color: rgb(32, 133, 112);
+  line-height: 60px;
+  text-align: center;
+  
+  span {
+    margin-left: 12px;
+    font-size: x-large;
+    color: #ffffff;
+  }
+}
+
+
 .ac-btn {
   width: 261px;
   line-height: 29px;

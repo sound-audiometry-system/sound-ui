@@ -5,7 +5,7 @@
             <el-icon size="24">
                 <Avatar />
             </el-icon>
-            <label style="margin-left: 10px; line-height: 48px;">{{ userInfo[0].name }}</label>
+            <label style="margin-left: 10px; line-height: 48px;">{{ userInfo[0].name}}</label>
         </el-col>
         <!-- <el-col :span="6">
             <el-button link>测试</el-button>

@@ -43,7 +43,7 @@
               <text style=" margin-left: 2px;font-size: large;font-weight: bold;width: 80%;">{{ item.name }}</text>
             </div>
             <div style="display: flex;align-items: center; margin-right: 15px;">
-              <el-button type="warning" style="text-align: end;" @click="router.push({ path: "/speaker", query:{ type: '1' } });" >扬声器测听</el-button>
+              <el-button type="warning" style="text-align: end;" @click="handleNavgator(item)" >扬声器测听</el-button>
               <el-button type="success" style="text-align: end;" @click="toTest(item)" >开始测试</el-button>
             </div>
           </div>
@@ -211,7 +211,10 @@ const getUserPatient = async (uid: string | number) => {
   // console.log(res, '2222222')
   // userSearchData.value = [res.data]
 };
-
+const handleNavgator =()=>{
+  sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
+  router.push({ path: "/amplifierTest"});
+}
 const handleNav = () => {
   chooseTypeVisble.value = false;
   sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
