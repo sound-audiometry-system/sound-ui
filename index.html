@@ -36,6 +36,9 @@
         if (message.cmdType == 'audioStart') {
           sessionStorage.setItem('audioStart', JSON.stringify(message))
         }
+        if (message.cmdType == 'audioStop') {
+          sessionStorage.setItem('audioStop', JSON.stringify(message))
+        }
         if (message.cmdType == 'playFinish') {
           // sessionStorage.setItem('imageData', JSON.stringify(message))
           sessionStorage.setItem('imageData', "")
