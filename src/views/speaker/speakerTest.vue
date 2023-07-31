@@ -99,7 +99,7 @@ interface RuleForm {
 const form = reactive({
   uid: userInfo[0].uid,
   testId: testData[0].id,
-  answerList: testData[0].signalSoundConfig,
+  // answerList: testData[0].signalSoundConfig,
   operator: "",
   reason: "",
   advice: "",
@@ -158,8 +158,9 @@ const handlePause = async () => {
 const handleResume = async () => {
   const res = await auditionApi.resumeTest();
 };
-const handleOpen = (type) => {
+const handleOpen = (type, answerList) => {
   openType.value = type;
+  form.answerList = answerList
   dialogVisible.value = true;
 };
 const handleSave = async (formEl: FormInstance | undefined) => {

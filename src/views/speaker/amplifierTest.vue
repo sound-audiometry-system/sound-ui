@@ -5,7 +5,7 @@
       <div class="titleItem">
         <span>扬声器测试</span>
       </div>
-      <el-button size="large" style="float: right; margin-top: 3px;" @click="$router.back()">返回</el-button>
+      <el-button size="large" style="float: right; position: relative; z-index: 999; margin-top: 3px;" @click="$router.back()">返回</el-button>
     </el-header>
     <el-main>
   <div style="margin-top: 80px;">

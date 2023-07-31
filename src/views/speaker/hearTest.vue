@@ -185,6 +185,8 @@ let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
 let soundIndex = ref(30);
+let source = ''
+let answerForm = {}
 // console.log(testData, 'testData')
 // console.log(testData.commands, 'testData')
 const answerMarks = ref(
@@ -215,6 +217,7 @@ const emit = defineEmits([
 ]);
 const props = defineProps<Props>();
 let answerIndex = props.answerIndex;
+let answerList = []
 const isCheckFlag = ref(false);
 const isCheck = ref(false);
 watch(
@@ -243,7 +246,17 @@ const handleStop = () => {
   // emit("handleStop");
 };
 const handleSave = (type: number) => {
-  emit("handleSave", type);
+  // console.log(answerList, 'answerList')
+  let arr = answerList.reverse()
+  let uniqueArr = arr.reduce((acc, curr) => {
+  let found = acc.find(item => item.file === curr.file);
+  if (!found) {
+    acc.push(curr);
+  }
+  return acc;
+}, []);
+console.log(uniqueArr)
+  emit("handleSave", type, uniqueArr);
 };
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
@@ -288,6 +301,20 @@ const checkedImg = (index) => {
   if (!isCheckFlag.value) return;
   // isCheckFlag.value = true;
   props.imageData.answerList[index].isCheckFlag = true;
+  // answerForm.wrongFile = props.imageData.answerList[index].image
+  // answerForm.correct = false
+  const arr = answerList.filter(item=> item.id == props.imageData.answerList[index])
+  if (arr && arr.length != 0) {
+    for (let i = 0;i<answerList.length;i++) {
+      if (answerList[i].id == props.imageData.answerList[index]) {
+        answerList[i].correct = false
+        answerList[i].wrongFile = props.imageData.answerList[index].image
+        break
+      }
+    }
+  } else {
+    answerList.push({ file: source, correct:false, wrongFile: props.imageData.answerList[index].image })
+  }
   index + 1 == props.imageData.target
     ? (answerMarks.value[answerIndex].answerMark = 2)
     : (answerMarks.value[answerIndex].answerMark = 3);
@@ -299,7 +326,7 @@ const checkedImg = (index) => {
   //   // props.imageData.answerList[index].isCheckFlag = false
   // }
 };
-provide('handleStop', handleStop)
+// provide('handleStop', handleStop)
 onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
@@ -309,7 +336,9 @@ onMounted(() => {
       return;
     }
     if (e.key === "imageData") {
+      console.log(answerMarks)
       answerMarks.value[answerIndex].answerMark = 2;
+      // answerForm.id = JSON.parse(e.newValue).image
     }
     // 1111
     if (e.key === "audioStart") {
@@ -317,9 +346,15 @@ onMounted(() => {
       // console.info("==========>", item);
       // console.info("mod==========>", mod(item.target, 2));
       soundIndex.value = mod(item.target, 2);
+      answerForm.file = item.source
+      answerForm.correct = true
+      source = item.source
     }
     if(e.key === 'audioStop') {
-      handleStop()
+      // console.log(answerForm, 'answerForm')
+      answerList.push(answerForm)
+      answerForm = {}
+      // handleStop()
     }
   });
 });
