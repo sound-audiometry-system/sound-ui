@@ -8,44 +8,13 @@
       
     </div>
     <el-row :gutter="20" style="margin-top: 20px">
-      <el-col
-        style="
-          height: 780px;
-          background-color: #fff;
-          padding: 10px 0;
-          overflow: auto;
-        "
-        :span="12"
-      >
-        <div
-          v-for="(item, index) in devices"
-          :key="index"
-          :gutter="10"
-          style="
-            height: 90px;
-            border-bottom: 1px solid #d6d6d6;
-            padding: 10px 0px;
-          "
-        >
+      <el-col style="eight: 760px; background-color: #fff; padding: 10px 0; overflow: auto;" :span="12">
+        <div v-for="(item, index) in devices" :key="index" :gutter="10" style=" height: 90px; border-bottom: 1px solid #d6d6d6;padding: 10px 0px;">
           <el-row style="align-items: center">
             <el-col :span="6">
-              <span>{{ index + 1 }}</span
-              >.
+              <span>{{ index + 1 }}</span>.
               <span
-                class="ml-10"
-                style="
-                  display: inline-block;
-                  border-radius: 50%;
-                  margin-right: 6px;
-                  width: 22px;
-                  height: 22px;
-                  background: #b0b912;
-                  color: #fff;
-                  text-align: center;
-                  line-height: 22px;
-                "
-                >{{ item.index }}</span
-              >
+                class="ml-10" style="display: inline-block;border-radius: 50%;margin-right: 6px;width: 22px;height: 22px;background: #b0b912;color: #fff;text-align: center;line-height: 22px;">{{ item.index }}</span>
               <span>{{ item.index }}号音响</span>
             </el-col>
             <el-col :span="3">
@@ -57,21 +26,11 @@
                 <el-radio label="1" size="large">言语声</el-radio>
               </el-radio-group>
             </el-col>
-            <el-col :span="2"
-              ><el-input
-                style="width: 100%"
-                controls-position="right"
-                size="small"
-                v-model="queryForm.signalSoundVolume"
-                placeholder="52"
-            /></el-col>
+            <el-col :span="2">
+              <el-input style="width: 100%" controls-position="right" size="small" v-model="queryForm.signalSoundVolume" placeholder="52"/></el-col>
             <el-col :span="4">(分贝db)</el-col>
             <el-col :span="3">
-              <el-radio-group
-                disabled
-                v-model="queryForm.environmentalSoundVolume"
-                class="ml-4"
-              >
+              <el-radio-group disabled v-model="queryForm.environmentalSoundVolume" class="ml-4">
                 <el-radio label="1" size="large">环境声</el-radio>
               </el-radio-group>
             </el-col>
