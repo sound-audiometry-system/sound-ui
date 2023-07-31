@@ -103,9 +103,7 @@
           "
         >
           <el-button size="large" @click="handleStart">播放</el-button>
-          <!-- <el-button @click="handleSave">保存</el-button> -->
           <el-button size="large" @click="handleStart">重复</el-button>
-          <!-- <el-button @click="handleBack">退出</el-button> -->
         </div>
         <el-row class="el-row-box" style="display: flex; margin-top: 180px; align-items: center">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3">信号声</el-col>
