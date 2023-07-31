@@ -53,7 +53,7 @@
       </el-form>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="dialogVisible = false">取 消</el-button>
+          <el-button @click="handleClose">取 消</el-button>
           <el-button type="primary" @click="handleSave(ruleFormRef)">
             保 存
           </el-button>
@@ -142,6 +142,7 @@ const startTest = async (value1, value2) => {
 };
 const handleClose = () => {
   dialogVisible.value = false;
+  handleResume()
 };
 const stopTest = async () => {
   //结束
@@ -149,6 +150,7 @@ const stopTest = async () => {
   if (res.code == 0) {
     isStart = false;
     isPlay.value = false;
+    sessionStorage.setItem('imageData', "")
   }
 };
 const handlePause = async () => {
@@ -162,6 +164,7 @@ const handleOpen = (type, answerList) => {
   openType.value = type;
   form.answerList = answerList
   dialogVisible.value = true;
+  handlePause()
 };
 const handleSave = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
