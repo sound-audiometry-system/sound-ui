@@ -2,7 +2,7 @@
 <template>
   <div v-loading="loading" class="main">
     <el-row :gutter="20">
-      <el-col :span="16">
+      <el-col :span="23">
         <el-input
           v-model="value"
           class="w-50 m-2"
@@ -10,16 +10,16 @@
           :prefix-icon="Search"
         />
       </el-col>
-      <el-col :span="8">
+      <!-- <el-col :span="8">
         <div class="mb-2 flex items-center text-sm">
           <el-radio-group v-model="radio1" class="ml-4">
             <el-radio label="1" size="large">仅显示已校准</el-radio>
             <el-radio label="2" size="large">仅显示未校准</el-radio>
           </el-radio-group>
         </div>
-      </el-col>
+      </el-col> -->
     </el-row>
-    <el-table :height="770" :data="tableData" stripe style="width: 100%">
+    <el-table :height="770" :data="tableData" stripe style="width: 100%" empty-text="暂无数据">
       <el-table-column prop="name" label="测试名称" min-width="180" />
       <el-table-column prop="level1EntryName" label="测试模式" min-width="180" />
       <el-table-column prop="level2EntryName" label="测试分类" />
@@ -50,13 +50,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { Search } from "@element-plus/icons-vue";
 const value = ref("");
 const radio1 = ref("1");
 let loading = ref(false);
 import { imitateApi } from "@/serve/api/user";
 let tableData = ref([]);
+let tableDatas = []
 const emit = defineEmits(["handleCalibration"]);
 const handleCalibration = (index, row) => {
   emit("handleCalibration", index, row);
@@ -69,8 +70,16 @@ const getListTestMode = async (name: string = "") => {
   loading.value = false;
   if (res.code == 0) {
     tableData.value = res.data;
+    tableDatas = res.data;
   }
 };
+watch(value, (newValue, oldValue)=> {
+  if(newValue) {
+    tableData.value = tableData.value.filter(item=> item.name.includes(newValue))
+  } else {
+    tableData.value = tableDatas
+  }
+})
 onMounted(() => {
   getListTestMode();
 });

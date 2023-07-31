@@ -327,10 +327,12 @@ const checkedImg = (index) => {
   // }
 };
 // provide('handleStop', handleStop)
+// provide('handleStop', handleStop)
 onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       for (const item of answerMarks.value) {
+        console.log(item)
         item.answerMark = 1;
       }
       return;

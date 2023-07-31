@@ -17,13 +17,13 @@
             </el-form-item>
           </el-form>
           <div class="userItem" v-for="(item, idx) in testData" :key="idx" v-if="testData.length > 0">
-            <div style="display: flex; align-items: center; margin: 2px 0px 2px 15px;width: 240px;">
+            <div style="display: flex; align-items: center; margin: 2px 0px 2px 15px;width: 500px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
               <text style="margin-left: 2px; font-size: large; font-weight: bold;"
                 >{{ item.name }}</text>
             </div>
             <el-button type="success" style="text-align: end; margin-right: 2%" @click="toTest(item)">开始模拟</el-button>
           </div>
-          <el-empty description="暂无" v-else />
+          <el-empty description="暂无数据" v-else />
         </div>
       </div>
     </el-main>
@@ -79,9 +79,9 @@ const imitateName = ref("");
 //测试列表
 const testData = ref([]);
 const getListTestMode = async (name: string = "")=> {
-  const res = await imitateApi.getListTestMode({ type: 2, name: name })
+  const res = await imitateApi.getListThresholdMode({ name: name })
   if (res.code == 0) {
-    testData.value = res.data.records
+    testData.value = res.data
   }
 }
 //测试结果
