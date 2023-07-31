@@ -1,6 +1,6 @@
 <template>
   <el-form-item label="测试名称">
-    <el-input style="width: 1720px" disabled v-model="testName" />
+    <el-input style="width: 1680px" disabled v-model="testName" />
     <el-button
       style="float: left; margin-left: 5px"
       type="primary"
@@ -23,7 +23,7 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 385px;
+          height: 335px;
           padding: 0 6px;
           display: flex;
         "
@@ -64,7 +64,7 @@
         style="
           margin-left: 10px;
           width: 920px;
-          height: 300px;
+          height: 305px;
           background-color: #8cdcfe;
           padding-top: 6px;
           overflow: auto;
@@ -145,7 +145,7 @@
               >查看全部<el-icon><CaretRight /></el-icon
             ></span>
           </div>
-          <div style="height: 24px; overflow: hidden">
+          <div style="height: 36px; overflow: hidden">
             <span
               v-for="(item, index) in answerMarks"
               :key="index"

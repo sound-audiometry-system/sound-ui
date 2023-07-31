@@ -5,13 +5,13 @@
       <userHeader></userHeader>
     </el-header>
     <el-main ref="main">
-      <el-tabs v-model="typeName" type="border-card">
-        <el-tab-pane name="1" label="扬声器测听">
+      <el-tabs v-model="typeName" stretch="true" type="border-card">
+        <!-- <el-tab-pane name="1" label="扬声器测听"> -->
           <!-- echarts图表 -->
-          <amplifier-test></amplifier-test>
+          <!-- <amplifier-test></amplifier-test> -->
           <!-- <div id="echarts-a" style="width: 600px;height:400px;"></div> -->
-        </el-tab-pane>
-        <el-tab-pane name="2" label="听力测试">
+        <!-- </el-tab-pane> -->
+        <el-tab-pane  align="left" style="font-size: x-large;" name="2" label="听力测试">
           <hearTest
             ref="childRef"
             :imageData="imageData"
@@ -363,13 +363,19 @@ onMounted(() => {
   margin: 0 auto;
   margin-top: 50px;
   .el-tabs {
-    height: 1000px;
+    // height: 1000px;
+    font-size: x-large;
   }
   .el-main {
     padding-block: inherit;
     padding: 0 !important;
+    
   }
 }
+.el-tabs__item {
+        font-size: x-large;
+        text-align: left;
+    }
 .el-tabs--border-card {
   background-color: #f5f5f5;
 }
