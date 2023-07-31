@@ -178,6 +178,19 @@ class ImitateApi {
       data
     }) 
   }
+
+  /**
+   * 获取阈值测试方案数据 
+   * @param data 
+   * @returns 
+   */
+  getListThresholdMode(data) {
+    return http.request({
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/listTestMode',
+      method: 'POST',
+      data
+    }) 
+  }
    /** 
    * 上传校准值
    * @param id

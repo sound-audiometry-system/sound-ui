@@ -56,28 +56,7 @@ const value = ref("");
 const radio1 = ref("1");
 let loading = ref(false);
 import { imitateApi } from "@/serve/api/user";
-let tableData = ref([
-  {
-    date: "2016-05-03",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    date: "2016-05-02",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    date: "2016-05-04",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-  {
-    date: "2016-05-01",
-    name: "Tom",
-    address: "No. 189, Grove St, Los Angeles",
-  },
-]);
+let tableData = ref([]);
 const emit = defineEmits(["handleCalibration"]);
 const handleCalibration = (index, row) => {
   emit("handleCalibration", index, row);
@@ -85,7 +64,7 @@ const handleCalibration = (index, row) => {
 const currentChange = () => {};
 const getListTestMode = async (name: string = "") => {
   loading.value = true;
-  const res = await imitateApi.getListTestMode({ type: 1, name: name });
+  const res = await imitateApi.getListThresholdMode({name: name });
   console.log(res);
   loading.value = false;
   if (res.code == 0) {
