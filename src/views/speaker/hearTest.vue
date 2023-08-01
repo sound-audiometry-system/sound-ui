@@ -277,15 +277,15 @@ const handlePrev = async () => {
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    answerIndex.value--;
+    answerIndex.value != 0 && answerIndex.value--;
   }
 };
 // 下一个
 const handleNext = async () => {
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
-    isCheckFlag.value = false;
-    answerIndex.value++;
+    // isCheckFlag.value = false;
+    // answerIndex.value++;
   }
 };
 // 重复
