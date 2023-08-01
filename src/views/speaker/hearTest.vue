@@ -247,17 +247,20 @@ const handleStop = () => {
 };
 const handleSave = (type: number) => {
   // console.log(answerList, 'answerList')
+  let uniqueArr = changeUniqueArr()
+// console.log(uniqueArr)
+  emit("handleSave", type, uniqueArr);
+};
+const changeUniqueArr = ()=> {
   let arr = answerList.reverse()
-  let uniqueArr = arr.reduce((acc, curr) => {
+  return arr.reduce((acc, curr) => {
   let found = acc.find(item => item.file === curr.file);
   if (!found) {
     acc.push(curr);
   }
   return acc;
 }, []);
-console.log(uniqueArr)
-  emit("handleSave", type, uniqueArr);
-};
+}
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
   emit(isOpen.value ? "handleAudio" : "handleStopAudio");
@@ -332,9 +335,11 @@ onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       for (const item of answerMarks.value) {
-        console.log(item)
+        // console.log(item)
         item.answerMark = 1;
       }
+      soundIndex.value = 0
+      emit("handleSave", 1, changeUniqueArr())
       return;
     }
     if (e.key === "imageData") {
@@ -353,7 +358,7 @@ onMounted(() => {
       source = item.source
     }
     if(e.key === 'audioStop') {
-      // console.log(answerForm, 'answerForm')
+      console.error(answerForm, 'answerForm')
       answerList.push(answerForm)
       answerForm = {}
       // handleStop()

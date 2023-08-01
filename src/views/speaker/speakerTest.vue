@@ -63,15 +63,16 @@
   </el-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, computed, watch, reactive, inject , ElMessage} from "vue";
+import { onMounted, ref, computed, watch, reactive, inject } from "vue";
+import { ElMessage } from 'element-plus';
 import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
-import * as echarts from "echarts";
+// import * as echarts from "echarts";
 import userHeader from "../lay/MainHeader.vue";
 import hearTest from "./hearTest.vue";
-import amplifierTest from "./amplifierTest.vue";
-import footer from "../../components/sound/index.vue";
-import footerTab from "../../components/footerTab.vue";
+// import amplifierTest from "./amplifierTest.vue";
+// import footer from "../../components/sound/index.vue";
+// import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
 import { useStore, mapState } from "vuex";
 let value = ref("1");
@@ -335,7 +336,7 @@ onMounted(() => {
         message: "方案播放完成",
         type: "success",
       });
-      openType.value == 0 && handleOpen(1);
+      // openType.value == 0 && handleOpen(1);
       if (!isOpen) {
         handleStopAudio();
       }
