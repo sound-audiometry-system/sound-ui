@@ -332,9 +332,6 @@ onMounted(() => {
       // }
       answerIndex.value+=1
       isCheckFlag.value = false; 
-      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
-        answerMarks.value[answerIndex.value].answerMark = 2;
-      }
       
     }
     // 1111
@@ -350,6 +347,9 @@ onMounted(() => {
       source = item.source
     }
     if(e.key === 'audioStop') {
+      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
+        answerMarks.value[answerIndex.value].answerMark = 2;
+      }
       answerForm = {} 
       // handleStop()
     }
