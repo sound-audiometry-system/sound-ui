@@ -17,6 +17,7 @@
             :imageData="imageData"
             :answerIndex="answerIndex"
             :isPlay="isPlay"
+            :isSave="isSave"
             @handleStart="handleStart"
             @handleStop="handleStop"
             @handleSave="handleOpen"
@@ -79,6 +80,7 @@ let value = ref("1");
 const typeName = ref('1')
 let isStart = false;
 let isPlay = ref(false);
+let isSave = false
 const dialogVisible = ref(false);
 let isOpen = false;
 let store = useStore();
@@ -164,8 +166,9 @@ const handleSave = async (formEl: FormInstance | undefined) => {
         isStart = false;
         isPlay.value = false;
         dialogVisible.value = false;
+        isSave = true
         handleStop();
-        handleTestStop?.()
+        // handleTestStop?.()
         ElMessage({
           message: "保存成功",
           type: "success",

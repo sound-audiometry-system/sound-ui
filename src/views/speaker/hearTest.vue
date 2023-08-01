@@ -201,7 +201,7 @@ let beforeChange1 = () => {
 };
 type Props = {
   imageData: any;
-  answerIndex: any;
+  isSave: any;
   isPlay: any;
 };
 const emit = defineEmits([
@@ -214,7 +214,7 @@ const emit = defineEmits([
   "handleResume",
 ]);
 const props = defineProps<Props>();
-let answerIndex = props.answerIndex;
+let answerIndex = ref(-1);
 let answerList = []
 const isCheckFlag = ref(false);
 const answerMap = new Map();
@@ -224,11 +224,10 @@ const itemId = ref("")
 watch(
   () => props.imageData,
   (newValue, oldValue) => {
-    answerIndex++;
-    isCheckFlag.value = false;
+    // answerIndex.value++;
+    // isCheckFlag.value = false;
     // console.log(222222222)
   },
-  { deep: true }
 );
 const handleClk = () => {
   // console.log(answerDialogRef.value);
@@ -278,7 +277,7 @@ const handlePrev = async () => {
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    answerIndex--;
+    answerIndex.value--;
   }
 };
 // 下一个
@@ -286,7 +285,7 @@ const handleNext = async () => {
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    answerIndex++;
+    answerIndex.value++;
   }
 };
 // 重复
@@ -301,14 +300,14 @@ const mod = (n, m) => {
 };
 const checkedImg = (item,index) => { 
   if (!isCheckFlag.value) return;
-  console.error("props.imageData  ====>>>>>>   " , props.imageData)
-  // props.imageData.answerList[index].isCheckFlag = true;
+  // console.error("props.imageData  ====>>>>>>   " , props.imageData)
+  props.imageData.answerList[index].isCheckFlag = true;
   //构建错误答案
   answerMap.set(item.uuid, {"file": itemId.value,"correct":false,"wrongFile": item.image})
 
   index + 1 == props.imageData.target
-    ? (answerMarks.value[answerIndex].answerMark = 2)
-    : (answerMarks.value[answerIndex].answerMark = 3);
+    ? (answerMarks.value[answerIndex.value].answerMark = 2)
+    : (answerMarks.value[answerIndex.value].answerMark = 3);
   isCheckFlag.value = false;
   emit("handleResume"); 
 }; 
@@ -319,12 +318,24 @@ onMounted(() => {
         // console.log(item)
         item.answerMark = 1;
       }
+      answerIndex.value = 0
       soundIndex.value = 0
-      emit("handleSave", 1, Array.from(answerMap.values()))
+      console.log(props.isSave)
+      !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()))
       return;
     }
     if (e.key === "imageData") {
-      answerMarks.value[answerIndex].answerMark = 2; 
+      console.error(answerIndex.value, 'answerIndex')
+      console.error(e, 'e')
+      // if (e.) {
+        
+      // }
+      answerIndex.value+=1
+      isCheckFlag.value = false; 
+      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
+        answerMarks.value[answerIndex.value].answerMark = 2;
+      }
+      
     }
     // 1111
     if (e.key === "audioStart") {
