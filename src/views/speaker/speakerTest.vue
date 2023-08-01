@@ -109,18 +109,6 @@ const rules = reactive<FormRules<RuleForm>>({
   operator: [{ required: true, message: "请输入操作人姓名", trigger: "blur" }],
   reason: [{ required: true, message: "请填写结束原因", trigger: "blur" }],
 });
-// console.log(testData);
-//计算属性——完整
-// let imageData = computed({
-//   // 读
-//   get() {
-//     return sessionStorage.getItem('imageData') ? JSON.parse(sessionStorage.getItem('imageData') || '') : [];
-//   },
-//   // 写
-//   set(value) {
-//     console.log(value)
-//   },
-// });
 const startTest = async (value1, value2) => {
   let params = {};
   if (!value1) {
@@ -134,7 +122,6 @@ const startTest = async (value1, value2) => {
   if (!value1 && !value2) {
     params["test"] = true;
   }
-  // console.info("startParam ------------>",params)
   const res = await auditionApi.startTest(testData[0], params);
   if (res.code == 0) {
     isStart = true;
@@ -170,13 +157,6 @@ const handleOpen = (type, answerList) => {
 const handleSave = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   //保存
-  // console.log(testData[0].commands)
-  //commands
-  // const res = await auditionApi.report({ uid: userInfo[0].uid, testId:testData[0].id,answerList: testData[0].commands, operator: 'admin',reason: '提前结束' });
-  // if (res.code == 0) {
-  //   isStart = false;
-  //   isPlay.value = false
-  // }
   formEl.validate(async (valid, fields) => {
     if (valid) {
       const res = await auditionApi.report(form);
@@ -199,19 +179,6 @@ const handleSave = async (formEl: FormInstance | undefined) => {
     }
   });
 };
-document.addEventListener(
-  "astilectron-ready",
-  () => {
-    // console.log(1111111);
-    astilectron.onMessage((message) => {
-      // console.log(message);
-    });
-  },
-  true
-);
-window.addEventListener("resize", () => {
-  // console.log(22222);
-});
 const recOpen = () => {
   isOpen = true;
   rec = Recorder({
@@ -261,11 +228,6 @@ const recStart = () => {
 const handleStart = (value1, value2) => {
   if (isStart) return;
   startTest(value1, value2);
-  // document.addEventListener("astilectron-ready",  ()=> {
-  //   astilectron.onMessage((message)=> {
-  //     console.log(message);
-  //   });
-  // });
 };
 const handleStop = () => {
   // if (!isStart) return;
@@ -292,7 +254,6 @@ const handleStopAudio = () => {
       const formData = new FormData();
       formData.append("upfile", blob, "test.mp3");
       formData.append("resourceId", testData[0].id);
-      console.log(formData.get("upfile"), "upfile");
       console.log(formData.get("resourceId"), "resourceId");
       const res = await auditionApi.fileUpload(formData);
       isOpen = false;
@@ -300,12 +261,6 @@ const handleStopAudio = () => {
         message: "录音关闭",
         type: "success",
       });
-      /*** 【立即播放例子】 ***/
-      // var audio = document.createElement("audio");
-      // audio.controls = true;
-      // document.body.appendChild(audio);
-      // audio.src = localUrl;
-      // audio.play();
     },
     function (msg) {
       console.log("录音失败:" + msg);
@@ -328,6 +283,7 @@ onMounted(() => {
   //   JSON.stringify(sessionStorage.getItem("imageData") || "")
   // );
   window.addEventListener("setItemEvent", function (e: any) {
+    // console.log('eee=>',e)
     if (!e.newValue) {
       isStart = false;
       isPlay.value = false;
@@ -343,11 +299,16 @@ onMounted(() => {
       imageData = reactive({});
       return;
     }
+
+    if(e.key==="imageClean"){
+      imageData = reactive({});
+      return;
+    }
     if (e.key === "imageData") {
       answerIndex.value += 1;
-      if (sessionStorage.getItem("imageData")) {
+      if (e.newValue) {
         imageData = reactive(
-          JSON.parse(sessionStorage.getItem("imageData") || "")
+          JSON.parse(e.newValue || "")
         );
       }
       if (imageData.answerList && imageData.answerList.length != 0) {
@@ -355,8 +316,6 @@ onMounted(() => {
           item.isCheckFlag = false;
         }
       }
-      // console.log(imageData);
-      // console.log(imageData.value);
     }
   });
 });

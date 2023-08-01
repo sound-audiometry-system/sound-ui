@@ -76,7 +76,7 @@
           :span="8"
         >
           <el-image
-          @click="checkedImg(index)"
+          @click="checkedImg(item,index)"
             :class="{
               'is-checked-img-error':
                 item.isCheckFlag && index + 1 != props.imageData.target,
@@ -186,9 +186,7 @@ let value3 = ref(true);
 let isOpen = ref(false);
 let soundIndex = ref(30);
 let source = ''
-let answerForm = {}
-// console.log(testData, 'testData')
-// console.log(testData.commands, 'testData')
+let answerForm = {} 
 const answerMarks = ref(
   testData[0].signalSoundConfig.map((item) => {
     return {
@@ -219,7 +217,10 @@ const props = defineProps<Props>();
 let answerIndex = props.answerIndex;
 let answerList = []
 const isCheckFlag = ref(false);
+const answerMap = new Map();
+const answerUUID = ref('')
 const isCheck = ref(false);
+const itemId = ref("")
 watch(
   () => props.imageData,
   (newValue, oldValue) => {
@@ -245,22 +246,22 @@ const handleStop = () => {
   }
   // emit("handleStop");
 };
-const handleSave = (type: number) => {
-  // console.log(answerList, 'answerList')
-  let uniqueArr = changeUniqueArr()
-// console.log(uniqueArr)
-  emit("handleSave", type, uniqueArr);
+const handleSave = (type: number) => { 
+  console.log("1111111111111    ",answerMap.values())
+  console.log( "=======>1111111   ", Array.from(answerMap.values()))
+  emit("handleSave", type, Array.from(answerMap.values()));
 };
-const changeUniqueArr = ()=> {
-  let arr = answerList.reverse()
-  return arr.reduce((acc, curr) => {
-  let found = acc.find(item => item.file === curr.file);
-  if (!found) {
-    acc.push(curr);
-  }
-  return acc;
-}, []);
-}
+// const changeUniqueArr = ()=> {
+//   let list =  answerMap.values;
+//   let arr = list.reverse()
+//   return arr.reduce((acc, curr) => {
+//   let found = acc.find(item => item.file === curr.file);
+//   if (!found) {
+//     acc.push(curr);
+//   }
+//   return acc;
+// }, []);
+// }
 const handleAudio = () => {
   isOpen.value = !isOpen.value;
   emit(isOpen.value ? "handleAudio" : "handleStopAudio");
@@ -298,39 +299,19 @@ const handleReImage = async () => {
 const mod = (n, m) => {
   return parseInt(n / m);
 };
-const checkedImg = (index) => {
-  // console.log(props.imageData.answerList[index].isCheckFlag)
-  // console.log(isCheckFlag.value)
+const checkedImg = (item,index) => { 
   if (!isCheckFlag.value) return;
-  // isCheckFlag.value = true;
-  props.imageData.answerList[index].isCheckFlag = true;
-  // answerForm.wrongFile = props.imageData.answerList[index].image
-  // answerForm.correct = false
-  // const arr = answerList.filter(item=> item.id == props.imageData.answerList[index])
-  // if (arr && arr.length != 0) {
-  //   for (let i = 0;i<answerList.length;i++) {
-  //     if (answerList[i].id == props.imageData.answerList[index]) {
-  //       answerList[i].correct = false
-  //       answerList[i].wrongFile = props.imageData.answerList[index].image
-  //       break
-  //     }
-  //   }
-  // } else {
-    answerList.push({ file: source, correct:false, wrongFile: props.imageData.answerList[index].image })
-  // }
+  console.error("props.imageData  ====>>>>>>   " , props.imageData)
+  // props.imageData.answerList[index].isCheckFlag = true;
+  //构建错误答案
+  answerMap.set(item.uuid, {"file": itemId.value,"correct":false,"wrongFile": item.image})
+
   index + 1 == props.imageData.target
     ? (answerMarks.value[answerIndex].answerMark = 2)
     : (answerMarks.value[answerIndex].answerMark = 3);
   isCheckFlag.value = false;
-  emit("handleResume");
-  // console.log(answerMarks.value[answerIndex].answerMark, 'answerMarks[answerIndex].answerMark')
-  // if (index + 1 != props.imageData.target) {
-  //   // isCheckFlag.value = true
-  //   // props.imageData.answerList[index].isCheckFlag = false
-  // }
-};
-// provide('handleStop', handleStop)
-// provide('handleStop', handleStop)
+  emit("handleResume"); 
+}; 
 onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
@@ -339,28 +320,26 @@ onMounted(() => {
         item.answerMark = 1;
       }
       soundIndex.value = 0
-      emit("handleSave", 1, changeUniqueArr())
+      emit("handleSave", 1, Array.from(answerMap.values()))
       return;
     }
     if (e.key === "imageData") {
-      console.log(answerMarks)
-      answerMarks.value[answerIndex].answerMark = 2;
-      // answerForm.id = JSON.parse(e.newValue).image
+      answerMarks.value[answerIndex].answerMark = 2; 
     }
     // 1111
     if (e.key === "audioStart") {
-      let item = JSON.parse(e.newValue);
-      // console.info("==========>", item);
-      // console.info("mod==========>", mod(item.target, 2));
+      //TODO newValue 数据结构问题
+      let item = JSON.parse(e.newValue); 
+      itemId.value = item.file;
       soundIndex.value = mod(item.target, 2);
-      answerForm.file = item.source
-      answerForm.correct = true
+      answerForm.file = item.file //题目id
+      answerForm.correct = true //默认正确
+      //添加到答案集map中
+      answerMap.set(e.newValue.uuid, answerForm)
       source = item.source
     }
     if(e.key === 'audioStop') {
-      console.error(answerForm, 'answerForm')
-      answerList.push(answerForm)
-      answerForm = {}
+      answerForm = {} 
       // handleStop()
     }
   });
