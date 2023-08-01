@@ -79,7 +79,7 @@ const imitateName = ref("");
 //测试列表
 const testData = ref([]);
 const getListTestMode = async (name: string = "")=> {
-  const res = await imitateApi.getListThresholdMode({ name: name })
+  const res = await imitateApi.getListTestMode({ name: name })
   if (res.code == 0) {
     testData.value = res.data
   }

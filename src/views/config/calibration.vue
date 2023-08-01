@@ -69,7 +69,7 @@ const getListTestMode = async (name: string = "") => {
   console.log(res);
   loading.value = false;
   if (res.code == 0) {
-    tableData.value = res.data;
+    tableData.value = res.data.records;
     tableDatas = res.data;
   }
 };
