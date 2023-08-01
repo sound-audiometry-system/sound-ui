@@ -171,14 +171,25 @@ class ImitateApi {
    * @param type, name
    * @returns
   */
-  getListTestMode(data) {
+  getSpeechList(data) {
     return http.request({
-      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/testModel/pageTestCalibrationMode',
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/listTestMode',
       method: 'POST',
       data
     }) 
   }
-
+  /**
+   * 获取言语实景模拟方案
+   * @param data
+   * @returns 
+   */
+  getListTestMode(data) {
+    return http.request({
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/listTestMode',
+      method: 'POST',
+      data
+    }) 
+  }
   /**
    * 获取阈值测试方案数据 
    * @param data 
@@ -186,7 +197,7 @@ class ImitateApi {
    */
   getListThresholdMode(data) {
     return http.request({
-      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/listTestMode',
+      url: '/hy_saas_client_gateway/ym_fha/hearing_service/api/testModel/pageTestCalibrationMode',
       method: 'POST',
       data
     }) 
