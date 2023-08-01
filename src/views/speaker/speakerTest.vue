@@ -63,7 +63,7 @@
   </el-container>
 </template>
 <script lang="ts" setup>
-import { onMounted, ref, computed, watch, reactive, inject } from "vue";
+import { onMounted, ref, computed, watch, reactive, inject , ElMessage} from "vue";
 import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
 import * as echarts from "echarts";
