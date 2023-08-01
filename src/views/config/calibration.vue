@@ -44,33 +44,39 @@
         </template>
       </el-table-column>
     </el-table>
-    <!-- <div style="display: flex;justify-content: flex-end;padding-right: 20px;">
-        <el-pagination style="margin-top: 16px;" background layout="prev, pager, next, jumper" :total="1000" @current-change="currentChange" />
-    </div> -->
+    <div style="display: flex;justify-content: flex-end;padding-right: 20px;position: absolute;bottom: 10px;right: 10px;">
+      <!-- <el-pagination background layout="prev, pager, next" :total="1000" /> -->
+      <el-pagination style="margin-top: 16px;" background layout="prev, pager, next, jumper" 
+      :page-size="queryForm.size" :current-page="queryForm.current" :total="queryForm.total" @current-change="currentChange" />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 const value = ref("");
 const radio1 = ref("1");
 let loading = ref(false);
 import { imitateApi } from "@/serve/api/user";
 let tableData = ref([]);
+
 let tableDatas = []
-const emit = defineEmits(["handleCalibration"]);
-const handleCalibration = (index, row) => {
-  emit("handleCalibration", index, row);
+const queryForm = reactive({});
+const currentChange = (current:number) => {
+  queryForm.current = current
+  getListTestMode()
 };
-const currentChange = () => {};
 const getListTestMode = async (name: string = "") => {
   loading.value = true;
-  const res = await imitateApi.getListThresholdMode({name: name });
+  const res = await imitateApi.getListThresholdMode({name: name, ...queryForm });
   console.log(res);
   loading.value = false;
   if (res.code == 0) {
     tableData.value = res.data.records;
     tableDatas = res.data;
+    queryForm.total = res.data.total
+    queryForm.current = res.data.current
+    queryForm.size = res.data.size
   }
 };
 watch(value, (newValue, oldValue)=> {

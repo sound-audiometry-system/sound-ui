@@ -306,18 +306,18 @@ const checkedImg = (index) => {
   props.imageData.answerList[index].isCheckFlag = true;
   // answerForm.wrongFile = props.imageData.answerList[index].image
   // answerForm.correct = false
-  const arr = answerList.filter(item=> item.id == props.imageData.answerList[index])
-  if (arr && arr.length != 0) {
-    for (let i = 0;i<answerList.length;i++) {
-      if (answerList[i].id == props.imageData.answerList[index]) {
-        answerList[i].correct = false
-        answerList[i].wrongFile = props.imageData.answerList[index].image
-        break
-      }
-    }
-  } else {
+  // const arr = answerList.filter(item=> item.id == props.imageData.answerList[index])
+  // if (arr && arr.length != 0) {
+  //   for (let i = 0;i<answerList.length;i++) {
+  //     if (answerList[i].id == props.imageData.answerList[index]) {
+  //       answerList[i].correct = false
+  //       answerList[i].wrongFile = props.imageData.answerList[index].image
+  //       break
+  //     }
+  //   }
+  // } else {
     answerList.push({ file: source, correct:false, wrongFile: props.imageData.answerList[index].image })
-  }
+  // }
   index + 1 == props.imageData.target
     ? (answerMarks.value[answerIndex].answerMark = 2)
     : (answerMarks.value[answerIndex].answerMark = 3);
