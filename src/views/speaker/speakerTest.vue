@@ -85,6 +85,7 @@ const dialogVisible = ref(false);
 let isOpen = false;
 let store = useStore();
 const route = useRoute();
+let isSuccess = false
 if(route.query.type) typeName.value=route.query.type
 const testData = store.getters.getTestData;
 const main = ref();
@@ -291,10 +292,16 @@ onMounted(() => {
       isStart = false;
       isPlay.value = false;
       // imageData = {}
-      ElMessage({
+      if(!isSuccess) {
+        ElMessage({
         message: "方案播放完成",
         type: "success",
       });
+      }
+      isSuccess = true
+      window.setTimeout(()=> {
+        isSuccess = false
+      }, 2000)
       // openType.value == 0 && handleOpen(1);
       if (!isOpen) {
         handleStopAudio();
