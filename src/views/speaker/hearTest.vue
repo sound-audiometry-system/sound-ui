@@ -4,7 +4,7 @@
     <el-button
       style="float: left; margin-left: 5px"
       type="primary"
-      @click="$router.back()"
+      @click="handleBack"
       >返回</el-button
     >
   </el-form-item>
@@ -114,13 +114,13 @@
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
-        <el-button size="large" plain @click="handleSave(1)">保存</el-button>
-        <el-button  size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button @click="handlePrev">上一个(左键)</el-button
-        ><el-button @click="handleNext">下一个(右键)</el-button
-        ><el-button @click="handleReImage">重复</el-button>
+        <el-button :disabled="!props.isPlay" @click="handlePrev">上一个(左键)</el-button
+        ><el-button :disabled="!props.isPlay" @click="handleNext">下一个(右键)</el-button
+        ><el-button :disabled="!props.isPlay" @click="handleReImage">重复</el-button>
       </el-row>
       <el-row>
         <div
@@ -170,6 +170,8 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, provide } from "vue";
 import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
+import { useRouter } from 'vue-router'
+const router = useRouter()
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
 import sound from "../../components/sound/index.vue";
@@ -221,6 +223,7 @@ const answerMap = new Map();
 const answerUUID = ref('')
 const isCheck = ref(false);
 const itemId = ref("")
+let displayId = 0
 watch(
   () => props.imageData,
   (newValue, oldValue) => {
@@ -239,6 +242,10 @@ const handleClkItem = (index) => {
 const handleStart = () => {
   emit("handleStart", value1.value, value2.value);
 };
+const handleBack = () => {
+  emit("handleStop");
+  router.back()
+}
 const handleStop = () => {
   for (const item of answerMarks.value) {
     item.answerMark = 1;
@@ -330,14 +337,16 @@ onMounted(() => {
       // if (e.) {
         
       // }
-      answerIndex.value+=1
-      isCheckFlag.value = false; 
+      if(displayId != e.id) answerIndex.value+=1
+      isCheckFlag.value = false;
       
     }
     // 1111
     if (e.key === "audioStart") {
       //TODO newValue 数据结构问题
       let item = JSON.parse(e.newValue); 
+      // displayId != e.id && displayId = e?.id
+      if(displayId != e.id) displayId = e?.id
       itemId.value = item.file;
       soundIndex.value = mod(item.target, 2);
       answerForm.file = item.file //题目id
