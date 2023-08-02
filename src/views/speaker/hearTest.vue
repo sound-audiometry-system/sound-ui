@@ -7,7 +7,7 @@
     <el-aside>
       <div class="es-switch">
         <span><el-switch v-model="value1" />
-          <label style="font-size: 16px" class="ml-2">左显示器</label></span>
+          <label>左显示器</label></span>
         <span><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
         </span>
       </div>
