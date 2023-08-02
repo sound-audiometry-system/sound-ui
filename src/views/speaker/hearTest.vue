@@ -39,7 +39,7 @@
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button @click="handleCheck" size="large" style="margin-right: 5px">
+        <el-button @click="handleCheck" :disabled = "sycnDisabledBtn" size="large" style="margin-right: 5px">
           <el-icon style="color: red; margin-right: 2px">
             <CircleClose />
           </el-icon>错误</el-button>
@@ -87,9 +87,9 @@
         <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button :disabled="!props.isPlay" @click="handlePrev">上一个(左键)</el-button><el-button :disabled="!props.isPlay"
-          @click="handleNext">下一个(右键)</el-button><el-button :disabled="!props.isPlay"
-          @click="handleReImage">重复</el-button>
+        <el-button :disabled="!props.isPlay" @click="handlePrev">上一个(左键)</el-button>
+        <el-button :disabled="!props.isPlay" @click="handleNext">下一个(右键)</el-button>
+        <el-button :disabled="!props.isPlay" @click="handleReImage">重复</el-button>
       </el-row>
       <el-row>
         <div style="
@@ -142,6 +142,7 @@ let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
+let sycnDisabledBtn = ref(false);
 let soundIndex = ref(30);
 let source = ''
 let answerForm = {}
@@ -190,6 +191,7 @@ watch(
   },
 );
 const handleClk = () => {
+  sycnDisabledBtn.value = true;
   // console.log(answerDialogRef.value);
   answerDialogRef.value.show([]);
 };
@@ -266,6 +268,7 @@ const mod = (n, m) => {
 };
 const checkedImg = (item, index) => {
   if (!isCheckFlag.value) return;
+  sycnDisabledBtn.value = false;
   // console.error("props.imageData  ====>>>>>>   " , props.imageData)
   props.imageData.answerList[index].isCheckFlag = true;
   //构建错误答案
