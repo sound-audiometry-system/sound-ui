@@ -246,6 +246,7 @@ const handlePrev = async () => {
 };
 // 下一个
 const handleNext = async () => {
+  console.error("handleNext  ====>>>>>>   ", answerMap.values())
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
     // isCheckFlag.value = false;
@@ -312,7 +313,8 @@ onMounted(() => {
       answerForm.file = item.file //题目id
       answerForm.correct = true //默认正确
       //添加到答案集map中
-      answerMap.set(e.newValue.uuid, answerForm)
+      answerMap.set(item.uuid, answerForm)
+      console.error("audioStart  ====>>>>>>   ", answerMap)
       source = item.source
     }
     if (e.key === 'audioStop') {
