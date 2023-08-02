@@ -306,7 +306,7 @@ onMounted(() => {
       //TODO newValue 数据结构问题
 
       // displayId != e.id && displayId = e?.id
-      if (displayId != item.id) displayId = item.id
+      displayId = item.id
       itemId.value = item.file;
       soundIndex.value = mod(item.target, 2);
       answerForm.file = item.file //题目id
