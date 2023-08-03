@@ -85,6 +85,7 @@ const dialogVisible = ref(false);
 let isOpen = false;
 let store = useStore();
 const route = useRoute();
+let isSuccess = false
 if(route.query.type) typeName.value=route.query.type
 const testData = store.getters.getTestData;
 const main = ref();
@@ -257,13 +258,9 @@ const handleStopAudio = () => {
       const formData = new FormData();
       formData.append("upfile", blob, "test.mp3");
       formData.append("resourceId", testData[0].id);
-      console.log(formData.get("resourceId"), "resourceId");
       const res = await auditionApi.fileUpload(formData);
       isOpen = false;
-      ElMessage({
-        message: "录音关闭",
-        type: "success",
-      });
+      ElMessage({ message: "录音关闭",type: "success",});
     },
     function (msg) {
       console.log("录音失败:" + msg);
@@ -291,10 +288,16 @@ onMounted(() => {
       isStart = false;
       isPlay.value = false;
       // imageData = {}
-      ElMessage({
+      if(!isSuccess) {
+        ElMessage({
         message: "方案播放完成",
         type: "success",
       });
+      }
+      isSuccess = true
+      window.setTimeout(()=> {
+        isSuccess = false
+      }, 2000)
       // openType.value == 0 && handleOpen(1);
       if (!isOpen) {
         handleStopAudio();

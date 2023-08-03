@@ -101,13 +101,13 @@
         </div>
         <el-row class="el-btn a">
           <el-button :disabled="props.isPlay"  size="large" plain @click="handleStart">开始</el-button>
-          <el-button size="large" plain  disabled>保存</el-button>
-          <el-button  size="large" plain disabled>提前结束</el-button>
+          <el-button :disabled="!props.isPlay" size="large" plain>保存</el-button>
+          <el-button :disabled="!props.isPlay"  size="large" plain>提前结束</el-button>
         </el-row>
         <el-row class="el-btn b">
-          <el-button @click="handlePrev" disabled>上一个(左键)</el-button
-          ><el-button @click="handleNext" disabled>下一个(右键)</el-button
-          ><el-button @click="handleReImage" disabled>重复</el-button>
+          <el-button :disabled="!props.isPlay" @click="handlePrev">上一个(左键)</el-button
+          ><el-button :disabled="!props.isPlay" @click="handleNext">下一个(右键)</el-button
+          ><el-button :disabled="!props.isPlay" @click="handleReImage">重复</el-button>
         </el-row>
         <el-row>
           <div style="height: 347px;width: 950px;background-color: #e9e9e9;margin-top: 15px;padding: 12px 20px;">
