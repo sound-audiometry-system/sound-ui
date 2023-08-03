@@ -55,7 +55,7 @@
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button @click="handleCheck" size="large" style="margin-right: 5px">
+        <el-button @click="handleCheck" :disabled="syncDisabledBtn" size="large" style="margin-right: 5px">
           <el-icon style="color: red; margin-right: 2px"><CircleClose /></el-icon>错误</el-button>
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
@@ -175,6 +175,7 @@ import soundDialog from "./components/soundDialog.vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
 import { useStore, mapState } from "vuex";
+import { fa } from "element-plus/es/locale";
 let store = useStore();
 const testData = store.getters.getTestData;
 let testName = ref(testData[0].name);
@@ -185,6 +186,7 @@ let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
 let soundIndex = ref(30);
+let syncDisabledBtn = ref(false);
 let source = ''
 let answerForm = {} 
 const answerMarks = ref(
@@ -217,7 +219,7 @@ const props = defineProps<Props>();
 let answerIndex = ref(-1);
 let answerList = []
 const isCheckFlag = ref(false);
-const answerMap = new Map();
+let answerMap : any = new Map();
 const answerUUID = ref('')
 const isCheck = ref(false);
 const itemId = ref("")
@@ -237,6 +239,7 @@ const handleClkItem = (index) => {
   soundDialogRef.value.show(index);
 };
 const handleStart = () => {
+  answerMap = new Map()
   emit("handleStart", value1.value, value2.value);
 };
 const handleStop = () => {
@@ -270,6 +273,7 @@ const handleStopAudio = () => {
 };
 const handleCheck = () => {
   isCheckFlag.value = true;
+  syncDisabledBtn.value = true;
   emit("handlePause");
 };
 // 上一个
@@ -318,24 +322,24 @@ onMounted(() => {
         // console.log(item)
         item.answerMark = 1;
       }
-      answerIndex.value = 0
+      answerIndex.value = -1
       soundIndex.value = 0
       console.log(props.isSave)
       !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()))
       return;
     }
     if (e.key === "imageData") {
-      console.error(answerIndex.value, 'answerIndex')
-      console.error(e, 'e')
-      // if (e.) {
-        
-      // }
       answerIndex.value+=1
-      isCheckFlag.value = false; 
+      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
+        answerMarks.value[answerIndex.value].answerMark = 2;
+      }
       
     }
     // 1111
     if (e.key === "audioStart") {
+      syncDisabledBtn.value = false
+      isCheckFlag.value = false; 
+      
       //TODO newValue 数据结构问题
       let item = JSON.parse(e.newValue); 
       itemId.value = item.file;
@@ -343,13 +347,12 @@ onMounted(() => {
       answerForm.file = item.file //题目id
       answerForm.correct = true //默认正确
       //添加到答案集map中
-      answerMap.set(e.newValue.uuid, answerForm)
+      console.error("e  ====>>>>>>   " , answerMap.size)
+      console.error("answerMap  ====>>>>>>   " , answerMap)
+      answerMap.set(item.uuid, answerForm)
       source = item.source
     }
     if(e.key === 'audioStop') {
-      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
-        answerMarks.value[answerIndex.value].answerMark = 2;
-      }
       answerForm = {} 
       // handleStop()
     }

@@ -66,6 +66,10 @@ const currentChange = (current:number) => {
   queryForm.current = current
   getListTestMode()
 };
+const emit = defineEmits(["handleCalibration"]);
+const handleCalibration = (index, row) => {
+  emit("handleCalibration", index, row);
+};
 const getListTestMode = async (name: string = "") => {
   loading.value = true;
   const res = await imitateApi.getListThresholdMode({name: name, ...queryForm });
