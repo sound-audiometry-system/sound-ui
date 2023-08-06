@@ -5,20 +5,52 @@
             <el-icon size="24">
                 <Avatar />
             </el-icon>
-            <label style="margin-left: 10px; line-height: 48px;">{{ userInfo[0].name}}</label>
+            <!-- <label style="margin-left: 10px; line-height: 48px;">{{ userInfo[0].name}}</label> -->
+            <el-select :v-model="userInfo[0].name" class="m-2" :placeholder="userInfo[0].name" size="large" @change="changePlan">
+                <el-option-group v-for="group in testSelectData" :key="group.label" :label="group.label">
+                    <el-option v-for="item in group.data" :key="item.id" :label="item.name" :value="item.id"/>
+                </el-option-group>
+            </el-select>
         </el-col>
         <!-- <el-col :span="6">
             <el-button link>测试</el-button>
         </el-col> -->
         <el-col :span="12">
-            <div class="grid-content ep-bg-purple" />
+            <div class="testClass"><img src="../../assets/test.png" style="height: 18px;widows: 18px;" /></div>
+             <text>测试</text>
         </el-col>
     </el-row>
 </template>
 <script setup lang="ts">
-const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || ""
+import {ref,reactive } from "vue";
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo")||"")
+const testData = JSON.parse(sessionStorage.getItem("testData")||"")
+let revertData = [{
+    label: "切换测试模式",
+    data: testData
+}]
+let testSelectData = ref(revertData)
+console.info(testSelectData,"testData")
+const changePlan = (val) => {
+    //TODO 处理方案变化
+    console.info(val,"val")
+}
+
 </script>
 <style scoped lang="scss">
+  .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
+    background-color: #c8d8d5;
+    color: #000
+  }
+.testClass{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 32px;
+    width: 32px;
+    border-radius: 16px;
+    background-color: #208570;
+}
 .el-col {
         width: 120px;
         height: 48px;

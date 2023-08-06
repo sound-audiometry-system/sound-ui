@@ -41,7 +41,7 @@
           margin-left: 10px;
           width: 920px;
           height: 305px;
-          background-color: #8cdcfe;
+          background-color: #efefef;
           padding-top: 6px;
           overflow: auto;
         ">

@@ -1,26 +1,16 @@
 <!--  -->
 <template>
   <el-container>
-    <el-header></el-header>
-    <el-main
-      style="display: flex; justify-content: center; background-color: #f2f3f5"
-    >
-      <div
-        style="
-          width: 50%;
-          height: 100%;
-          background-color: white;
-          flex-direction: column;
-        "
-      >
+    <el-header>
+      <!-- <el-row >xxxxxxxxxxxxxxxxxxxxx</el-row>
+      <el-row style="background-color: #208571;">xxxxxxxxxxxxxxxxxxxxx</el-row> -->
+      <div style="height: 50px;">首页界面</div>
+      <div style="background-color: #208571;height: 40px;"></div>
+    </el-header>
+    <el-main style="display: flex; justify-content: center; background-color: #f2f3f5">
+      <div style=" width: 50%;height: 100%;background-color: white;flex-direction: column;">
         <div style="display: flex; margin: 3% 3% 0 3%; flex-direction: column">
-          <el-form
-            :model="form"
-            ref="form"
-            label-width="200px"
-            class="form"
-            @submit.native.prevent="() => searchUser"
-          >
+          <el-form :model="form" ref="form" label-width="200px" class="form" @submit.native.prevent="() => searchUser">
             <el-form-item>
               <el-input
                 v-model="inputUserId"
@@ -52,32 +42,6 @@
       </div>
     </el-main>
     <footer-tab></footer-tab>
-    <!-- <el-footer>
-      <div
-        class="footer-div"
-        :class="{ activeColor: active == 1 }"
-        @click="chooseItem(1)"
-      >
-        <Tickets class="icon" color="white" />
-        <text class="font">听力测试</text>
-      </div>
-      <div
-        class="footer-div"
-        :class="{ activeColor: active == 2 }"
-        @click="chooseItem(2)"
-      >
-        <Setting class="icon" color="white" />
-        <text class="font">配置检查</text>
-      </div>
-      <div
-        class="footer-div"
-        :class="{ activeColor: active == 3 }"
-        @click="chooseItem(3)"
-      >
-        <Monitor class="icon" color="white" />
-        <text class="font">言语实景模拟</text>
-      </div>
-    </el-footer> -->
     <el-dialog
       v-model="chooseTypeVisble"
       width="40%"
@@ -94,11 +58,7 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Male
-              width="1.2em"
-              height="1.2em"
-              v-if="userInfo.gender == '1'"
-            />
+            <Male width="1.2em" height="1.2em" v-if="userInfo[0].gender == '1'"/>
             <Female width="1.2em" height="1.2em" v-else />
             <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
           </div>
@@ -129,6 +89,7 @@ import { useRouter } from "vue-router";
 import { userApi } from "@/serve/api/user";
 import { useStore } from "vuex";
 import footerTab from "../../components/footerTab.vue";
+import { ElMessage } from 'element-plus'
 // import { useStore } from '../../store'
 let store = useStore();
 // console.log()
@@ -147,7 +108,7 @@ const inputUserId = ref(null);
 //存储选择的用户信息
 // const userInfo = ;
 const userInfo =
-  JSON.parse(sessionStorage.getItem("userInfo")) ||
+  JSON.parse(sessionStorage.getItem("userInfo")||"") ||
   ref({
     name: null,
     gender: "",
@@ -192,12 +153,10 @@ const getUserInfo = async () => {
   const res = await userApi.getUserInfo({ uid: inputUserId.value });
   // console.log(res, '2222222')
   if (res.code == 0) {
+    console.info(res.data);
     userSearchData.value = [res.data];
   } else {
-    ElMessage({
-      message: res.msg || "用户不存在",
-      type: "error",
-    });
+    ElMessage.error( res.msg || "用户不存在")
   }
 };
 
@@ -205,8 +164,9 @@ const getUserInfo = async () => {
 const getUserPatient = async (uid: string | number) => {
   const res = await userApi.getUserPatient({ uid: uid });
   testData.value = res.data;
+  sessionStorage.setItem("testData", JSON.stringify(res.data));
   // store.commit("setTestData", res.data)
-  console.log(store);
+  console.log(res.data,"userConfig");
   // store['_mutations'].setTestData()
   // console.log(res, '2222222')
   // userSearchData.value = [res.data]
@@ -232,7 +192,6 @@ const handleNav = () => {
 const toTest = (info) => {
   // inputUserId.value = info.name;
   userInfo.value = info;
-  console.log(info);
   getUserPatient(info.uid);
   chooseTypeVisble.value = true;
 };
@@ -289,7 +248,11 @@ const chooseItem = (val) => {
   margin: 0 auto;
   margin-top: 50px;
   .el-header {
-    background-color: #208571;
+    width: 1920px;
+    margin-left: 0px;
+    height: 90px;
+    --el-header-padding: 0px;
+    padding-bottom: 0px;
   }
 
   .el-footer {

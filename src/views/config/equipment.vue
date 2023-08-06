@@ -189,7 +189,7 @@ let getBgc = (idex) => {
     align-items: center;
     justify-content: space-around;
     width: 920px;
-    height: 356px;
+    height: 306px;
     // flex-direction: column;
     flex-wrap: wrap;
     background-color: #f6f6f6;

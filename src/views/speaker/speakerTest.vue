@@ -75,8 +75,7 @@ import hearTest from "./hearTest.vue";
 // import footer from "../../components/sound/index.vue";
 // import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
-import { useStore, mapState } from "vuex";
-let value = ref("1");
+import { useStore } from "vuex";
 const typeName = ref('1')
 let isStart = false;
 let isPlay = ref(false);
@@ -94,7 +93,7 @@ let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
-const userInfo = JSON.parse(sessionStorage.getItem("userInfo")) || "";
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo")|| "");
 const openType = ref(0);
 const handleTestStop = inject<() => void>('handleStop');
 interface RuleForm {
@@ -103,6 +102,7 @@ interface RuleForm {
 const form = reactive({
   uid: userInfo[0].uid,
   testId: testData[0].id,
+  answerList:[],
   // answerList: testData[0].signalSoundConfig,
   operator: "",
   reason: "",
