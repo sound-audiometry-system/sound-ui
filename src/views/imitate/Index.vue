@@ -4,24 +4,68 @@
   <el-container>
     <el-header></el-header>
     <el-main
-      style="display: flex; justify-content: center; background-color: #f2f3f5">
-      <div style=" width: 50%;height: 100%;overflow-y: auto;background-color: white;flex-direction: column;">
+      style="display: flex; justify-content: center; background-color: #f2f3f5"
+    >
+      <div
+        style="
+          width: 50%;
+          height: 100%;
+          overflow-y: auto;
+          background-color: white;
+          flex-direction: column;
+        "
+      >
         <div style="display: flex; margin: 3% 3% 0 3%; flex-direction: column">
-          <el-form :model="form" ref="form" label-width="200px" class="form" @submit.native.prevent="()=> searchImitate">
+          <el-form
+            :model="form"
+            ref="form"
+            label-width="200px"
+            class="form"
+            @submit.native.prevent="() => searchImitate"
+          >
             <el-form-item>
-              <el-input v-model="imitateName" placeholder="请输入" class="input-with-select" clearable @clear="userSearchData = []" @blur="searchImitate">
+              <el-input
+                v-model="imitateName"
+                placeholder="请输入"
+                class="input-with-select"
+                clearable
+                @clear="userSearchData = []"
+                @blur="searchImitate"
+              >
                 <template #prepend>
                   <el-button @click="searchImitate" :icon="Search" />
                 </template>
               </el-input>
             </el-form-item>
           </el-form>
-          <div class="userItem" v-for="(item, idx) in testData" :key="idx" v-if="testData.length > 0">
-            <div style="display: flex; align-items: center; margin: 2px 0px 2px 15px;width: 500px; white-space: nowrap;overflow: hidden;text-overflow: ellipsis;">
-              <text style="margin-left: 2px; font-size: large; font-weight: bold;"
-                >{{ item.name }}</text>
+          <div
+            class="userItem"
+            v-for="(item, idx) in testData"
+            :key="idx"
+            v-if="testData.length > 0"
+          >
+            <div
+              style="
+                display: flex;
+                align-items: center;
+                margin: 2px 0px 2px 15px;
+                width: 500px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              "
+            >
+              <text
+                style="margin-left: 2px; font-size: large; font-weight: bold"
+                >{{ item.name }}</text
+              >
             </div>
-            <el-button type="success" style="text-align: end; margin-right: 2%" @click="toTest(item)">开始模拟</el-button>
+            <el-button
+              type="success"
+              style="text-align: end; margin-right: 2%"
+              @click="toTest(item)"
+              >开始模拟</el-button
+            >
           </div>
           <el-empty description="暂无数据" v-else />
         </div>
@@ -59,38 +103,38 @@
 <script setup lang="ts" >
 import { ref, reactive, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { useRouter } from 'vue-router'
+import { useRouter } from "vue-router";
 import { imitateApi } from "@/serve/api/user";
-import { useStore } from 'vuex'
+import { useStore } from "vuex";
 import footerTab from "../../components/footerTab.vue";
 // import { useStore } from '../../store'
-  let store = useStore();
-  // console.log()
-// const queryData = async () => { 
+let store = useStore();
+// console.log()
+// const queryData = async () => {
 //     const res = await userApi.getPageData(params)
 // }
- const router = useRouter()
+const router = useRouter();
 const active = ref(1);
 let isStart = false;
-const form = reactive({})
+const form = reactive({});
 //模拟方案搜索
 const imitateName = ref("");
 
 //测试列表
 const testData = ref([]);
-const getListTestMode = async (name: string = "")=> {
-  const res = await imitateApi.getListTestMode({ name: name })
+const getListTestMode = async (name: string = "") => {
+  const res = await imitateApi.getListTestMode({ name: name });
   if (res.code == 0) {
-    testData.value = res.data
+    testData.value = res.data;
   }
-}
+};
 //测试结果
 const testResult = ref();
 
 //搜索模拟方案
 const searchImitate = () => {
   //后续为远程搜索用户信息
-  getListTestMode(imitateName.value)
+  getListTestMode(imitateName.value);
 };
 const handleNav = () => {
   // chooseTypeVisble.value = false;
@@ -107,16 +151,16 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // chooseTypeVisble.value = true;
-  console.log("testInfo ============>              "+info)
-  store.commit("setImitateData", info)
-  router.push('/imitate-plan')
+  console.log("testInfo ============>              " + info);
+  store.commit("setImitateData", info);
+  router.push("/imitate-plan");
 };
 
-onMounted(()=> {
+onMounted(() => {
   // 调用模拟列表
   // console.log(22222222)
-  getListTestMode()
-})
+  getListTestMode();
+});
 </script>
 <style lang="scss" scoped>
 .font {
@@ -141,7 +185,7 @@ onMounted(()=> {
 }
 
 .activeColor {
-  background-color: #C7D8D4;
+  background-color: #c7d8d4;
 
   .icon {
     color: rgb(30, 25, 25);

@@ -86,6 +86,7 @@ let store = useStore();
 const route = useRoute();
 let isSuccess = false
 if(route.query.type) typeName.value=route.query.type
+// console.log(store, 'store')
 const testData = store.getters.getTestData;
 const main = ref();
 const childRef = ref(null);
@@ -99,6 +100,8 @@ const handleTestStop = inject<() => void>('handleStop');
 interface RuleForm {
   operator: string;
 }
+console.log(userInfo[0])
+console.log(testData.value)
 const form = reactive({
   uid: userInfo[0].uid,
   testId: testData[0].id,
