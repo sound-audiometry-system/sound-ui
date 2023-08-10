@@ -8,7 +8,13 @@
       <el-col class="dot" :span="12">
         <div class="dot-outer">
           <div class="dot-center"><img src="../../assets/header.png" width="30" alt=""></div>
-          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="{ 'dot-control': true, 'error-active': item.active && index <= 4, 'success-active': item.active && index > 5 && index <= 10,'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index  }">
+          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="{ 
+            'dot-control': true, 
+            'error-active': item.active && index <= 4, 
+            'success-active': item.active && index > 5 && index <= 10,
+            'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,
+            'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,
+            'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index  }">
             {{ index }}
           </div>
         </div>
@@ -23,8 +29,7 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch, watchEffect } from 'vue'
-import { auditionApi } from "@/serve/api/user";
-import { findLastKey } from 'lodash';
+// background: linear-gradient(to right, #ffbd26 50%, #b0b912 50%);
 const emit = defineEmits(['handleClkItem'])
 const soundList = ref([
   {
@@ -83,16 +88,16 @@ type Props = {
   soundIndex: Number;
 };
 const props = defineProps<Props>();
-// console.log(props)
 watch(()=>props.sounds, (newValue, oldValue)=> {
   if (props.sounds && props.sounds.length != 0) {
+    console.log(props.sounds,"sounds")
     for (const item of props.sounds) {
-    for (const obj of soundList.value) {
-      if (obj.soundVal == item.substring(1,2)) {
-        obj.active = true
+      for (const obj of soundList.value) {
+        if (obj.soundVal == item.substring(1,2)) {
+          obj.active = true
+        }
       }
     }
-  }
   }
 }, {deep: true})
 // watchEffect(()=> {

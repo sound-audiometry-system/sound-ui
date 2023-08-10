@@ -11,84 +11,61 @@
       <el-col style="eight: 760px; background-color: #fff; padding: 10px 0; overflow: auto;" :span="12">
         <div v-for="(item, index) in devices" :key="index" :gutter="10" style=" height: 90px; border-bottom: 1px solid #d6d6d6;padding: 10px 0px;">
           <el-row style="align-items: center">
-            <el-col :span="6">
-              <span>{{ index + 1 }}</span>.
+          <el-col :span="4">
+            <span>{{ index + 1 }}</span>.
               <span
                 class="ml-10" style="display: inline-block;border-radius: 50%;margin-right: 6px;width: 22px;height: 22px;background: #b0b912;color: #fff;text-align: center;line-height: 22px;">{{ item.index }}</span>
               <span>{{ item.index }}号音响</span>
-            </el-col>
-            <el-col :span="3">
-              <el-radio-group
-                disabled
-                v-model="queryForm.signalSoundVolume"
-                class="ml-4"
-              >
-                <el-radio label="1" size="large">言语声</el-radio>
-              </el-radio-group>
-            </el-col>
-            <el-col :span="2">
-              <el-input style="width: 100%" controls-position="right" size="small" v-model="queryForm.signalSoundVolume" placeholder="52"/></el-col>
-            <el-col :span="4">(分贝db)</el-col>
-            <el-col :span="3">
-              <el-radio-group disabled v-model="queryForm.environmentalSoundVolume" class="ml-4">
-                <el-radio label="1" size="large">环境声</el-radio>
-              </el-radio-group>
-            </el-col>
-            <el-col :span="2"
-              ><el-input
-                style="width: 100%"
-                controls-position="right"
-                size="small"
-                v-model="queryForm.environmentalSoundVolume"
-                placeholder="52"
-            /></el-col>
-            <el-col :span="4">(分贝db)</el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="6">
-              <div>
-                <el-button
-                  style="margin-left: 10px"
-                  size="small"
-                  type="primary"
-                  plain
-                  @click="handleCalibration(item, index)"
-                  >{{ item.isCalibration ? "结束校准" : "点击校准" }}</el-button
-                >
-              </div>
-            </el-col>
-            <el-col
-              v-if="!item?.signalCalibrated"
-              :span="9"
-              style="color: #989898"
-            >
-              未校准
-            </el-col>
-            <el-col
-              v-if="!item?.signalCalibrated"
-              :span="8"
-              style="color: #989898"
-            >
-              未校准
-            </el-col>
-            <el-col
-              v-if="item?.signalCalibrated"
-              :span="8"
-              style="color: #078f44"
-            >
-              已校准
-            </el-col>
-            <el-col
-              v-if="item?.signalCalibrated"
-              :span="8"
-              style="color: #078f44"
-            >
-              已校准
-            </el-col>
-          </el-row>
-        </div>
-      </el-col>
-      <el-col :span="12">
+          </el-col>
+          <!-- 言语声 -->
+          <el-col :span="10" v-if="item.signalSoundVolume" class="testCol" s>
+            <el-row style="display: flex; align-items: center; flex-wrap: nowrap;">
+              <el-col :span="3">
+                <el-radio-group disabled v-model="item.signalSource" class="ml-4">
+                  <el-radio label="1" size="large">言语声</el-radio>
+                </el-radio-group>
+              </el-col>
+              <el-col :span="2">
+                <el-input style="width: 100%" controls-position="right" size="small" v-model="item.signalSoundVolume" placeholder="52"/></el-col>
+              <el-col :span="4">(分贝db)</el-col>
+            </el-row>
+            <!-- 按钮 -->
+            <el-row>
+              <el-col v-if="!item?.signalCalibrated" :span="9">
+                <el-button size="small">未校准</el-button>
+              </el-col>
+              <el-col v-if="item?.signalCalibrated" :span="8" >
+                <el-button type="success" disabled size="small">已校准</el-button>
+              </el-col>
+            </el-row>
+          </el-col>
+          <!-- 环境声音 -->
+          <el-col :span="10" v-if="item.signalSoundVolume" >
+            <el-row style="display: flex; align-items: center; flex-wrap: nowrap;">
+              <el-col :span="3" >
+                  <el-radio-group disabled v-model="item.signalSource" class="ml-4">
+                    <el-radio label="1" size="large">环境声</el-radio>
+                  </el-radio-group>
+                </el-col>
+                <el-col :span="2">
+                  <el-input style="width: 100%" controls-position="right" size="small" v-model="queryForm.environmentalSoundVolume" placeholder="52"/>
+                </el-col>
+                <el-col :span="4">(分贝db)</el-col>
+            </el-row>
+            <!-- 按钮 -->
+            <el-row>
+              <el-col v-if="!item?.signalCalibrated" :span="9">
+                <el-button size="small">未校准</el-button>
+              </el-col>
+              <el-col v-if="item?.signalCalibrated" :span="8" >
+                <el-button type="success" disabled size="small">已校准</el-button>
+              </el-col>
+            </el-row>
+          </el-col>
+        </el-row>
+      </div>
+    </el-col>
+    <el-col :span="12">
         <sound :device-config="devices"></sound>
         <div
           style="
@@ -108,8 +85,7 @@
         <el-row class="el-row-box" style="display: flex; margin-top: 180px; align-items: center">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3">信号声</el-col>
           <el-col :span="4">
-            <el-input-number
-              :disabled="!isCalibration"
+            <el-input-number :disabled="!isCalibration"
               style="width: 100%"
               controls-position="right"
               size="small"
@@ -226,68 +202,7 @@ type Props = {
   testData: any;
 };
 const props = defineProps<Props>();
-const devices = ref([
-  {
-    id1: "001",
-    id2: "011",
-    isCalibration: false,
-  },
-  {
-    id1: "001",
-    id2: "011",
-    isCalibration: false,
-  },
-  {
-    id1: "002",
-    id2: "012",
-    isCalibration: false,
-  },
-  {
-    id1: "003",
-    id2: "013",
-    isCalibration: false,
-  },
-  {
-    id1: "004",
-    id2: "014",
-    isCalibration: false,
-  },
-  {
-    id1: "005",
-    id2: "015",
-    isCalibration: false,
-  },
-  {
-    id1: "006",
-    id2: "016",
-    isCalibration: false,
-  },
-  {
-    id1: "007",
-    id2: "017",
-    isCalibration: false,
-  },
-  {
-    id1: "008",
-    id2: "018",
-    isCalibration: false,
-  },
-  {
-    id1: "009",
-    id2: "019",
-    isCalibration: false,
-  },
-  {
-    id1: "010",
-    id2: "011",
-    isCalibration: false,
-  },
-  {
-    id1: "001",
-    id2: "011",
-    isCalibration: false,
-  },
-]);
+const devices = ref([]);
 interface Mark {
   style: CSSProperties;
   label: string;
@@ -310,6 +225,7 @@ const marks = reactive<Marks>({
 watch(
   () => props.testData,
   (newValue, oldValue) => {
+    console.log(newValue,"1222222222222");
     devices.value = newValue.indexs;
   },
   { deep: true, immediate: true }
@@ -406,7 +322,7 @@ onMounted(() => {
 }
 
 .main {
-  width: 100%;
+  width: 1920px;
   // background-color: #f2f2f2;
   margin: 20px 20px 0px 20px;
 }

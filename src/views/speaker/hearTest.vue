@@ -131,38 +131,17 @@
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button
-          :disabled="props.isPlay"
-          size="large"
-          plain
-          @click="handleStart"
-          >开始</el-button
-        >
-        <el-button
-          :disabled="!props.isPlay"
-          size="large"
-          plain
-          @click="handleSave(1)"
-          >保存</el-button
-        >
-        <el-button
-          :disabled="!props.isPlay"
-          size="large"
-          plain
-          @click="handleSave(2)"
-          >提前结束</el-button
-        >
+        <el-button :disabled="props.isPlay" size="large" plain @click="handleStart">开始</el-button>
+        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
         <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev"
-          >上一个(左键)</el-button
-        >
+          >上一个(左键)</el-button>
         <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleNext"
-          >下一个(右键)</el-button
-        >
+          >下一个(右键)</el-button>
         <el-button :disabled="!props.isPlay || isDisabled" @click="handleReImage"
-          >重复</el-button
-        >
+          >重复</el-button>
       </el-row>
       <el-row>
         <div
@@ -342,13 +321,9 @@ const mod = (n: number, m: number) => {
   return parseInt(n / m + "");
 };
 const handkeyCode = (e)=> {
-  console.log(e); // 打印出按键后的信息
-       if(e.keyCode === 32){
-          //  console.log('触发了空格键');
-          handleCheck()
-
-       }
-
+  if(e.keyCode === 32){
+    handleCheck()
+  }
 }
 const checkedImg = (item, index) => {
   if (!isCheckFlag.value) return;
