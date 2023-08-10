@@ -10,11 +10,19 @@
             height: 100%;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-around;
+            /* justify-content: space-around; */
+            justify-content: center;
+            padding: 0 10px;
         }
 
         p {
             margin-top: 6px;
+        }
+        .box {
+            margin-right: 10px;
+            background-color: #D8D8D8;
+            width: 300px;
+            height: 300px;
         }
     </style>
 </head>
@@ -49,8 +57,8 @@
                         var pNode = document.createElement('p')
                         pNode.innerText = message.answerList[j]['label']
                         pNode.style.textAlign = 'center';
-                        imgNode.style.width = "300px"
-                        imgNode.style.height = "300px"
+                        imgNode.style.maxWidth = "300px"
+                        imgNode.style.maxHeight = "300px"
                         imgNode.src = message.answerList[j]['sourceUrl']
                         if (document.getElementsByClassName('box').length > 0) {
                             document.getElementsByClassName('box')[j].appendChild(imgNode);

@@ -341,6 +341,15 @@ const handleReImage = useThrottle(async () => {
 const mod = (n: number, m: number) => {
   return parseInt(n / m + "");
 };
+const handkeyCode = (e)=> {
+  console.log(e); // 打印出按键后的信息
+       if(e.keyCode === 32){
+          //  console.log('触发了空格键');
+          handleCheck()
+
+       }
+
+}
 const checkedImg = (item, index) => {
   if (!isCheckFlag.value) return;
   sycnDisabledBtn.value = false;
@@ -360,6 +369,7 @@ const checkedImg = (item, index) => {
   emit("handleResume");
 };
 onMounted(() => {
+  window.addEventListener('keydown', handkeyCode, true)//开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       for (const item of answerMarks.value) {
