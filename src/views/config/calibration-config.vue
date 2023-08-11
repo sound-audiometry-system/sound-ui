@@ -12,9 +12,11 @@
         <div v-for="(item, index) in devices" :key="index" :gutter="10" style=" height: 90px; border-bottom: 1px solid #d6d6d6;padding: 10px 0px;">
           <el-row style="align-items: center">
           <el-col :span="4">
+            <!-- 双色记录 -->
             <span>{{ index + 1 }}</span>.
-              <span
-                class="ml-10" style="display: inline-block;border-radius: 50%;margin-right: 6px;width: 22px;height: 22px;background: #b0b912;color: #fff;text-align: center;line-height: 22px;">{{ item.index }}</span>
+              <span class="ml-10" style="display: inline-block;
+              border-radius: 50%;margin-right: 6px;width: 22px;height: 22px;background: #b0b912;
+              color: #fff;text-align: center;line-height: 22px;">{{ item.index }}</span>
               <span>{{ item.index }}号音响</span>
           </el-col>
           <!-- 言语声 -->
