@@ -3,7 +3,7 @@
     <div>
       <span>测试名称</span>
       <span class="ml-10" style="display: inline-block;width: 82%;background: #ececec;border: 1px solid #b5b5b5;border-radius: 3px;">{{ props.testData.name }}</span>
-      <el-button type="success" @click="handleSave" class="ml-10">保存</el-button>
+      <el-button type="success" color="#1F8570" @click="handleSave" class="ml-10">保存</el-button>
       <el-button @click="handleBack" class="ml-10">退出</el-button>
       
     </div>
@@ -19,46 +19,46 @@
           </el-col>
           <!-- 言语声 -->
           <el-col :span="10" v-if="item.signalSoundVolume" class="testCol" s>
-            <el-row style="display: flex; align-items: center; flex-wrap: nowrap;">
-              <el-col :span="3">
-                <el-radio-group disabled v-model="item.signalSource" class="ml-4">
-                  <el-radio label="1" size="large">言语声</el-radio>
+            <el-row class="table-row">
+              <el-col :span="4">
+                <el-radio-group  v-model="item.signalSource" class="ml-4">
+                  <el-radio disabled label="1" size="large">言语声</el-radio>
                 </el-radio-group>
               </el-col>
               <el-col :span="2">
-                <el-input style="width: 100%" controls-position="right" size="small" v-model="item.signalSoundVolume" placeholder="52"/></el-col>
-              <el-col :span="4">(分贝db)</el-col>
+                <el-input readonly style="width: 100%" controls-position="right" size="small" v-model="item.signalSoundVolume" :placeholder="item.signalSoundVolume"/></el-col>
+              <el-col :span="5">(分贝db)</el-col>
             </el-row>
             <!-- 按钮 -->
             <el-row>
               <el-col v-if="!item?.signalCalibrated" :span="9">
-                <el-button size="small">未校准</el-button>
+                <el-button :disabled="item.environmentalCalibrated" size="small" @click="startCalibration(item,1)">未校准</el-button>
               </el-col>
               <el-col v-if="item?.signalCalibrated" :span="8" >
-                <el-button type="success" disabled size="small">已校准</el-button>
+                <el-button type="primary" :disabled="item.environmentalCalibrated" size="small">已校准</el-button>
               </el-col>
             </el-row>
           </el-col>
           <!-- 环境声音 -->
-          <el-col :span="10" v-if="item.signalSoundVolume" >
-            <el-row style="display: flex; align-items: center; flex-wrap: nowrap;">
-              <el-col :span="3" >
-                  <el-radio-group disabled v-model="item.signalSource" class="ml-4">
-                    <el-radio label="1" size="large">环境声</el-radio>
-                  </el-radio-group>
+          <el-col :span="10" v-if="item.environmentalSoundDecibels" >
+            <el-row class="table-row">
+              <el-col :span="4" >
+                  <!-- <el-radio-group  v-model="item.signalSource" class="ml-4"> -->
+                    <el-radio disabled label="1" size="large">环境声</el-radio>
+                  <!-- </el-radio-group> -->
                 </el-col>
                 <el-col :span="2">
-                  <el-input style="width: 100%" controls-position="right" size="small" v-model="queryForm.environmentalSoundVolume" placeholder="52"/>
+                  <el-input readonly style="width: 100%" controls-position="right" size="small" v-model="item.environmentalSoundDecibels" :placeholder="item.environmentalSoundDecibels" />
                 </el-col>
-                <el-col :span="4">(分贝db)</el-col>
+                <el-col :span="5">(分贝db)</el-col>
             </el-row>
             <!-- 按钮 -->
             <el-row>
               <el-col v-if="!item?.signalCalibrated" :span="9">
-                <el-button size="small">未校准</el-button>
+                <el-button :disabled="item.environmentalCalibrated" @click="startCalibration(item,2)" size="small">未校准</el-button>
               </el-col>
               <el-col v-if="item?.signalCalibrated" :span="8" >
-                <el-button type="success" disabled size="small">已校准</el-button>
+                <el-button type="primary" disabled size="small">已校准</el-button>
               </el-col>
             </el-row>
           </el-col>
@@ -68,64 +68,32 @@
     <el-col :span="12">
         <sound :device-config="devices"></sound>
         <div
-          style="
-            width: 230px;
-            margin-top: 40px;
-            margin-left: 20px;
-            height: 61px;
-            display: flex;
-            align-items: center;
-            background: #d8d8d8;
-            justify-content: space-around;
-          "
-        >
+          style="width: 230px;margin-top: 40px;margin-left: 20px;height: 61px;display: flex;align-items: center;background: #d8d8d8;justify-content: space-around;"        >
           <el-button size="large" @click="handleStart">播放</el-button>
           <el-button size="large" @click="handleStart">重复</el-button>
         </div>
+        <!-- 信号声音 -->
         <el-row class="el-row-box" style="display: flex; margin-top: 180px; align-items: center">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3">信号声</el-col>
           <el-col :span="4">
-            <el-input-number :disabled="!isCalibration"
-              style="width: 100%"
-              controls-position="right"
-              size="small"
-              v-model="queryForm.signalSoundVolume"
-              placeholder="52"
-              :max="100"
-              :min="0"
-              :step="queryForm.step"
-          /></el-col>
+            <el-input-number :disabled="!isSignalCalibration" style="width: 100%" controls-position="right" size="small"
+              v-model="queryForm.signalSoundVolume" placeholder="52" :max="100" :min="0" :step="queryForm.step" />
+            </el-col>
           <el-col :span="4">（分贝db）</el-col>
-          <el-col :span="4"
-            ><el-input-number
-              :disabled="!isCalibration"
-              :min="1"
-              :max="10"
-              style="width: 100%"
-              controls-position="right"
-              size="small"
-              v-model="queryForm.step"
-              placeholder="52"
-          /></el-col>
-          <el-col style="font-size: 14px; color: #b0b0b0" :span="2"
-            >(步幅)</el-col
-          >
-          <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button :disabled="!isCalibration" @click="handleSaveItem"
-              >保存点 [Enter]</el-button
-            ></el-col
-          >
+          <el-col :span="4">
+            <el-input-number :disabled="!isSignalCalibration" :min="1" :max="10" style="width: 100%" controls-position="right"
+              size="small" v-model="queryForm.step" :placeholder= "queryForm.signalSoundVolume"/>
+            </el-col>
+          <el-col style="font-size: 14px; color: #b0b0b0" :span="2">(步幅)</el-col>
+          <el-col style="font-size: 14px; color: #b0b0b0" :span="4">
+            <el-button :disabled="!isSignalCalibration" @click="handleSaveItem" >保存点 [Enter]</el-button>\
+          </el-col>
           <el-col>
-            <el-slider
-              style="width: 96%"
-              v-model="queryForm.signalSoundVolume"
-              :min="25"
-              :max="80"
-              :marks="marks"
-              :disabled="!isCalibration"
-            />
+            <el-slider style="width: 96%" v-model="queryForm.signalSoundVolume" :min="25" :max="80"
+              :marks="marks" :disabled="!isSignalCalibration" />
           </el-col>
         </el-row>
+        <!-- 环境音 -->
         <el-row class="el-row-box" style="display: flex; margin-top: 60px; align-items: center">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3"
             >环境声</el-col
@@ -152,7 +120,7 @@
               controls-position="right"
               size="small"
               v-model="queryForm.step1"
-              placeholder="52"
+              :placeholder="queryForm.environmentalSoundVolume"
           /></el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="2"
             >(步幅)</el-col
@@ -181,10 +149,44 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted, watch } from "vue";
 import type { CSSProperties } from "vue";
+import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
+import { treeEmits } from "element-plus/es/components/tree-v2/src/virtual-tree";
 const value1 = ref("1");
 let isStart = false;
+
+
+const startCalibration = (item,id)=>{
+  isSignalCalibration.value = false
+  isCalibration.value = false
+  //1 信号声， 2 环境声
+  id == 1?startSignal(item):startEnvironment(item)
+}
+//信号声处理
+let startSignal = (item)=>{
+  // 打开信号声调试
+  if(!item.signalCalibrated){
+    console.info(item,"startSignal")
+    isSignalCalibration.value = true
+    queryForm.signalSoundVolume = item.signalSoundVolume
+  }
+
+}
+let startEnvironment = (item)=>{
+  //打开背景声调试
+  console.info(item,"startEnvironment")
+  if(!item.signalCalibrated){
+    isCalibration.value = true
+    queryForm.environmentalSoundVolume = item.environmentalSoundVolume
+
+  }
+}
+// signalCalibrated: false
+// signalSoundDecibels: 39
+// signalSoundVolume: 39
+
+
 const queryForm = reactive({
   fileName: null,
   delay: "1",
@@ -197,6 +199,8 @@ const queryForm = reactive({
   signalCalibrated: false,
   environmentalCalibrated: false,
 });
+//信号
+const isSignalCalibration = ref(false);
 const isCalibration = ref(false);
 type Props = {
   testData: any;
@@ -271,10 +275,7 @@ const handleSaveItem = async () => {
   };
   const res = await imitateApi.saveAdjustValue(form);
   if (res.code == 0) {
-    ElMessage({
-      message: "保存成功",
-      type: "success",
-    });
+    ElMessage({message: "保存成功",type: "success",});
   }
 };
 const handleCalibration = async (item: any, index: number) => {
@@ -294,10 +295,7 @@ const handleCalibration = async (item: any, index: number) => {
   if (!item.isCalibration) {
     const res = await imitateApi.dbCalibration(form.id);
     if (res.code == 0) {
-      ElMessage({
-        message: "校准值上传成功",
-        type: "success",
-      });
+      ElMessage({message: "校准值上传成功",type: "success",});
       audioIndex = '12';
     }
   }
@@ -307,16 +305,22 @@ onMounted(() => {
     if (!e.newValue) {
       isStart = false;
       // imageData = {}
-      ElMessage({
-        message: "方案播放完成",
-        type: "success",
-      });
+      ElMessage({message: "方案播放完成",type: "success",});
     }
   });
 });
 </script>
 
 <style lang="scss" scoped>
+.table-row{
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  .el-col{
+    margin-left: 10px;
+  }
+
+}
 .ml-10 {
   margin-left: 10px;
 }
