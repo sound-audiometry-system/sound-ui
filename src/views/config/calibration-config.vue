@@ -14,9 +14,7 @@
           <el-col :span="4">
             <!-- 双色记录 -->
             <span>{{ index + 1 }}</span>.
-              <span class="ml-10" style="display: inline-block;
-              border-radius: 50%;margin-right: 6px;width: 22px;height: 22px;background: #b0b912;
-              color: #fff;text-align: center;line-height: 22px;">{{ item.index }}</span>
+              <span :class="'icon-tag ' +  getTagCss(item)">{{ item.index }}</span>
               <span>{{ item.index }}号音响</span>
           </el-col>
           <!-- 言语声 -->
@@ -75,7 +73,7 @@
           <el-button size="large" @click="handleStart">重复</el-button>
         </div>
         <!-- 信号声音 -->
-        <el-row class="el-row-box" style="display: flex; margin-top: 180px; align-items: center">
+        <el-row class="el-row-box" style="display: flex; margin-top: 130px; align-items: center;width: 900px;">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3">信号声</el-col>
           <el-col :span="4">
             <el-input-number :disabled="!isSignalCalibration" style="width: 100%" controls-position="right" size="small"
@@ -96,42 +94,21 @@
           </el-col>
         </el-row>
         <!-- 环境音 -->
-        <el-row class="el-row-box" style="display: flex; margin-top: 60px; align-items: center">
-          <el-col style="font-size: 14px; color: #3a3a3a" :span="3"
-            >环境声</el-col
-          >
-          <el-col :span="4"
-            ><el-input-number
-              :disabled="!isCalibration"
-              style="width: 100%"
-              controls-position="right"
-              size="small"
-              v-model="queryForm.environmentalSoundVolume"
-              placeholder="52"
-              :max="100"
-              :min="0"
-              :step="queryForm.step1"
-          /></el-col>
+        <el-row class="el-row-box" style="display: flex; margin-top: 60px; align-items: center;width: 900px;">
+          <el-col style="font-size: 14px; color: #3a3a3a" :span="3">环境声</el-col>
+          <el-col :span="4">
+            <el-input-number :disabled="!isCalibration" style="width: 100%" controls-position="right" size="small" v-model="queryForm.environmentalSoundVolume"
+              placeholder="52" :max="100" :min="0" :step="queryForm.step1"/>
+            </el-col>
           <el-col :span="4">（分贝db）</el-col>
-          <el-col :span="4"
-            ><el-input-number
-              :disabled="!isCalibration"
-              :min="1"
-              :max="10"
-              style="width: 100%"
-              controls-position="right"
-              size="small"
-              v-model="queryForm.step1"
-              :placeholder="queryForm.environmentalSoundVolume"
-          /></el-col>
-          <el-col style="font-size: 14px; color: #b0b0b0" :span="2"
-            >(步幅)</el-col
-          >
-          <el-col style="font-size: 14px; color: #b0b0b0" :span="4"
-            ><el-button :disabled="!isCalibration" @click="handleSaveItem"
-              >保存点 [Enter]</el-button
-            ></el-col
-          >
+          <el-col :span="4"            >
+            <el-input-number :disabled="!isCalibration" :min="1" :max="10" style="width: 100%" controls-position="right" size="small"
+              v-model="queryForm.step1" :placeholder="queryForm.environmentalSoundVolume" />
+            </el-col>
+          <el-col style="font-size: 14px; color: #b0b0b0" :span="2">(步幅)</el-col>
+          <el-col style="font-size: 14px; color: #b0b0b0" :span="4">
+            <el-button :disabled="!isCalibration" @click="handleSaveEnv">保存点 [Enter]</el-button>
+            </el-col>
           <el-col>
             <el-slider
               style="width: 96%"
@@ -149,27 +126,40 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive, onMounted, watch } from "vue";
+import { ref, reactive, onMounted, watch, toRaw } from "vue";
 import type { CSSProperties } from "vue";
 import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
-import { treeEmits } from "element-plus/es/components/tree-v2/src/virtual-tree";
+const setup = ()=>{
+  //清空答案记录
+  testMap.clear()
+  }
 const value1 = ref("1");
 let isStart = false;
-
-
+//判断css样式
+const getTagCss = (item)=>{
+  if (item.environmentalSoundVolume && item.signalSoundVolume) {
+    return "color-3"
+  } else if(item.environmentalSoundVolume) {
+    return "color-2"
+  } else if(item.signalSoundVolume) {
+    return "color-1"
+  }
+} 
+//点击校准
 const startCalibration = (item,id)=>{
+  /** 开启校准组件，缓存数据对象 index */
   isSignalCalibration.value = false
   isCalibration.value = false
+  queryForm.index = item.index
   //1 信号声， 2 环境声
-  id == 1?startSignal(item):startEnvironment(item)
+  id == 1 ? startSignal(item) : startEnvironment(item)
 }
 //信号声处理
 let startSignal = (item)=>{
   // 打开信号声调试
   if(!item.signalCalibrated){
-    console.info(item,"startSignal")
     isSignalCalibration.value = true
     queryForm.signalSoundVolume = item.signalSoundVolume
   }
@@ -177,19 +167,37 @@ let startSignal = (item)=>{
 }
 let startEnvironment = (item)=>{
   //打开背景声调试
-  console.info(item,"startEnvironment")
   if(!item.signalCalibrated){
     isCalibration.value = true
     queryForm.environmentalSoundVolume = item.environmentalSoundVolume
 
   }
 }
-// signalCalibrated: false
-// signalSoundDecibels: 39
-// signalSoundVolume: 39
+interface AlignData extends AlignDataSignal,AlignDataAmbient{
+  
+}
+//保存点 环境
+interface AlignDataAmbient{
+  index: Number,//id
+  environmentalCalibrated: Boolean,//环境声是否校准
+  environmentalSoundVolume: Number,//校准数值
+}
+//信号声答案
+interface AlignDataSignal{
+  index: Number,//id
+  signalSoundVolume: Number,//校准数值
+  signalCalibrated: Boolean,//信号声是否校准
+}
 
+/** 
+ * 构建map，以id为key
+ * 将数据存入map，存入时检查对象字段
+ * 保存点将数据存入
+ */
+const testMap = reactive(new Map());
 
 const queryForm = reactive({
+  index: 110,
   fileName: null,
   delay: "1",
   environmentalSoundVolume: 52,
@@ -213,25 +221,11 @@ interface Mark {
   style: CSSProperties;
   label: string;
 }
-let audioIndex = '12';
 type Marks = Record<number, Mark | string>;
-const marks = reactive<Marks>({
-  30: "30",
-  35: "35",
-  40: "40",
-  45: "45",
-  50: "50",
-  55: "55",
-  60: "60",
-  65: "65",
-  70: "70",
-  75: "75",
-  80: "80",
-});
+const marks = reactive<Marks>({30: "30",  35: "35",  40: "40",  45: "45",  50: "50",  55: "55",  60: "60",  65: "65",  70: "70",  75: "75",  80: "80",});
 watch(
   () => props.testData,
   (newValue, oldValue) => {
-    console.log(newValue,"1222222222222");
     devices.value = newValue.indexs;
   },
   { deep: true, immediate: true }
@@ -259,30 +253,47 @@ const reImageTest = async () => {
 const handleBack = () => {
   emit("handleBack", false);
 };
-const handleSaveItem = async () => {
-  if (audioIndex == '12') {
-    ElMessage({
-      message: "请先选择音响校准",
-      type: "warning",
-    });
-    return;
+/**
+ * 保存环境声校准值
+ */
+const handleSaveEnv = () => {
+  if(queryForm.index === 110){
+    ElMessage({message: "请先选择音响校准",type: "warning",});
+    return
   }
-  const form = {
-    id: props.testData.id,
-    index: audioIndex,
-    signalSoundVolume: queryForm.signalSoundVolume,
-    environmentalSoundVolume: queryForm.environmentalSoundVolume,
-    signalCalibrated: queryForm.signalCalibrated,
-    environmentalCalibrated: queryForm.environmentalCalibrated,
-  };
-  const res = await imitateApi.saveAdjustValue(form);
-  if (res.code == 0) {
-    ElMessage({message: "保存成功",type: "success",});
+  const answer = ref<AlignDataAmbient>()
+  answer.value= {index:queryForm.index,environmentalSoundVolume:queryForm.environmentalSoundVolume,environmentalCalibrated:true}
+  // 答案写入集合
+  setData(queryForm.index,answer.value)
+}
+/**
+ * 保存信号声校准值
+ */
+const handleSaveItem = () => {
+  if(queryForm.index === 110){
+    ElMessage({message: "请先选择音响校准",type: "warning",});
+    return
   }
+  const answer = ref<AlignDataSignal>()
+  answer.value= {index:queryForm.index,signalSoundVolume:queryForm.signalSoundVolume,signalCalibrated:true}
+  // 答案写入集合
+ 
+  setData(queryForm.index,answer.value)
 };
+//添加答案，如果存在则合并更新，不存在则直接存入
+const setData = (key,value)=>{
+  if(testMap.has(key)){
+       // 检查map中是否存在该id，存在则合并字段更新
+      let newData =  reactive<AlignData>({...testMap.get(key),...value})
+      testMap.set(key,newData)
+    }else{
+      //不存在，直接存入
+      testMap.set(key,value)
+    }
+}
+
 const handleCalibration = async (item: any, index: number) => {
   isCalibration.value = !isCalibration.value;
-  audioIndex = index+'';
   item.isCalibration = !item.isCalibration;
   const form = {
     id: props.testData.id,
@@ -298,7 +309,6 @@ const handleCalibration = async (item: any, index: number) => {
     const res = await imitateApi.dbCalibration(form.id);
     if (res.code == 0) {
       ElMessage({message: "校准值上传成功",type: "success",});
-      audioIndex = '12';
     }
   }
 };
@@ -326,7 +336,27 @@ onMounted(() => {
 .ml-10 {
   margin-left: 10px;
 }
-
+//图标样式
+.icon-tag {
+  margin-left: 10px;
+  display: inline-block;
+  border-radius: 50%;
+  margin-right: 6px;
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  text-align: center;
+  line-height: 22px;
+}
+.color-1 {
+  background: #B2BA0D;
+}
+.color-2 {
+  background: #FFBF24;
+}
+.color-3 {
+  background: linear-gradient(to right, #B2BA0D 50%, #FFBF24 50%);
+}
 .main {
   width: 1920px;
   // background-color: #f2f2f2;
