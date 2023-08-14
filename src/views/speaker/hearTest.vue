@@ -363,7 +363,7 @@ onMounted(() => {
       // if (e.) {
 
       // }
-      if (rePlayId != item.id || answerIndex + 1 != item.id) answerIndex.value += 1;
+      if (rePlayId != item.id || answerIndex.value + 1 != item.id) answerIndex.value += 1;
       isCheckFlag.value = false;
     }
     // 1111
