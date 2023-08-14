@@ -29,7 +29,7 @@ export default {
 
 <template>
   <div class="container">
-    <RouterView />
+    <RouterView :key="$route.path + $route.query.t" />
   </div>
 </template>
 

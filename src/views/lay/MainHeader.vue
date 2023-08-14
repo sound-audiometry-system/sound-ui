@@ -12,6 +12,7 @@
         :placeholder="userInfo[0].name"
         size="large"
         @change="changePlan"
+        :disabled="props.isPlay"
       >
         <el-option-group
           v-for="group in testSelectData"
@@ -44,6 +45,10 @@ import { useStore } from "vuex";
 import { useRouter } from "vue-router";
 let store = useStore();
 const router = useRouter();
+type Props = {
+  isPlay: any;
+};
+const props = defineProps<Props>();
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "");
 const testData = JSON.parse(sessionStorage.getItem("testData") || "");
 let revertData = [
@@ -65,7 +70,7 @@ const changePlan = (val) => {
   store.commit("setTestData", testDataFlt);
   console.log(22222)
   // if (testResult.value == 1) {
-  router.push({ path: "/speaker", query: { type: "2" } });
+  router.push({ path: "/speaker", query: { type: "2", t: Date.now() } });
 };
 </script>
 <style scoped lang="scss">

@@ -2,7 +2,7 @@
 <template>
   <el-container>
     <el-header>
-      <userHeader></userHeader>
+      <userHeader :isPlay="isPlay"></userHeader>
     </el-header>
     <el-main ref="main">
       <el-tabs v-model="typeName" stretch="true" type="border-card">
@@ -101,7 +101,7 @@ interface RuleForm {
   operator: string;
 }
 console.log(userInfo[0])
-console.log(testData.value)
+console.log(testData)
 const form = reactive({
   uid: userInfo[0].uid,
   testId: testData[0].id,

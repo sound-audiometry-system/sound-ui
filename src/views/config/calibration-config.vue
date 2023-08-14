@@ -3,7 +3,7 @@
     <div>
       <span>测试名称</span>
       <span class="ml-10" style="display: inline-block;width: 82%;background: #ececec;border: 1px solid #b5b5b5;border-radius: 3px;">{{ props.testData.name }}</span>
-      <el-button type="success" color="#1F8570" @click="handleSave" class="ml-10">保存</el-button>
+      <el-button type="success" color="#1F8570" @click="handleCalibration" class="ml-10">保存</el-button>
       <el-button @click="handleBack" class="ml-10">退出</el-button>
       
     </div>
@@ -13,10 +13,10 @@
           <el-row style="align-items: center">
           <el-col :span="4">
             <!-- 双色记录 -->
-            <span>{{ index + 1 }}</span>.
+            <span>{{ index + 1 }}</span>
               <span :class="'icon-tag ' +  getTagCss(item)">{{ item.index }}</span>
               <span>{{ item.index }}号音响</span>
-          </el-col>
+          </el-col> 
           <!-- 言语声 -->
           <el-col :span="10" v-if="item.signalSoundVolume" class="testCol" s>
             <el-row class="table-row">
@@ -86,7 +86,7 @@
             </el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="2">(步幅)</el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4">
-            <el-button :disabled="!isSignalCalibration" @click="handleSaveItem" >保存点 [Enter]</el-button>\
+            <el-button :disabled="!isSignalCalibration" @click="handleSaveItem" >保存点 [Enter]</el-button>
           </el-col>
           <el-col>
             <el-slider style="width: 96%" v-model="queryForm.signalSoundVolume" :min="25" :max="80"
