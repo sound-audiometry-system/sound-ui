@@ -293,12 +293,28 @@ const handleCheck = () => {
   syncDisabledBtn.value = true;
   emit("handlePause");
 };
+
+const removeItem = () => {
+  //通过index找到答题数据，取出file字段，在answerMap（答案列表）中找到对应的答案，将其删除
+  let planList = testData[0].signalSoundConfig;
+  //取出方案数据
+  let audio = planList[answerIndex.value].audios[0];
+  let file = audio.file;
+  answerMap.forEach((value, key) => {
+    if (value.file == file) {
+      answerMap.delete(key);
+    }
+  });
+};
 // 上一个
 const handlePrev = useThrottle(async () => {
+  //删除答案
+  removeItem()
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
-    answerIndex.value != 0 && answerIndex.value--;
+    //因为 imageDate 会+1，所以这里需要重新赋值 -2
+    if(answerIndex.value > 0)  answerIndex.value-=2;
   }
 }, 1500, isDisabled);
 // 下一个
@@ -311,10 +327,14 @@ const handleNext = useThrottle(async () => {
 }, 1500, isDisabled);
 // 重复
 const handleReImage = useThrottle(async () => {
+  //删除答案
+  removeItem()
   const res = await auditionApi.reImageTest();
   if (res.code == 0) {
     isCheckFlag.value = false;
     rePlayId = displayId;
+    //因为 imageDate 会被修改，所以这里需要重新赋值 -1
+    if(answerIndex.value > 0) answerIndex.value--;
   }
 }, 1500, isDisabled);
 const mod = (n: number, m: number) => {
@@ -360,17 +380,14 @@ onMounted(() => {
     }
     let item = JSON.parse(e.newValue);
     if (e.key === "imageData") {
-      // if (e.) {
-
-      // }
-      if (rePlayId != item.id || answerIndex.value + 1 != item.id) answerIndex.value += 1;
-      isCheckFlag.value = false;
+        if (rePlayId != item.id || answerIndex.value + 1 != item.id) answerIndex.value += 1;
+        isCheckFlag.value = false;
     }
     // 1111
     if (e.key === "audioStart") {
       syncDisabledBtn.value = false;
       isCheckFlag.value = false;
-      //TODO newValue 数据结构问题
+      //TODO newValue 数据结构问题  
       // displayId != e.id && displayId = e?.id
       displayId = item.id;
       itemId.value = item.file;
