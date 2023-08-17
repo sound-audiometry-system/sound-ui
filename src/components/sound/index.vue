@@ -9,6 +9,7 @@
         <div class="dot-outer">
           <div class="dot-center"><img src="../../assets/header.png" width="30" alt=""></div>
           <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="{ 
+        
             'dot-control': true, 
             'error-active': item.active && index <= 4, 
             'success-active': item.active && index > 5 && index <= 10,
@@ -100,14 +101,9 @@ watch(()=>props.sounds, (newValue, oldValue)=> {
     }
   }
 }, {deep: true})
-// watchEffect(()=> {
-//   console.log(props)
-// })
+ 
 onMounted(async ()=> {
-  // const res = await auditionApi.getDevice()
-  // if (res.code == 0) {
-  //   console.log(res)
-  // }
+  
 })
 const handleClkItem = (index: number) => {
     emit('handleClkItem', index)

@@ -1,39 +1,40 @@
 <!-- 设备连接 -->
 <template>
-  <el-row>
+  <el-row style="color: #000;">
     <el-col :span="24" style="display: flex">
-      <div style="width: 1920px">
-        <label>测试前连接</label>
-        <button type="button" @click="buttClick">连接</button>
+      <div style="width: 1920px;display: flex;justify-content: space-between;" >
+        <label style="font-size: 15px;font-weight: bold;">测试前连接</label>
+        <button style="outline: none; width: 100px;background-color:#F1871B;color: white;font-size: 16px;box-shadow: none;" type="button" @click="buttClick">连接</button>
       </div>
     </el-col>
   </el-row>
   <el-container>
-    <el-aside>
+    <el-aside style="color: #000;">
       <el-row style="height: 400px; width: 525px">
         <el-col :span="24">
           <sound :sounds="deviceset"></sound>
         </el-col>
       </el-row>
       <el-row class="xxx-a">
-        <el-col :span="6" v-for="index in 12" :key="index" >
-          <div style="background-color: aliceblue;">
-            <div class="config-b" :style="{ 'display': 'inline-block','text-align': 'center', backgroundColor: getBgc(index-1) }" >
-              {{ index-1 }}
-            </div><label>{{ index-1 }} 号音响</label>
+        <el-col :span="6" v-for="index in deviceset" :key="index" >
+          <div >
+            <div class="config-b" :style="{'font-size':'13px', color: parseInt(index.id) ==1 || parseInt(index.id)==7 ?'#000':'#fff','display': 'inline-block','text-align': 'center', backgroundColor: getBgc(index) }" >
+              {{ parseInt(index.id ) - 1}}
+            </div>
+            <label style="color: #000; font-size: 13px;font-weight: bold;">{{ parseInt(index.id) - 1}} 号音响</label>
         </div>
         </el-col>
       </el-row>
     </el-aside>
     <el-main >
-      <el-row :gutter="20">
+      <el-row :gutter="20" style="color: #000;">
         <el-col :span="24">显示器</el-col>
         <el-col :span="12" class="monitor-a">
           <div style="display: flex; align-items: center; margin: 10px 0">
             <span
-              style="width: 20px; margin-right: 10px; color: #fff; height: 20px line-height: 20px; background-color: #3457C6; text-align: center;"
-              >左</span
-            >
+              style="width: 20px; margin-right: 10px; color: #fff; height: 20px line-height: 20px; background-color: #3457C6; text-align: center;">
+              左
+            </span>
             <span>显示器</span>
           </div>
           <div style="width: 400px; height: 300px; background-color: #000"></div>
@@ -56,7 +57,44 @@
 import { ref, reactive } from "vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
-let deviceset = ref([]);
+let deviceset = ref([
+  {
+  id: '01',
+  active: false
+},{
+  id: '05',
+  active: false
+},{
+  id: '09',
+  active: false
+},{
+  id: '02',
+  active: false
+},{
+  id: '06',
+  active: false
+},{
+  id: '10',
+  active: false
+},{
+  id: '03',
+  active: false
+},{
+  id: '07',
+  active: false
+},{
+  id: '11',
+  active: false
+},{
+  id: '04',
+  active: false
+},{
+  id: '08',
+  active: false
+},{
+  id: '12',
+  active: false
+}]);
 const devices = [
 {
     soundVal: '001',
@@ -121,48 +159,35 @@ const devices = [
 ]
 const getDevice = async (id)=> {
   const res = await auditionApi.getDevice({id: id})
-  if (res.code == 0 && res.online) {
-    var idstr = id.substring(0,2)
-    if (deviceset.includes(idstr)) return
-    deviceset.push(idstr)
-  }
-  // if (res.code == 0) {
-  //   deviceset.value = res.list
-  //   // res.list.forEach(item=>{
-  //   //   deviceset.push(item.substring(0,2))
-  //   // })
-  //   // console.log(deviceset);
-  //   //渲染已连接的音箱
-  // }
+  var idstr = id.substring(0,2) 
+  if (res.code == 0) {
+    if (deviceset.includes(idstr)) return 
+   
+  } 
+  deviceset.value.filter(item=>item.id == idstr).active = true
+  // console.log('===>>deviceset',deviceset)
 }
-let buttClick = async () => {
-  // window.setTimeout(() => {
-  //   // deviceset.value = ["012", "013"];
-  //   // console.log(deviceset)
-  // }, 1000);
-  // const res = await auditionApi.getDevice({id: '011'});
+let buttClick = async () => { 
   for (const item of devices) {
     getDevice(item.soundVal)
-    if (item.soundVal2) {
-      getDevice(item.soundVal2)
-    }
+    // if (item.soundVal2) {
+    //   getDevice(item.soundVal2)
+    // }
   }
-  
-  
 };
-let getBgc = (idex) => {
-  if (idex == 0 || idex == 6) {
-    return "#ffffff";
-  }
-  if (idex < 6 && idex > 1) {
-    return "red";
-  }
-  if (idex > 6) {
-    return "blue";
-  }
+let getBgc = (idx) => {
+  console.log("idx===>执行",idx.id)
+  // if (!idx.active) return "#DEDEDE"
+  if(idx.id =='01' || idx.id =='07') return "rgb(250,250,245)"
+  return parseInt(idx.id) >6 ? "#3357C4" : "red"
 };
 </script>
 <style scoped lang="scss">
+body{
+  height: auto;
+  width: auto;
+  background-color: rgb(213,213,213);
+}
 .el-container {
   width: 100%;
   height: 95%;
@@ -192,7 +217,7 @@ let getBgc = (idex) => {
     height: 306px;
     // flex-direction: column;
     flex-wrap: wrap;
-    background-color: #f6f6f6;
+    // background-color: #f6f6f6;
 
     .el-col {
       margin-left: 3px;
