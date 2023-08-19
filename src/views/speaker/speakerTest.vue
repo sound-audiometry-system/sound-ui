@@ -100,8 +100,8 @@ const handleTestStop = inject<() => void>('handleStop');
 interface RuleForm {
   operator: string;
 }
-console.log(userInfo[0])
-console.log(testData)
+// console.log(userInfo[0])
+// console.log(testData)
 const form = reactive({
   uid: userInfo[0].uid,
   testId: testData[0].id,

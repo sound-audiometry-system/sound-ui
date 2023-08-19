@@ -96,7 +96,7 @@
           ><el-icon style="margin-right: 2px;color: #134EFE;" circle><Microphone /></el-icon
           >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
         >
-        <div style="height: 290px; width: 530px">
+        <div style="height: 320px; width: 760px">
           <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" ></sound>
         </div>
         <el-row class="el-btn a">

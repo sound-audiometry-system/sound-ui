@@ -8,7 +8,7 @@
       
     </div>
     <el-row :gutter="20" style="margin-top: 20px">
-      <el-col style="eight: 760px; background-color: #fff; padding: 10px 0; overflow: auto;" :span="12">
+      <el-col style="height: 700px; background-color: #fff; padding: 10px 0; overflow: auto;" :span="12">
         <div v-for="(item, index) in devices" :key="index" :gutter="10" style=" height: 90px; border-bottom: 1px solid #d6d6d6;padding: 10px 0px;">
           <el-row style="align-items: center">
           <el-col :span="4">
@@ -18,12 +18,12 @@
               <span>{{ item.index }}号音响</span>
           </el-col> 
           <!-- 言语声 -->
-          <el-col :span="10" v-if="item.signalSoundVolume" class="testCol" s>
+          <el-col :span="10" v-if="item.signalSoundVolume">
             <el-row class="table-row">
               <el-col :span="4">
-                <el-radio-group  v-model="item.signalSource" class="ml-4">
-                  <el-radio disabled label="1" size="large">言语声</el-radio>
-                </el-radio-group>
+                <el-checkbox-group v-model="radioFlag">
+                  <el-checkbox :disabled="item.signalCalibrated"  :label="item.index" :true-label="item.index" @change="startCalibration(item,1)"  :tabindex="item.index">信号声</el-checkbox>
+                </el-checkbox-group>
               </el-col>
               <el-col :span="2">
                 <el-input readonly style="width: 100%" controls-position="right" size="small" v-model="item.signalSoundVolume" :placeholder="item.signalSoundVolume"/></el-col>
@@ -32,10 +32,10 @@
             <!-- 按钮 -->
             <el-row>
               <el-col v-if="!item?.signalCalibrated" :span="9">
-                <el-button :disabled="item.environmentalCalibrated" size="small" @click="startCalibration(item,1)">未校准</el-button>
+                <el-button disabled size="small">未校准</el-button>
               </el-col>
-              <el-col v-if="item?.signalCalibrated" :span="8" >
-                <el-button type="primary" :disabled="item.environmentalCalibrated" size="small">已校准</el-button>
+              <el-col v-else :span="8" >
+                <el-button type="primary" disabled size="small">已校准</el-button>
               </el-col>
             </el-row>
           </el-col>
@@ -43,21 +43,21 @@
           <el-col :span="10" v-if="item.environmentalSoundDecibels" >
             <el-row class="table-row">
               <el-col :span="4" >
-                  <!-- <el-radio-group  v-model="item.signalSource" class="ml-4"> -->
-                    <el-radio disabled label="1" size="large">环境声</el-radio>
-                  <!-- </el-radio-group> -->
-                </el-col>
-                <el-col :span="2">
-                  <el-input readonly style="width: 100%" controls-position="right" size="small" v-model="item.environmentalSoundDecibels" :placeholder="item.environmentalSoundDecibels" />
-                </el-col>
-                <el-col :span="5">(分贝db)</el-col>
+                <el-checkbox-group v-model="radioFlagEnv">
+                  <el-checkbox :disabled="item.environmentalCalibrated" :label="item.index" :true-label="item.index" @change="startCalibration(item,2)"  :tabindex="item.index">信号声</el-checkbox>
+                </el-checkbox-group>
+              </el-col>
+              <el-col :span="2">
+                <el-input readonly style="width: 100%" controls-position="right" size="small" v-model="item.environmentalSoundDecibels" :placeholder="item.environmentalSoundDecibels" />
+              </el-col>
+              <el-col :span="5">(分贝db)</el-col>
             </el-row>
             <!-- 按钮 -->
             <el-row>
-              <el-col v-if="!item?.signalCalibrated" :span="9">
-                <el-button :disabled="item.environmentalCalibrated" @click="startCalibration(item,2)" size="small">未校准</el-button>
+              <el-col v-if="!item?.environmentalCalibrated" :span="9">
+                <el-button disabled size="small">未校准</el-button>
               </el-col>
-              <el-col v-if="item?.signalCalibrated" :span="8" >
+              <el-col v-else :span="8" >
                 <el-button type="primary" disabled size="small">已校准</el-button>
               </el-col>
             </el-row>
@@ -70,7 +70,7 @@
         <div
           style="width: 230px;margin-top: 40px;margin-left: 20px;height: 61px;display: flex;align-items: center;background: #d8d8d8;justify-content: space-around;"        >
           <el-button size="large" @click="handleStart">播放</el-button>
-          <el-button size="large" @click="handleStart">重复</el-button>
+          <el-button size="large" @click="handleStart">循环播放</el-button>
         </div>
         <!-- 信号声音 -->
         <el-row class="el-row-box" style="display: flex; margin-top: 130px; align-items: center;width: 900px;">
@@ -79,7 +79,7 @@
             <el-input-number :disabled="!isSignalCalibration" style="width: 100%" controls-position="right" size="small"
               v-model="queryForm.signalSoundVolume" placeholder="52" :max="100" :min="0" :step="queryForm.step" />
             </el-col>
-          <el-col :span="4">（分贝db）</el-col>
+          <el-col :span="4">（音量）</el-col>
           <el-col :span="4">
             <el-input-number :disabled="!isSignalCalibration" :min="1" :max="10" style="width: 100%" controls-position="right"
               size="small" v-model="queryForm.step" :placeholder= "queryForm.signalSoundVolume"/>
@@ -100,7 +100,7 @@
             <el-input-number :disabled="!isCalibration" style="width: 100%" controls-position="right" size="small" v-model="queryForm.environmentalSoundVolume"
               placeholder="52" :max="100" :min="0" :step="queryForm.step1"/>
             </el-col>
-          <el-col :span="4">（分贝db）</el-col>
+          <el-col :span="4">（音量）</el-col>
           <el-col :span="4"            >
             <el-input-number :disabled="!isCalibration" :min="1" :max="10" style="width: 100%" controls-position="right" size="small"
               v-model="queryForm.step1" :placeholder="queryForm.environmentalSoundVolume" />
@@ -131,12 +131,14 @@ import type { CSSProperties } from "vue";
 import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
+import { kebabCase } from "element-plus/es/utils";
+
 const setup = ()=>{
   //清空答案记录
   testMap.clear()
   }
-const value1 = ref("1");
 let isStart = false;
+const xxxx = ref(true)
 //判断css样式
 const getTagCss = (item)=>{
   if (item.environmentalSoundVolume && item.signalSoundVolume) {
@@ -147,17 +149,29 @@ const getTagCss = (item)=>{
     return "color-1"
   }
 } 
+const radioFlag = ref(-1)
+const radioFlagEnv = ref(-1)
 //点击校准
-const startCalibration = (item,id)=>{
+const startCalibration = (item,flag)=>{
+  //关闭所有勾选框
+  radioFlagEnv.value = -1
+  radioFlag.value = -1
+  //判断按钮是否关闭
   /** 开启校准组件，缓存数据对象 index */
   isSignalCalibration.value = false
   isCalibration.value = false
   queryForm.index = item.index
   //1 信号声， 2 环境声
-  id == 1 ? startSignal(item) : startEnvironment(item)
+  flag == 1 ? startSignal(item) : startEnvironment(item)
+  return true;
 }
 //信号声处理
 let startSignal = (item)=>{
+  if(radioFlag.value == item.index){
+    ElMessage({message: "请先关闭校准",type: "warning",});
+    return false
+  }
+  radioFlag.value = item.index
   // 打开信号声调试
   if(!item.signalCalibrated){
     isSignalCalibration.value = true
@@ -166,15 +180,19 @@ let startSignal = (item)=>{
 
 }
 let startEnvironment = (item)=>{
+  if(radioFlag.value == item.index){
+    ElMessage({message: "请先关闭校准",type: "warning",});
+    return false
+  }
+  //判断按钮是否开启
+  radioFlagEnv.value = item.index
   //打开背景声调试
   if(!item.signalCalibrated){
     isCalibration.value = true
     queryForm.environmentalSoundVolume = item.environmentalSoundVolume
-
   }
 }
 interface AlignData extends AlignDataSignal,AlignDataAmbient{
-  
 }
 //保存点 环境
 interface AlignDataAmbient{
@@ -277,8 +295,8 @@ const handleSaveItem = () => {
   const answer = ref<AlignDataSignal>()
   answer.value= {index:queryForm.index,signalSoundVolume:queryForm.signalSoundVolume,signalCalibrated:true}
   // 答案写入集合
- 
   setData(queryForm.index,answer.value)
+  //TODO 改变数据样式
 };
 //添加答案，如果存在则合并更新，不存在则直接存入
 const setData = (key,value)=>{
@@ -320,7 +338,15 @@ onMounted(() => {
       ElMessage({message: "方案播放完成",type: "success",});
     }
   });
+  window.addEventListener("keyup",(e:any)=>{
+    if(13 == e.keyCode){
+      //保存点
+      // handleSaveItem()
+      // handleSaveEnv()
+    }
+  })
 });
+
 </script>
 
 <style lang="scss" scoped>

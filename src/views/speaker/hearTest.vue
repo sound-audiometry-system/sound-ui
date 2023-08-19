@@ -127,8 +127,8 @@
           <Microphone /> </el-icon
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
-      <div style="height: 290px; width: 530px">
-        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex"></sound>
+      <div style="height: 320px; width: 760px">
+        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" env-index="122"></sound>
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay" size="large" plain @click="handleStart">开始</el-button>
