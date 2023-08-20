@@ -10,7 +10,7 @@
   </el-row>
   <el-container>
     <el-aside style="color: #000;">
-      <el-row style="height: 400px; width: 525px">
+      <el-row style="height: 400px; width: 760px">
         <el-col :span="24">
           <sound :sounds="deviceset"></sound>
         </el-col>
