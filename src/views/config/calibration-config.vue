@@ -44,7 +44,7 @@
             <el-row class="table-row">
               <el-col :span="4" >
                 <el-checkbox-group v-model="radioFlagEnv">
-                  <el-checkbox :disabled="item.environmentalCalibrated" :label="item.index" :true-label="item.index" @change="startCalibration(item,2)"  :tabindex="item.index">信号声</el-checkbox>
+                  <el-checkbox :disabled="item.environmentalCalibrated" :label="item.index" :true-label="item.index" @change="startCalibration(item,2)"  :tabindex="item.index">环境声</el-checkbox>
                 </el-checkbox-group>
               </el-col>
               <el-col :span="2">
@@ -66,14 +66,14 @@
       </div>
     </el-col>
     <el-col :span="12">
-        <sound :device-config="devices"></sound>
+        <sound :sound-index="0"></sound>
         <div
           style="width: 230px;margin-top: 40px;margin-left: 20px;height: 61px;display: flex;align-items: center;background: #d8d8d8;justify-content: space-around;"        >
           <el-button size="large" @click="handleStart">播放</el-button>
-          <el-button size="large" @click="handleStart">循环播放</el-button>
+          <el-button size="large" @click="handleCirculate">循环播放</el-button>
         </div>
         <!-- 信号声音 -->
-        <el-row class="el-row-box" style="display: flex; margin-top: 130px; align-items: center;width: 900px;">
+        <el-row class="el-row-box" style="display: flex; margin-top: 90px; align-items: center;width: 900px;">
           <el-col style="font-size: 14px; color: #3a3a3a" :span="3">信号声</el-col>
           <el-col :span="4">
             <el-input-number :disabled="!isSignalCalibration" style="width: 100%" controls-position="right" size="small"
@@ -132,13 +132,13 @@ import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
 import { kebabCase } from "element-plus/es/utils";
+import { fa } from "element-plus/es/locale";
 
 const setup = ()=>{
   //清空答案记录
   testMap.clear()
   }
 let isStart = false;
-const xxxx = ref(true)
 //判断css样式
 const getTagCss = (item)=>{
   if (item.environmentalSoundVolume && item.signalSoundVolume) {
@@ -153,6 +153,7 @@ const radioFlag = ref(-1)
 const radioFlagEnv = ref(-1)
 //点击校准
 const startCalibration = (item,flag)=>{
+  console.info(item,"勾选校准音频")
   //关闭所有勾选框
   radioFlagEnv.value = -1
   radioFlag.value = -1
@@ -163,7 +164,7 @@ const startCalibration = (item,flag)=>{
   queryForm.index = item.index
   //1 信号声， 2 环境声
   flag == 1 ? startSignal(item) : startEnvironment(item)
-  return true;
+  // return true;
 }
 //信号声处理
 let startSignal = (item)=>{
@@ -177,7 +178,6 @@ let startSignal = (item)=>{
     isSignalCalibration.value = true
     queryForm.signalSoundVolume = item.signalSoundVolume
   }
-
 }
 let startEnvironment = (item)=>{
   if(radioFlag.value == item.index){
@@ -186,8 +186,8 @@ let startEnvironment = (item)=>{
   }
   //判断按钮是否开启
   radioFlagEnv.value = item.index
-  //打开背景声调试
-  if(!item.signalCalibrated){
+  //打开环境声调试
+  if(!item.environmentalCalibrated){
     isCalibration.value = true
     queryForm.environmentalSoundVolume = item.environmentalSoundVolume
   }
@@ -250,11 +250,24 @@ watch(
 );
 const emit = defineEmits(["handleBack"]);
 const handleStart = async () => {
+  console.info(props.testData,"开始测试")
   const res = await auditionApi.startTest(props.testData);
   if (res.code == 0) {
     isStart = true;
   }
 };
+/**
+ * 循环播放
+ * TODO 构建参数
+ */
+const handleCirculate = async () => {
+  const res = await auditionApi.startTest(props.testData, true);
+  if (res.code == 0) {
+    isStart = true;
+  }
+};
+
+
 const handleSave = async () => {
   const res = await auditionApi.stopTest();
   console.log(res);
@@ -283,20 +296,41 @@ const handleSaveEnv = () => {
   answer.value= {index:queryForm.index,environmentalSoundVolume:queryForm.environmentalSoundVolume,environmentalCalibrated:true}
   // 答案写入集合
   setData(queryForm.index,answer.value)
+  isCalibration.value = false
+  // TODO
+  let item = devices.value.filter(x=>x.index == queryForm.index);
+  devices.value.forEach((x,index)=>{
+    if(x.index == queryForm.index){
+      x.environmentalCalibrated = true
+    }
+  })
+  // queryForm.environmentalCalibrated = true
 }
 /**
  * 保存信号声校准值
  */
-const handleSaveItem = () => {
+const handleSaveItem = async () => {
   if(queryForm.index === 110){
     ElMessage({message: "请先选择音响校准",type: "warning",});
     return
   }
+  //保存时已经校准完成，关闭正在播放音频
+  await auditionApi.stopTest();
   const answer = ref<AlignDataSignal>()
   answer.value= {index:queryForm.index,signalSoundVolume:queryForm.signalSoundVolume,signalCalibrated:true}
   // 答案写入集合
   setData(queryForm.index,answer.value)
-  //TODO 改变数据样式
+  // 已保存校准，禁用校准控件
+  isSignalCalibration.value = false
+  // 改变数据样式
+  queryForm.environmentalCalibrated = true
+  //循环数据，修改控制样式
+  devices.value.forEach((x)=>{
+    if(x.index == queryForm.index){
+      x.signalCalibrated = true
+    }
+  })
+
 };
 //添加答案，如果存在则合并更新，不存在则直接存入
 const setData = (key,value)=>{
@@ -309,9 +343,22 @@ const setData = (key,value)=>{
       testMap.set(key,value)
     }
 }
-
+/**
+ * 保存阈值校准方案
+ */
 const handleCalibration = async (item: any, index: number) => {
-  isCalibration.value = !isCalibration.value;
+  // 根据devices数据，判断是否全部校准
+  let evnArr = devices.value.map(x=>x.environmentalCalibrated).filter(x=>x != undefined)
+  let sinArr = devices.value.map(x=>x.signalCalibrated).filter(x=>x != undefined)
+  // evn sin任一为false则给提示
+  let evn =  evnArr.every(x=>x == true)
+  let sin =  sinArr.every(x=>x == true)
+  console.info((evn && sin),"sin是否全部校准")
+  if(!(evn && sin)){
+    ElMessage({message: "方案未全部校准完成,请检查",type: "warning",});
+    return
+  }
+  isCalibration.value = false;
   item.isCalibration = !item.isCalibration;
   const form = {
     id: props.testData.id,
