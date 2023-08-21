@@ -131,8 +131,7 @@ import type { CSSProperties } from "vue";
 import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
-import { kebabCase } from "element-plus/es/utils";
-import { fa } from "element-plus/es/locale";
+import { pa, tr } from "element-plus/es/locale";
 
 const setup = ()=>{
   //清空答案记录
@@ -249,24 +248,49 @@ watch(
   { deep: true, immediate: true }
 );
 const emit = defineEmits(["handleBack"]);
+/**
+ * 播放
+ * TODO 构建参数
+ */
 const handleStart = async () => {
-  console.info(props.testData,"开始测试")
-  const res = await auditionApi.startTest(props.testData);
+  auditionApi.stopTest()
+  let item: any =  getItem(queryForm.index);
+  //构建对象 signalSource
+  let param = {id:props.testData.id,"enableManualPlayMode":false,signalSource:[{
+    audios:[{"target": queryForm.index, "file": item.signalSource,"volume": queryForm.signalSoundVolume}],
+  }]}
+  
+  const res = await auditionApi.startTest(param,true);
   if (res.code == 0) {
     isStart = true;
   }
 };
 /**
+ * 根据index后去对象信息，index为数组中对象index字段
+ * @param index 对象索引，根据索引获取对象
+ */
+const getItem = (index)=>{
+  if(!index) return
+  return devices.value.filter(x=>x.index == index)[0]
+}
+/**
  * 循环播放
  * TODO 构建参数
  */
 const handleCirculate = async () => {
-  const res = await auditionApi.startTest(props.testData, true);
+  auditionApi.stopTest()
+  //获取测试对象信息
+  let item: any =  getItem(queryForm.index);
+  //构建参数
+  let param = {id:props.testData.id,"enableManualPlayMode":true,envSoundConfig:[
+    {"target": queryForm.index, "file": item.environmentalSource,"volume": queryForm.environmentalSoundVolume},
+  ]}
+  //调用接口
+  const res = await auditionApi.startTest(param,true);
   if (res.code == 0) {
     isStart = true;
   }
 };
-
 
 const handleSave = async () => {
   const res = await auditionApi.stopTest();
