@@ -70,7 +70,7 @@
         <div
           style="width: 230px;margin-top: 40px;margin-left: 20px;height: 61px;display: flex;align-items: center;background: #d8d8d8;justify-content: space-around;"        >
           <el-button size="large" @click="handleStart">播放</el-button>
-          <el-button size="large" @click="handleCirculate">循环播放</el-button>
+          <el-button size="large" @click="handleCirculate">循环</el-button>
         </div>
         <!-- 信号声音 -->
         <el-row class="el-row-box" style="display: flex; margin-top: 90px; align-items: center;width: 900px;">
