@@ -202,6 +202,17 @@ class ImitateApi {
       data
     }) 
   }
+   /**
+   * 获取扬声器测听数据 
+   * @param
+   * @returns 
+   */
+   getAudioTest() {
+    return http.request({
+      url: '/v2/native/audio-test/list',
+      method: 'POST',
+    }) 
+  }
    /** 
    * 上传校准值
    * @param id

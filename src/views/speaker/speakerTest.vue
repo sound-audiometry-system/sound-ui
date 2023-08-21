@@ -82,6 +82,7 @@ let isPlay = ref(false);
 let isSave = false
 const dialogVisible = ref(false);
 let isOpen = false;
+const fileUrl = []
 let store = useStore();
 const route = useRoute();
 let isSuccess = false
@@ -110,6 +111,7 @@ const form = reactive({
   operator: "",
   reason: "",
   advice: "",
+  recordPath: ''
 });
 const rules = reactive<FormRules<RuleForm>>({
   operator: [{ required: true, message: "请输入操作人姓名", trigger: "blur" }],
@@ -165,6 +167,7 @@ const handleSave = async (formEl: FormInstance | undefined) => {
   //保存
   formEl.validate(async (valid, fields) => {
     if (valid) {
+      form.recordPath = fileUrl.join(',')
       const res = await auditionApi.report(form);
       if (res.code == 0) {
         isStart = false;
@@ -263,6 +266,9 @@ const handleStopAudio = () => {
       formData.append("resourceId", testData[0].id);
       const res = await auditionApi.fileUpload(formData);
       isOpen = false;
+      if(res.code == 0) {
+        fileUrl.push(res.data)
+      }
       ElMessage({ message: "录音关闭",type: "success",});
     },
     function (msg) {

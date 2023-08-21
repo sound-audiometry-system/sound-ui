@@ -58,6 +58,15 @@
 import sound from "../../components/sound/index.vue";
 import speakerChart from "./components/speakerChart.vue";
 import userHeader from "../lay/MainHeader.vue";
+import { imitateApi } from "@/serve/api/user";
+import { onMounted } from "vue";
+// getAudioTest
+const getAudioTest = async ()=> {
+  const res = await imitateApi.getAudioTest()
+}
+onMounted(()=> {
+  getAudioTest()
+})
 </script>
 
 <style lang="scss" scoped>

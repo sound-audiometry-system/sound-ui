@@ -131,8 +131,8 @@
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" env-index="122"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button :disabled="props.isPlay" size="large" plain @click="handleStart">开始</el-button>
-        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart">开始</el-button>
+        <el-button :disabled="!props.isPlay || !isStop" size="large" plain @click="handleSave(1)">保存</el-button>
         <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
@@ -231,6 +231,7 @@ type Props = {
   imageData: any;
   isSave: any;
   isPlay: any;
+  fileUrl: any;
 };
 const emit = defineEmits([
   "handleStart",
@@ -244,6 +245,7 @@ const emit = defineEmits([
 const props = defineProps<Props>();
 let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
+const isStop = ref(false)
 let answerMap: any = new Map();
 const itemId = ref("");
 let displayId = 0;
@@ -266,6 +268,7 @@ const handleClkItem = (index) => {
 };
 const handleStart = () => {
   answerMap = new Map();
+  isStop.value = false
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
@@ -281,7 +284,9 @@ const handleStop = () => {
 const handleSave = (type: number) => {
   emit("handleSave", type, Array.from(answerMap.values()));
 };
-const handleAudio = () => {
+const handleAudio = (key) => {
+  if (isOpen.value && key === 'recordStart') return
+  if (!isOpen.value && key === 'recordStop') return
   isOpen.value = !isOpen.value;
   emit(isOpen.value ? "handleAudio" : "handleStopAudio");
 };
@@ -374,11 +379,14 @@ onMounted(() => {
       answerIndex.value = -1;
       soundIndex.value = 0;
       displayId = 0;
-      console.log(props.isSave);
-      !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()));
+      // console.log(props.isSave);
+      // !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()));
       return;
     }
-    let item = JSON.parse(e.newValue);
+    let item = JSON.parse(e.newValue); 
+    if (e.key === 'recordStart' || e.key === 'recordStop') {
+      handleAudio(e.key)
+    }
     if (e.key === "imageData") {
         if (rePlayId != item.id || answerIndex.value + 1 != item.id) answerIndex.value += 1;
         isCheckFlag.value = false;
@@ -399,10 +407,11 @@ onMounted(() => {
       source = item.source;
     }
     if (e.key === "audioStop") {
-      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
-        answerMarks.value[answerIndex.value].answerMark = 2;
-      }
-      answerForm = {};
+      // if (answerMarks.value[answerIndex.value].answerMark !== 3) {
+      //   answerMarks.value[answerIndex.value].answerMark = 2;
+      // }
+      // answerForm = {};
+      isStop.value = true
       // handleStop()
     }
   });
