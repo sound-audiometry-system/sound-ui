@@ -50,7 +50,7 @@ type Props = {
 };
 const props = defineProps<Props>();
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "");
-const testData = JSON.parse(sessionStorage.getItem("testData") || "");
+const testData = sessionStorage.getItem("testData") ? JSON.parse(sessionStorage.getItem("testData") || "") : "";
 let revertData = [
   {
     label: "切换测试模式",
