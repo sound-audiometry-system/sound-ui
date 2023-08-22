@@ -128,20 +128,51 @@
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
       <div style="height: 320px; width: 760px">
-        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" env-index="122"></sound>
+        <sound
+          @handleClkItem="handleClkItem"
+          :sound-index="soundIndex"
+          env-index="122"
+        ></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart">开始</el-button>
-        <el-button :disabled="!props.isPlay || !isStop" size="large" plain @click="handleSave(1)">保存</el-button>
-        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button
+          :disabled="props.isPlay || isStop"
+          size="large"
+          plain
+          @click="handleStart"
+          >开始</el-button
+        >
+        <el-button
+          :disabled="!props.isPlay || !isStop"
+          size="large"
+          plain
+          @click="handleSave(1)"
+          >保存</el-button
+        >
+        <el-button
+          :disabled="!props.isPlay"
+          size="large"
+          plain
+          @click="handleSave(2)"
+          >提前结束</el-button
+        >
       </el-row>
       <el-row class="el-btn b">
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev"
-          >上一个(左键)</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleNext"
-          >下一个(右键)</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled" @click="handleReImage"
-          >重复</el-button>
+        <el-button
+          :disabled="!props.isPlay || isDisabled || enableManualplavMode"
+          @click="handlePrev"
+          >上一个(左键)</el-button
+        >
+        <el-button
+          :disabled="!props.isPlay || isDisabled || enableManualplavMode"
+          @click="handleNext"
+          >下一个(右键)</el-button
+        >
+        <el-button
+          :disabled="!props.isPlay || isDisabled"
+          @click="handleReImage"
+          >重复</el-button
+        >
       </el-row>
       <el-row>
         <div
@@ -198,7 +229,7 @@ import soundDialog from "./components/soundDialog.vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
 import { useStore, mapState } from "vuex";
-import { useThrottle } from '../../utils/index'
+import { useThrottle } from "../../utils/index";
 let store = useStore();
 const testData = store.getters.getTestData;
 let testName = ref(testData[0].name);
@@ -208,8 +239,8 @@ let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
-let isDisabled = ref(false)
-let enableManualplavMode = ref(!testData[0].enableManualPlayMode)
+let isDisabled = ref(false);
+let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
 let soundIndex = ref(30);
 let syncDisabledBtn = ref(false);
@@ -245,7 +276,7 @@ const emit = defineEmits([
 const props = defineProps<Props>();
 let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
-const isStop = ref(false)
+const isStop = ref(false);
 let answerMap: any = new Map();
 const itemId = ref("");
 let displayId = 0;
@@ -268,7 +299,7 @@ const handleClkItem = (index) => {
 };
 const handleStart = () => {
   answerMap = new Map();
-  isStop.value = false
+  isStop.value = false;
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
@@ -282,13 +313,13 @@ const handleStop = () => {
   // emit("handleStop");
 };
 const handleSave = (type: number) => {
-  emit("handleSave", type, Array.from(answerMap.values()));
+    emit("handleSave", type, Array.from(answerMap.values()));
 };
-const handleAudio = (key) => {
-  if (isOpen.value && key === 'recordStart') return
-  if (!isOpen.value && key === 'recordStop') return
+const handleAudio = async (key) => {
+  if (isOpen.value && key === "recordStart") return;
+  if (!isOpen.value && key === "recordStop") return;
   isOpen.value = !isOpen.value;
-  emit(isOpen.value ? "handleAudio" : "handleStopAudio");
+  await emit(isOpen.value ? "handleAudio" : "handleStopAudio");
 };
 const handleStopAudio = () => {
   emit("handleStopAudio");
@@ -312,44 +343,56 @@ const removeItem = () => {
   });
 };
 // 上一个
-const handlePrev = useThrottle(async () => {
-  //删除答案
-  removeItem()
-  const res = await auditionApi.prevTest();
-  if (res.code == 0) {
-    isCheckFlag.value = false;
-    //因为 imageDate 会+1，所以这里需要重新赋值 -2
-    if(answerIndex.value > 0)  answerIndex.value-=2;
-  }
-}, 1500, isDisabled);
+const handlePrev = useThrottle(
+  async () => {
+    //删除答案
+    removeItem();
+    const res = await auditionApi.prevTest();
+    if (res.code == 0) {
+      isCheckFlag.value = false;
+      //因为 imageDate 会+1，所以这里需要重新赋值 -2
+      if (answerIndex.value > 0) answerIndex.value -= 2;
+    }
+  },
+  1500,
+  isDisabled
+);
 // 下一个
-const handleNext = useThrottle(async () => {
-  const res = await auditionApi.nextTest();
-  if (res.code == 0) {
-    // isCheckFlag.value = false;
-    // answerIndex.value++;
-  }
-}, 1500, isDisabled);
+const handleNext = useThrottle(
+  async () => {
+    const res = await auditionApi.nextTest();
+    if (res.code == 0) {
+      // isCheckFlag.value = false;
+      // answerIndex.value++;
+    }
+  },
+  1500,
+  isDisabled
+);
 // 重复
-const handleReImage = useThrottle(async () => {
-  //删除答案
-  removeItem()
-  const res = await auditionApi.reImageTest();
-  if (res.code == 0) {
-    isCheckFlag.value = false;
-    rePlayId = displayId;
-    //因为 imageDate 会被修改，所以这里需要重新赋值 -1
-    if(answerIndex.value > 0) answerIndex.value--;
-  }
-}, 1500, isDisabled);
+const handleReImage = useThrottle(
+  async () => {
+    //删除答案
+    removeItem();
+    const res = await auditionApi.reImageTest();
+    if (res.code == 0) {
+      isCheckFlag.value = false;
+      rePlayId = displayId;
+      //因为 imageDate 会被修改，所以这里需要重新赋值 -1
+      if (answerIndex.value > 0) answerIndex.value--;
+    }
+  },
+  1500,
+  isDisabled
+);
 const mod = (n: number, m: number) => {
   return parseInt(n / m + "");
 };
-const handkeyCode = (e)=> {
-  if(e.keyCode === 32){
-    handleCheck()
+const handkeyCode = (e) => {
+  if (e.keyCode === 32) {
+    handleCheck();
   }
-}
+};
 const checkedImg = (item, index) => {
   if (!isCheckFlag.value) return;
   sycnDisabledBtn.value = false;
@@ -369,7 +412,7 @@ const checkedImg = (item, index) => {
   emit("handleResume");
 };
 onMounted(() => {
-  window.addEventListener('keydown', handkeyCode, true)//开启监听键盘按下事件
+  window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
       for (const item of answerMarks.value) {
@@ -383,19 +426,20 @@ onMounted(() => {
       // !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()));
       return;
     }
-    let item = JSON.parse(e.newValue); 
-    if (e.key === 'recordStart' || e.key === 'recordStop') {
-      handleAudio(e.key)
+    let item = JSON.parse(e.newValue);
+    if (e.key === "recordStart" || e.key === "recordStop") {
+      handleAudio(e.key);
     }
     if (e.key === "imageData") {
-        if (rePlayId != item.id || answerIndex.value + 1 != item.id) answerIndex.value += 1;
-        isCheckFlag.value = false;
+      if (rePlayId != item.id || answerIndex.value + 1 != item.id)
+        answerIndex.value += 1;
+      isCheckFlag.value = false;
     }
     // 1111
     if (e.key === "audioStart") {
       syncDisabledBtn.value = false;
       isCheckFlag.value = false;
-      //TODO newValue 数据结构问题  
+      //TODO newValue 数据结构问题
       // displayId != e.id && displayId = e?.id
       displayId = item.id;
       itemId.value = item.file;
@@ -411,7 +455,7 @@ onMounted(() => {
       //   answerMarks.value[answerIndex.value].answerMark = 2;
       // }
       // answerForm = {};
-      isStop.value = true
+      isStop.value = true;
       // handleStop()
     }
   });

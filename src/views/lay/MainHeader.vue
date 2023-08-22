@@ -63,26 +63,20 @@ const changePlan = (val) => {
   //TODO 处理方案变化
   // console.info(val, "val");
   // console.info(testSelectData.value[0], "testSelectData");
-  ElMessageBox.confirm(
-    '确定切换测试方案？',
-    '提示',
-    {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
-      type: 'warning',
-    }
-  )
-    .then(() => {
-      const testDataFlt = testSelectData.value[0].data.filter(
-    (item) => item.id === val
-  );
-  // console.log(testDataFlt)
-  store.commit("setTestData", testDataFlt);
-  // console.log(22222)
-  // if (testResult.value == 1) {
-  router.push({ path: "/speaker", query: { type: "2", t: Date.now() } });
-    })
-  
+  ElMessageBox.confirm("确定切换测试方案？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(() => {
+    const testDataFlt = testSelectData.value[0].data.filter(
+      (item) => item.id === val
+    );
+    // console.log(testDataFlt)
+    store.commit("setTestData", testDataFlt);
+    // console.log(22222)
+    // if (testResult.value == 1) {
+    router.push({ path: "/speaker", query: { type: "2", t: Date.now() } });
+  });
 };
 </script>
 <style scoped lang="scss">

@@ -4,14 +4,19 @@
     <el-header>
       <userHeader :isPlay="isPlay"></userHeader>
     </el-header>
-    <el-main ref="main">
+    <el-main v-loading="isOpenLoading" ref="main">
       <el-tabs v-model="typeName" stretch="true" type="border-card">
         <!-- <el-tab-pane name="1" label="扬声器测听"> -->
-          <!-- echarts图表 -->
-          <!-- <amplifier-test></amplifier-test> -->
-          <!-- <div id="echarts-a" style="width: 600px;height:400px;"></div> -->
+        <!-- echarts图表 -->
+        <!-- <amplifier-test></amplifier-test> -->
+        <!-- <div id="echarts-a" style="width: 600px;height:400px;"></div> -->
         <!-- </el-tab-pane> -->
-        <el-tab-pane  align="left" style="font-size: x-large;" name="2" label="听力测试">
+        <el-tab-pane
+          align="left"
+          style="font-size: x-large"
+          name="2"
+          label="听力测试"
+        >
           <hearTest
             ref="childRef"
             :imageData="imageData"
@@ -65,7 +70,7 @@
 </template>
 <script lang="ts" setup>
 import { onMounted, ref, computed, watch, reactive, inject } from "vue";
-import { ElMessage } from 'element-plus';
+import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
 // import * as echarts from "echarts";
@@ -76,17 +81,18 @@ import hearTest from "./hearTest.vue";
 // import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
-const typeName = ref('1')
+const typeName = ref("1");
 let isStart = false;
 let isPlay = ref(false);
-let isSave = false
+let isSave = false;
 const dialogVisible = ref(false);
 let isOpen = false;
-const fileUrl = []
+const isOpenLoading = ref(false)
+const fileUrl = [];
 let store = useStore();
 const route = useRoute();
-let isSuccess = false
-if(route.query.type) typeName.value=route.query.type
+let isSuccess = false;
+if (route.query.type) typeName.value = route.query.type;
 // console.log(store, 'store')
 const testData = store.getters.getTestData;
 const main = ref();
@@ -95,9 +101,9 @@ let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
-const userInfo = JSON.parse(sessionStorage.getItem("userInfo")|| "");
+const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "");
 const openType = ref(0);
-const handleTestStop = inject<() => void>('handleStop');
+const handleTestStop = inject<() => void>("handleStop");
 interface RuleForm {
   operator: string;
 }
@@ -106,12 +112,12 @@ interface RuleForm {
 const form = reactive({
   uid: userInfo[0].uid,
   testId: testData[0].id,
-  answerList:[],
+  answerList: [],
   // answerList: testData[0].signalSoundConfig,
   operator: "",
   reason: "",
   advice: "",
-  recordPath: ''
+  recordPath: "",
 });
 const rules = reactive<FormRules<RuleForm>>({
   operator: [{ required: true, message: "请输入操作人姓名", trigger: "blur" }],
@@ -138,7 +144,7 @@ const startTest = async (value1, value2) => {
 };
 const handleClose = () => {
   dialogVisible.value = false;
-  handleResume()
+  handleResume();
 };
 const stopTest = async () => {
   //结束
@@ -146,7 +152,7 @@ const stopTest = async () => {
   if (res.code == 0) {
     isStart = false;
     isPlay.value = false;
-    sessionStorage.setItem('imageData', "")
+    sessionStorage.setItem("imageData", "");
   }
 };
 const handlePause = async () => {
@@ -157,23 +163,36 @@ const handleResume = async () => {
   const res = await auditionApi.resumeTest();
 };
 const handleOpen = (type, answerList) => {
-  openType.value = type;
-  form.answerList = answerList
-  dialogVisible.value = true;
-  handlePause()
+  if (isOpen) {
+    ElMessageBox.confirm("当前录音未关闭，是否关闭？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    }).then(async () => {
+      openType.value = type;
+      form.answerList = answerList;
+      dialogVisible.value = true;
+      handlePause();
+    });
+  } else {
+    openType.value = type;
+      form.answerList = answerList;
+      dialogVisible.value = true;
+      handlePause();
+  }
 };
 const handleSave = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   //保存
   formEl.validate(async (valid, fields) => {
     if (valid) {
-      form.recordPath = fileUrl.join(',')
+      form.recordPath = fileUrl.join(",");
       const res = await auditionApi.report(form);
       if (res.code == 0) {
         isStart = false;
         isPlay.value = false;
         dialogVisible.value = false;
-        isSave = true
+        isSave = true;
         handleStop();
         // handleTestStop?.()
         ElMessage({
@@ -250,6 +269,7 @@ const handleAudio = async () => {
 };
 const handleStopAudio = () => {
   if (!isOpen) return;
+  isOpenLoading.value = true
   rec.stop(
     async function (blob, duration) {
       //简单利用URL生成本地文件地址，注意不用了时需要revokeObjectURL，否则霸占内存
@@ -265,17 +285,19 @@ const handleStopAudio = () => {
       formData.append("upfile", blob, "test.mp3");
       formData.append("resourceId", testData[0].id);
       const res = await auditionApi.fileUpload(formData);
-      isOpen = false;
-      if(res.code == 0) {
-        fileUrl.push(res.data)
+      if (res.code == 0) {
+        fileUrl.push(res.data);
       }
-      ElMessage({ message: "录音关闭",type: "success",});
+      isOpen = false;
+      isOpenLoading.value = false
+      ElMessage({ message: "录音关闭", type: "success" });
     },
     function (msg) {
       console.log("录音失败:" + msg);
       rec.close(); //可以通过stop方法的第3个参数来自动调用close
       rec = null;
       isOpen = false;
+      isOpenLoading.value = false
     }
   );
 };
@@ -297,16 +319,16 @@ onMounted(() => {
       isStart = false;
       isPlay.value = false;
       // imageData = {}
-      if(!isSuccess) {
+      if (!isSuccess) {
         ElMessage({
-        message: "方案播放完成",
-        type: "success",
-      });
+          message: "方案播放完成",
+          type: "success",
+        });
       }
-      isSuccess = true
-      window.setTimeout(()=> {
-        isSuccess = false
-      }, 2000)
+      isSuccess = true;
+      window.setTimeout(() => {
+        isSuccess = false;
+      }, 2000);
       // openType.value == 0 && handleOpen(1);
       if (!isOpen) {
         handleStopAudio();
@@ -315,16 +337,14 @@ onMounted(() => {
       return;
     }
 
-    if(e.key==="imageClean"){
+    if (e.key === "imageClean") {
       imageData = reactive({});
       return;
     }
     if (e.key === "imageData") {
       answerIndex.value += 1;
       if (e.newValue) {
-        imageData = reactive(
-          JSON.parse(e.newValue || "")
-        );
+        imageData = reactive(JSON.parse(e.newValue || ""));
       }
       if (imageData.answerList && imageData.answerList.length != 0) {
         for (const item of imageData.answerList) {
@@ -348,13 +368,12 @@ onMounted(() => {
   .el-main {
     padding-block: inherit;
     padding: 0 !important;
-    
   }
 }
 .el-tabs__item {
-        font-size: x-large;
-        text-align: left;
-    }
+  font-size: x-large;
+  text-align: left;
+}
 .el-tabs--border-card {
   background-color: #f5f5f5;
 }
