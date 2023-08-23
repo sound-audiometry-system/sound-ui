@@ -7,18 +7,19 @@
     @click="handleClkChart"
     v-once
   ></div>
-  <p>转换后的X坐标值：{{ convertToPixel(200, 'x') }}</p>
+  <!-- <p>转换后的X坐标值：{{ convertToPixel(200, 'x') }}</p> -->
 </template>
-  <script setup lang="ts">
-import { ref, Ref, reactive, defineComponent, onMounted, watch } from "vue";
-import { ECharts, EChartsOption, init } from "echarts";
+<script setup lang="ts">
+import { ref , onMounted,  } from "vue";
+import { ECharts } from "echarts";
 import * as echarts from 'echarts';
 import customPointImage from "@/assets/ucl.png";
-let chart: ECharts;
+import { ElMessage } from 'element-plus'
 let chartInstance: ECharts;
 const chartRef = ref<ECharts | null>(null);
-const data1 = [120, 132, 101, 134, 90, 230, 210];
-const data2 = [220, 182, 191, 234, 290, 330, 310];
+const UclData :number[]= [];
+const AcData :number[]= [];
+const xAxisData =  ["125", "250", "500", "1k", "2k", "4k", "8k"];
 // 自定义x轴的数字样式
 const formatter = (value: string) => {
   return value != 125 && value != 250 && value != "8k"
@@ -43,7 +44,7 @@ const option = {
   xAxis: {
     type: "category",
     boundaryGap: false,
-    data: ["125", "250", "500", "1k", "2k", "4k", "8k"],
+    data: xAxisData,
     axisLabel: {
       //轴上的字 字体、样式
       // inside: true,
@@ -71,116 +72,16 @@ const option = {
     },
   },
   yAxis: {
-    type: "category",
-    data: ["120", "100", "80", "60", "40", "20", "0"],
-    // splitLine: {
-    //   show: true,
-    //   lineStyle: {
-    //     color: "#ACACAC",
-    //   },
-    // },
+    type: "value",
+    min:0,max:120,
   },
-
-  series: [
-    // {
-    //   name: "Email",
-    //   type: "line",
-    //   stack: "Total",
-    //   areaStyle: {},
-    //   emphasis: {
-    //     focus: "series",
-    //   },
-    //   data: [
-    //     [0, 2],
-    //     [1, 2],
-    //     [2, 2],
-    //     [3, 2],
-    //     [4, 2],
-    //     [5, 2],
-    //     [6, 2],
-    //   ],
-    //   itemStyle: {
-    //     normal: {
-    //       color: "rgba(66, 66, 66, 0.14)",
-    //       opacity: 0.4,
-    //       lineStyle: {
-    //         color: "#3E3E3E",
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "Email",
-    //   type: "line",
-    //   stack: "Total",
-    //   areaStyle: {},
-    //   emphasis: {
-    //     focus: "series",
-    //   },
-    //   data: [
-    //     [0, 2],
-    //     [1, 2],
-    //     [2, 2],
-    //     [3, 2],
-    //     [4, 2],
-    //     [5, 2],
-    //     [6, 2],
-    //   ],
-    //   itemStyle: {
-    //     normal: {
-    //       color: "rgba(66, 66, 66, 0.14)",
-    //       opacity: 0.4,
-    //       lineStyle: {
-    //         color: "#3E3E3E",
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "Email",
-    //   type: "line",
-    //   stack: "Total",
-    //   data: [
-    //     [0, 3],
-    //     [1, 2],
-    //     [2, 3],
-    //     [3, 4],
-    //     [4, 5],
-    //   ],
-    //   // symbol: 'triangle',
-    //   symbol: `image://${customPointImage}`, // 自定义点的图标
-    //   symbolSize: [40, 20], // 图标的大小
-    //   itemStyle: {
-    //     normal: {
-    //       color: "#A01616",
-    //       lineStyle: {
-    //         color: "#A01616",
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "Union Ads",
-    //   type: "line",
-    //   stack: "Total",
-    //   data: [
-    //     [0, 1],
-    //     [1, 2],
-    //     [2, 3],
-    //     [3, 4],
-    //     [4, 5],
-    //   ],
-    //   symbolSize: 10,
-    //   itemStyle: {
-    //     normal: {
-    //       color: "#A01616",
-    //       lineStyle: {
-    //         color: "#A01616",
-    //       },
-    //     },
-    //   },
-    // },
-  ],
+  series: [{
+    data: UclData,
+    type: "line",
+  },{
+    data: AcData,
+    type: "line",
+  }],
   graphic: [
     {
       type: "rect",
@@ -209,35 +110,70 @@ const handleClkChart = (event) => {
   // console.log(chartRef.value.offsetWidth);
   // initChart()
 };
-const convertToPixel = (value: number, axisName: string) => {
-  const chartInstance = chartRef.value;
-  console.log(chartInstance)
-  if (chartInstance) {
-    return chartInstance.convertToPixel({ [axisName]: value }, "grid")[
-      axisName
-    ];
-  }
+// const convertToPixel = (value: number, axisName: string) => {
+//   const chartInstance = chartRef.value;
+//   console.log(chartInstance)
+//   if (chartInstance) {
+//     return chartInstance.convertToPixel({ [axisName]: value }, "grid")[
+//       axisName
+//     ];
+//   }
 
-  return 0;
-};
+//   return 0;
+// };
 const emit = defineEmits(["handleClk"]);
 onMounted(() => {
   // 获取挂载的组件实例
   // chart = init(chartRef.value as HTMLElement);
   
   initChart();
+  chartInstance.getZr().on("mouseup", (params: any) => {
+    console.log(poper);
+
+    let x= params.offsetX
+    let y= params.offsetY
+    let pixel =   chartInstance.convertFromPixel({
+      seriesIndex:0,xAxisIndex:0
+    },[x,y])
+    if(UclData.length == xAxisData.length){
+      ElMessage({
+        showClose: true,
+        message: '已超出最大数据量，请删除后再添加',
+        type: 'error',
+      });
+      return
+    }
+    //TODO 判断Ac还是Ucl
+    //获取到坐标后，需要自动计算它靠近那个数据
+    let yAxis =  pixel[1];
+    //计算出最近的坐标
+    let clkY =  Math.round(yAxis/20)*20
+    if(20>clkY || clkY>80){
+      ElMessage({
+        showClose: true,
+        message: '超出范围，请重新选择',
+        type: 'error',
+      });
+      return
+    }
+    UclData.push(clkY)
+    //TODO 区分Ac和Ucl
+    option.series[0].data = UclData
+    chartInstance.setOption(option)
+  });
+
   // 自适应
   window.onresize = function () {
     chartRef.value.resize();
   };
-  chartRef.value.on("click", (params: any) => {
-    console.log(params);
-    emit("handleClk", params.data);
-    data2.splice(params.dataIndex, 1, null);
-    if (chart) {
-      chart.setOption(option);
-    }
-  });
+  // chartRef.value.on("click", (params: any) => {
+  //   console.log(params);
+  //   emit("handleClk", params.data);
+  //   data2.splice(params.dataIndex, 1, null);
+  //   if (chart) {
+  //     chart.setOption(option);
+  //   }
+  // });
   return {};
 });
 </script>

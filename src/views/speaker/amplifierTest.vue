@@ -10,43 +10,25 @@
     <el-main>
   <div style="margin-top: 80px;">
     <el-row :gutter="10">
-      <el-col :span="13"
-        ><speaker-chart></speaker-chart>
+      <el-col :span="13"><speaker-chart></speaker-chart>
         <div class="chart-btm">
             <div style="display: flex;align-items: center;"><span class="left-box"></span>强制性频率</div>
             <div><el-button type="info" plain>保存并进行另一侧</el-button></div>
           </div>
-        </el-col
-      >
+        </el-col>
       <el-col :span="11">
         <sound></sound>
         <div style="margin-top: 60px">
-          <div class="mbm14 ac-btn btn-active">
-            <img
-              style="margin-right: 6px"
-              src="../../assets/ac.png"
-              width="40"
-              alt=""
-            />
+          <div :class="'mbm14 ac-btn '+acActive" v-on:click="clkAc">
+            <img style="margin-right: 6px" src="../../assets/ac.png" width="40" alt="" />
             AC
           </div>
-          <div class="mbm14 ac-btn">
-            <img
-              style="margin-right: 6px"
-              src="../../assets/ac.png"
-              width="40"
-              alt=""
-            />
+          <div :class="'mbm14 ac-btn '+uclActive" v-on:click="clkUcl">
+            <img style="margin-right: 6px" src="../../assets/ac.png" width="40" alt="" />
             UCL
           </div>
-          <div class="mbm14 bc-btn">
-            播放信号
-            <p class="c9">[空格]</p>
-          </div>
-          <div class="mbm14 bc-btn">
-            <p>保存点</p>
-            <p class="c9">[Enter]</p>
-          </div>
+          <div class="mbm14 bc-btn" >播放信号<p class="c9">[空格]</p></div>
+          <div class="mbm14 bc-btn"><p>保存点</p><p class="c9">[Enter]</p></div>
         </div>
       </el-col>
     </el-row>
@@ -59,7 +41,20 @@ import sound from "../../components/sound/index.vue";
 import speakerChart from "./components/speakerChart.vue";
 import userHeader from "../lay/MainHeader.vue";
 import { imitateApi } from "@/serve/api/user";
-import { onMounted } from "vue";
+import { onMounted,ref } from "vue";
+
+const clkUcl = () => {
+  uclActive.value = 'btn-active'
+  acActive.value = ''
+  console.log("clkUcl");
+}
+const clkAc = () => {
+  uclActive.value = ''
+  acActive.value = 'btn-active'
+  console.log("clkAc");
+}
+const acActive = ref('');
+const uclActive = ref('');
 // getAudioTest
 const getAudioTest = async ()=> {
   const res = await imitateApi.getAudioTest()
