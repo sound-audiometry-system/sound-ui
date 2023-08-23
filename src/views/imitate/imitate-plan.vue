@@ -34,7 +34,7 @@
           </el-row>
           <div style="width: 18%;margin-left: 10px;">
             <p>测试总数</p>
-            <div class="test-total-box">{{ 0 }}</div>
+            <div class="test-total-box">{{ testData.signalSoundConfig.length }}</div>
             <div style="margin-top: 10px;"><el-switch v-model="value3" disabled/></div>
             <p style="font-size: 12px;">同时打开两边显示器</p>
           </div>
