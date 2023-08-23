@@ -313,7 +313,7 @@ const handleStop = () => {
   // emit("handleStop");
 };
 const handleSave = (type: number) => {
-    emit("handleSave", type, Array.from(answerMap.values()));
+  emit("handleSave", type, Array.from(answerMap.values()));
 };
 const handleAudio = async (key) => {
   if (isOpen.value && key === "recordStart") return;
@@ -343,32 +343,26 @@ const removeItem = () => {
   });
 };
 // 上一个
-const handlePrev = useThrottle(
-  async () => {
-    //删除答案
-    removeItem();
-    const res = await auditionApi.prevTest();
-    if (res.code == 0) {
-      isCheckFlag.value = false;
-      //因为 imageDate 会+1，所以这里需要重新赋值 -2
-      if (answerIndex.value > 0) answerIndex.value -= 2;
-    }
-  },
-  1500,
-  isDisabled
-);
+const handlePrev = async () => {
+  //删除答案
+  removeItem();
+  isDisabled.value = true;
+  const res = await auditionApi.prevTest();
+  if (res.code == 0) {
+    isCheckFlag.value = false;
+    //因为 imageDate 会+1，所以这里需要重新赋值 -2
+    if (answerIndex.value > 0) answerIndex.value -= 2;
+  }
+};
 // 下一个
-const handleNext = useThrottle(
-  async () => {
-    const res = await auditionApi.nextTest();
-    if (res.code == 0) {
-      // isCheckFlag.value = false;
-      // answerIndex.value++;
-    }
-  },
-  1500,
-  isDisabled
-);
+const handleNext = async () => {
+  isDisabled.value = true;
+  const res = await auditionApi.nextTest();
+  if (res.code == 0) {
+    // isCheckFlag.value = false;
+    // answerIndex.value++;
+  }
+};
 // 重复
 const handleReImage = useThrottle(
   async () => {
@@ -447,7 +441,7 @@ onMounted(() => {
       answerForm.file = item.file; //题目id
       answerForm.correct = true; //默认正确
       if (enableManualplavMode) {
-        isDisabled.value = true
+        isDisabled.value = true;
       }
       //添加到答案集map中
       answerMap.set(item.uuid, answerForm);
@@ -460,7 +454,7 @@ onMounted(() => {
       // answerForm = {};
       isStop.value = true;
       if (enableManualplavMode) {
-        isDisabled.value = false
+        isDisabled.value = false;
       }
       // handleStop()
     }
