@@ -446,6 +446,9 @@ onMounted(() => {
       soundIndex.value = mod(item.target, 2);
       answerForm.file = item.file; //题目id
       answerForm.correct = true; //默认正确
+      if (enableManualplavMode) {
+        isDisabled.value = true
+      }
       //添加到答案集map中
       answerMap.set(item.uuid, answerForm);
       source = item.source;
@@ -456,6 +459,9 @@ onMounted(() => {
       // }
       // answerForm = {};
       isStop.value = true;
+      if (enableManualplavMode) {
+        isDisabled.value = false
+      }
       // handleStop()
     }
   });
