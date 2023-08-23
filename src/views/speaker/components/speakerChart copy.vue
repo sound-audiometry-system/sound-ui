@@ -5,18 +5,14 @@
     ref="chartRef"
     :style="{ width: '940px', height: '526px' }"
     @click="handleClkChart"
-    v-once
   ></div>
-  <p>转换后的X坐标值：{{ convertToPixel(200, 'x') }}</p>
 </template>
   <script setup lang="ts">
 import { ref, Ref, reactive, defineComponent, onMounted, watch } from "vue";
 import { ECharts, EChartsOption, init } from "echarts";
-import * as echarts from 'echarts';
 import customPointImage from "@/assets/ucl.png";
 let chart: ECharts;
-let chartInstance: ECharts;
-const chartRef = ref<ECharts | null>(null);
+const chartRef: Ref<HTMLElement | null> = ref(null);
 const data1 = [120, 132, 101, 134, 90, 230, 210];
 const data2 = [220, 182, 191, 234, 290, 330, 310];
 // 自定义x轴的数字样式
@@ -200,37 +196,22 @@ const option = {
   ],
 };
 const initChart = () => {
-  chartInstance = echarts.init(chartRef.value as HTMLDivElement);
-  chartInstance.setOption(option);
-  chartRef.value = chartInstance;
+  chart.setOption(option);
 };
 const handleClkChart = (event) => {
   // console.log(2222)
-  // console.log(chartRef.value.offsetWidth);
-  // initChart()
-};
-const convertToPixel = (value: number, axisName: string) => {
-  const chartInstance = chartRef.value;
-  console.log(chartInstance)
-  if (chartInstance) {
-    return chartInstance.convertToPixel({ [axisName]: value }, "grid")[
-      axisName
-    ];
-  }
-
-  return 0;
+  console.log(chartRef.value.offsetWidth);
 };
 const emit = defineEmits(["handleClk"]);
 onMounted(() => {
   // 获取挂载的组件实例
-  // chart = init(chartRef.value as HTMLElement);
-  
+  chart = init(chartRef.value as HTMLElement);
   initChart();
   // 自适应
   window.onresize = function () {
-    chartRef.value.resize();
+    chart.resize();
   };
-  chartRef.value.on("click", (params: any) => {
+  chart.on("click", (params: any) => {
     console.log(params);
     emit("handleClk", params.data);
     data2.splice(params.dataIndex, 1, null);
