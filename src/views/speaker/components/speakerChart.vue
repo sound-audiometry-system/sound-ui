@@ -127,8 +127,8 @@ onMounted(() => {
   // chart = init(chartRef.value as HTMLElement);
   
   initChart();
-  chartInstance.getZr().on("mouseup", (params: any) => {
-    console.log(poper);
+  chartInstance.getZr().on("click", (params: any) => {
+    // console.log(poper);
 
     let x= params.offsetX
     let y= params.offsetY
@@ -164,16 +164,16 @@ onMounted(() => {
 
   // 自适应
   window.onresize = function () {
-    chartRef.value.resize();
+    chartInstance.resize();
   };
-  // chartRef.value.on("click", (params: any) => {
-  //   console.log(params);
-  //   emit("handleClk", params.data);
-  //   data2.splice(params.dataIndex, 1, null);
-  //   if (chart) {
-  //     chart.setOption(option);
-  //   }
-  // });
+  chartInstance.on("contextmenu", (params: any) => {
+    params.event.event.preventDefault()
+    UclData.splice(params.dataIndex, 1);
+    if (chartInstance) {
+      option.series[0].data = UclData
+    chartInstance.setOption(option)
+    }
+  });
   return {};
 });
 </script>
