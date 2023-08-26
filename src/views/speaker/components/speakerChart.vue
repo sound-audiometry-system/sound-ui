@@ -15,6 +15,7 @@ import { ECharts } from "echarts";
 import * as echarts from "echarts";
 import customPointImage from "@/assets/ucl2.png";
 import { ElMessage } from "element-plus";
+import { imitateApi } from "@/serve/api/user";
 let chartInstance: ECharts;
 type Props = {
   chartIndex: any;
@@ -130,12 +131,12 @@ const option = {
         normal: {
           // color: "rgba(66, 66, 66, 0.14)",
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: "rgba(66, 66, 66, 0.3)" }, //s 100以下的颜色设为透明
-          // { offset: 0.2, color: "rgba(66, 66, 66, 0.4)" }, // 100-120之间的颜色设为透明
-          { offset: 0.4, color: "rgba(66, 66, 66, 0.3)" }, // 100-120之间的颜色设为透明
-          { offset: 0.5, color: "rgba(66, 66, 66, 0.3)" }, // 100-120之间插入透明到红色之间的颜色
-          { offset: 1, color: "rgba(0,0,0,0)" }, // 大于120的颜色设为红色
-        ]),
+            { offset: 0, color: "rgba(66, 66, 66, 0.3)" }, //s 100以下的颜色设为透明
+            // { offset: 0.2, color: "rgba(66, 66, 66, 0.4)" }, // 100-120之间的颜色设为透明
+            { offset: 0.4, color: "rgba(66, 66, 66, 0.3)" }, // 100-120之间的颜色设为透明
+            { offset: 0.5, color: "rgba(66, 66, 66, 0.3)" }, // 100-120之间插入透明到红色之间的颜色
+            { offset: 1, color: "rgba(0,0,0,0)" }, // 大于120的颜色设为红色
+          ]),
           opacity: 0.4,
           // lineStyle: {
           //   color: "#3E3E3E",
@@ -156,12 +157,12 @@ const option = {
         normal: {
           // color: "rgba(66, 66, 66, 0.14)",
           color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          { offset: 0, color: "rgba(66, 66, 66, 0.3)" }, //s 100以下的颜色设为透明
-          // { offset: 0.2, color: "rgba(66, 66, 66, 0.4)" }, // 100-120之间的颜色设为透明
-          { offset: 0.4, color: "rgba(66, 66, 66, 0.3)" }, // 100-120之间的颜色设为透明
-          { offset: 0.5, color: "rgba(0,0,0,0)" }, // 100-120之间插入透明到红色之间的颜色
-          { offset: 1, color: "rgba(0,0,0,0)" }, // 大于120的颜色设为红色
-        ]),
+            { offset: 0, color: "rgba(66, 66, 66, 0.3)" }, //s 100以下的颜色设为透明
+            // { offset: 0.2, color: "rgba(66, 66, 66, 0.4)" }, // 100-120之间的颜色设为透明
+            { offset: 0.4, color: "rgba(66, 66, 66, 0.3)" }, // 100-120之间的颜色设为透明
+            { offset: 0.5, color: "rgba(0,0,0,0)" }, // 100-120之间插入透明到红色之间的颜色
+            { offset: 1, color: "rgba(0,0,0,0)" }, // 大于120的颜色设为红色
+          ]),
           opacity: 0.4,
           lineStyle: {
             color: "#3E3E3E",
@@ -191,7 +192,6 @@ const option = {
 const initChart = () => {
   chartInstance = echarts.init(chartRef.value as HTMLDivElement);
   chartInstance.setOption(option);
-  chartRef.value = chartInstance;
 };
 const handleClkChart = (event) => {
   console.log(props.chartIndex);
@@ -219,42 +219,87 @@ onMounted(() => {
   // chart = init(chartRef.value as HTMLElement);
 
   initChart();
-  chartInstance.getZr().on("click", (params: any) => {
+  chartInstance.getZr().on("click", async (params: any) => {
     let data = props.chartIndex == 0 ? AcData : UclData;
-    let x = params.offsetX;
-    let y = params.offsetY;
-    let pixel = chartInstance.convertFromPixel(
-      {
-        seriesIndex: 0,
-        xAxisIndex: 0,
-      },
-      [x, y]
+
+    const pointInPixel = [params.offsetX, params.offsetY];
+    // console.log(chartInstance.convertFromPixel("grid", pointInPixel));
+    // 使用 convertFromPixel方法 转换像素坐标值到逻辑坐标系上的点。获取点击位置对应的x轴数据的索引         值，借助于索引值的获取到其它的信息
+    // 转换X轴坐标
+    let pointInGrid = chartInstance.convertFromPixel(
+      { seriesIndex: 0 },
+      pointInPixel
     );
-    if (data.length == xAxisData.length) {
-      ElMessage({
-        showClose: true,
-        message: "已超出最大数据量，请删除后再添加",
-        type: "error",
-      });
-      return;
+    // 转换Y轴坐标
+    let pointInGrid2 = chartInstance.convertFromPixel(
+      { seriesIndex: 1 },
+      pointInPixel
+    );
+    // 所点击点的X轴坐标点所在X轴data的下标
+    let xIndex = pointInGrid[0];
+    // 所点击点的Y轴坐标点数值
+    let yIndex = pointInGrid2[1];
+    // 使用getOption() 获取图表的option
+    let op = chartInstance.getOption();
+    //获取到x轴的索引值和option之后，我们就可以获取我们需要的任意数据。
+    // 点击点的X轴对应坐标的名称
+    var xValue = op.xAxis[0].data[xIndex];
+    // 点击点的series -- data对应的值
+    // console.log(op.series)
+    const seriesData = op.series[props.chartIndex].data;
+    console.log(seriesData);
+    var value = seriesData[xIndex] && seriesData[xIndex][1];
+    const dataIndex = seriesData.findIndex((dataPoint) => {
+      return dataPoint[0] === xIndex && dataPoint[1] === value;
+    });
+    if (dataIndex > -1) {
+      // 处理点击折线点的逻辑
+      const form = {
+        file: xValue + "x" + value,
+        volume: 80,
+      };
+      const res = await imitateApi.playAudioTest(form);
+    } else {
+      // 处理点击画布的逻辑
+      // 如果绘制的点已等于x轴数量，停止执行
+      if (xAxisData.length === data.length) return;
+      // console.log(params);
+      let x = params.offsetX;
+      let y = params.offsetY;
+      let pixel = chartInstance.convertFromPixel(
+        {
+          seriesIndex: 0,
+          xAxisIndex: 0,
+        },
+        [x, y]
+      );
+      if (data.length == xAxisData.length) {
+        ElMessage({
+          showClose: true,
+          message: "已超出最大数据量，请删除后再添加",
+          type: "error",
+        });
+        return;
+      }
+      //TODO 判断Ac还是Ucl
+      //获取到坐标后，需要自动计算它靠近那个数据
+      let xAxis = pixel[0];
+      let yAxis = pixel[1];
+      //计算出最近的坐标
+      let clkY = Math.round(yAxis / 20) * 20;
+      if (20 > clkY || clkY > 80) {
+        ElMessage({
+          showClose: true,
+          message: "超出范围，请重新选择",
+          type: "error",
+        });
+        return;
+      }
+      data.push([xAxis, clkY]);
+      //TODO 区分Ac和Ucl
+      option.series[props.chartIndex].data = data;
+      chartInstance.setOption(option);
     }
-    //TODO 判断Ac还是Ucl
-    //获取到坐标后，需要自动计算它靠近那个数据
-    let yAxis = pixel[1];
-    //计算出最近的坐标
-    let clkY = Math.round(yAxis / 20) * 20;
-    if (20 > clkY || clkY > 80) {
-      ElMessage({
-        showClose: true,
-        message: "超出范围，请重新选择",
-        type: "error",
-      });
-      return;
-    }
-    data.push(clkY);
-    //TODO 区分Ac和Ucl
-    option.series[props.chartIndex].data = data;
-    chartInstance.setOption(option);
   });
 
   // 自适应

@@ -213,6 +213,18 @@ class ImitateApi {
       method: 'POST',
     }) 
   }
+  /**
+   * 播放扬声器测听数据 
+   * @param
+   * @returns 
+   */
+  playAudioTest(data:any) {
+    return http.request({
+      url: '/v2/native/audio-test/play',
+      method: 'POST',
+      data
+    }) 
+  }
    /** 
    * 上传校准值
    * @param id
