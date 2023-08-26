@@ -448,10 +448,10 @@ onMounted(() => {
       source = item.source;
     }
     if (e.key === "audioStop") {
-      // if (answerMarks.value[answerIndex.value].answerMark !== 3) {
-      //   answerMarks.value[answerIndex.value].answerMark = 2;
-      // }
-      // answerForm = {};
+      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
+        answerMarks.value[answerIndex.value].answerMark = 2;
+      }
+      answerForm = {};
       isStop.value = true;
       if (enableManualplavMode) {
         isDisabled.value = false;
