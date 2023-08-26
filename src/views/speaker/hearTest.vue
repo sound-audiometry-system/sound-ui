@@ -323,7 +323,7 @@ const handleAudio = async (key) => {
 };
 const handleStopAudio = () => {
   emit("handleStopAudio");
-};
+}; 
 const handleCheck = () => {
   isCheckFlag.value = true;
   syncDisabledBtn.value = true;
@@ -409,13 +409,14 @@ onMounted(() => {
   window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
-      for (const item of answerMarks.value) {
-        // console.log(item)
-        item.answerMark = 1;
-      }
+      // for (const item of answerMarks.value) {
+      //   // console.log(item)
+      //   item.answerMark = 1;
+      // }
       answerIndex.value = -1;
-      soundIndex.value = 0;
-      displayId = 0;
+      isStop.value = true;
+      // soundIndex.value = 0;
+      // displayId = 0;
       // console.log(props.isSave);
       // !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()));
       return;
@@ -452,7 +453,9 @@ onMounted(() => {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
       answerForm = {};
-      isStop.value = true;
+      // if (answerIndex.value + 1 === answerMarks.length) {
+      //   isStop.value = true;
+      // }
       if (enableManualplavMode) {
         isDisabled.value = false;
       }

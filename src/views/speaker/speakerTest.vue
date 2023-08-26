@@ -171,6 +171,7 @@ const handleOpen = (type, answerList) => {
     }).then(async () => {
       openType.value = type;
       form.answerList = answerList;
+      await handleStopAudio()
       dialogVisible.value = true;
       handlePause();
     });
@@ -317,7 +318,7 @@ onMounted(() => {
     // console.log('eee=>',e)
     if (!e.newValue) {
       isStart = false;
-      isPlay.value = false;
+      isPlay.value = true;
       // imageData = {}
       if (!isSuccess) {
         ElMessage({
@@ -336,7 +337,9 @@ onMounted(() => {
       imageData = reactive({});
       return;
     }
-
+    if (e.key === 'recordStart') {
+      isOpen = true
+    }
     if (e.key === "imageClean") {
       imageData = reactive({});
       return;

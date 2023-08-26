@@ -76,106 +76,106 @@ const option = {
     //   },
     // },
   },
-
+  
   series: [
-    // {
-    //   name: "Email",
-    //   type: "line",
-    //   stack: "Total",
-    //   areaStyle: {},
-    //   emphasis: {
-    //     focus: "series",
-    //   },
-    //   data: [
-    //     [0, 2],
-    //     [1, 2],
-    //     [2, 2],
-    //     [3, 2],
-    //     [4, 2],
-    //     [5, 2],
-    //     [6, 2],
-    //   ],
-    //   itemStyle: {
-    //     normal: {
-    //       color: "rgba(66, 66, 66, 0.14)",
-    //       opacity: 0.4,
-    //       lineStyle: {
-    //         color: "#3E3E3E",
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "Email",
-    //   type: "line",
-    //   stack: "Total",
-    //   areaStyle: {},
-    //   emphasis: {
-    //     focus: "series",
-    //   },
-    //   data: [
-    //     [0, 2],
-    //     [1, 2],
-    //     [2, 2],
-    //     [3, 2],
-    //     [4, 2],
-    //     [5, 2],
-    //     [6, 2],
-    //   ],
-    //   itemStyle: {
-    //     normal: {
-    //       color: "rgba(66, 66, 66, 0.14)",
-    //       opacity: 0.4,
-    //       lineStyle: {
-    //         color: "#3E3E3E",
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "Email",
-    //   type: "line",
-    //   stack: "Total",
-    //   data: [
-    //     [0, 3],
-    //     [1, 2],
-    //     [2, 3],
-    //     [3, 4],
-    //     [4, 5],
-    //   ],
-    //   // symbol: 'triangle',
-    //   symbol: `image://${customPointImage}`, // 自定义点的图标
-    //   symbolSize: [40, 20], // 图标的大小
-    //   itemStyle: {
-    //     normal: {
-    //       color: "#A01616",
-    //       lineStyle: {
-    //         color: "#A01616",
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   name: "Union Ads",
-    //   type: "line",
-    //   stack: "Total",
-    //   data: [
-    //     [0, 1],
-    //     [1, 2],
-    //     [2, 3],
-    //     [3, 4],
-    //     [4, 5],
-    //   ],
-    //   symbolSize: 10,
-    //   itemStyle: {
-    //     normal: {
-    //       color: "#A01616",
-    //       lineStyle: {
-    //         color: "#A01616",
-    //       },
-    //     },
-    //   },
-    // },
+    {
+      name: "Email",
+      type: "line",
+      stack: "Total",
+      areaStyle: {},
+      emphasis: {
+        focus: "series",
+      },
+      data: [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+        [3, 2],
+        [4, 2],
+        [5, 2],
+        [6, 2],
+      ],
+      itemStyle: {
+        normal: {
+          color: "rgba(66, 66, 66, 0.14)",
+          opacity: 0.4,
+          lineStyle: {
+            color: "#3E3E3E",
+          },
+        },
+      },
+    },
+    {
+      name: "Email",
+      type: "line",
+      stack: "Total",
+      areaStyle: {},
+      emphasis: {
+        focus: "series",
+      },
+      data: [
+        [0, 2],
+        [1, 2],
+        [2, 2],
+        [3, 2],
+        [4, 2],
+        [5, 2],
+        [6, 2],
+      ],
+      itemStyle: {
+        normal: {
+          color: "rgba(66, 66, 66, 0.14)",
+          opacity: 0.4,
+          lineStyle: {
+            color: "#3E3E3E",
+          },
+        },
+      },
+    },
+    {
+      name: "Email",
+      type: "line",
+      stack: "Total",
+      data: [
+        [0, 3],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        [4, 5],
+      ],
+      // symbol: 'triangle',
+      symbol: `image://${customPointImage}`, // 自定义点的图标
+      symbolSize: [40, 20], // 图标的大小
+      itemStyle: {
+        normal: {
+          color: "#A01616",
+          lineStyle: {
+            color: "#A01616",
+          },
+        },
+      },
+    },
+    {
+      name: "Union Ads",
+      type: "line",
+      stack: "Total",
+      data: [
+        [0, 1],
+        [1, 2],
+        [2, 3],
+        [3, 4],
+        [4, 5],
+      ],
+      symbolSize: 10,
+      itemStyle: {
+        normal: {
+          color: "#A01616",
+          lineStyle: {
+            color: "#A01616",
+          },
+        },
+      },
+    },
   ],
   graphic: [
     {

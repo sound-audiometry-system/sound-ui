@@ -38,6 +38,12 @@
         if (message.cmdType == 'audioStart') {
           sessionStorage.setItem('audioStart', JSON.stringify(message))
         }
+        if (message.cmdType == 'recordStart') {
+          sessionStorage.setItem('recordStart', JSON.stringify(message))
+        }
+        if (message.cmdType == 'recordStop') {
+          sessionStorage.setItem('recordStop', JSON.stringify(message))
+        }
         if (message.cmdType == 'audioStop') {
           sessionStorage.setItem('audioStop', JSON.stringify(message))
         }

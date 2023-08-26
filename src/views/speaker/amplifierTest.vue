@@ -10,7 +10,7 @@
     <el-main>
   <div style="margin-top: 80px;">
     <el-row :gutter="10">
-      <el-col :span="13"><speaker-chart></speaker-chart>
+      <el-col :span="13"><speaker-chart :chartIndex="chartIndex"></speaker-chart>
         <div class="chart-btm">
             <div style="display: flex;align-items: center;"><span class="left-box"></span>强制性频率</div>
             <div><el-button type="info" plain>保存并进行另一侧</el-button></div>
@@ -23,8 +23,8 @@
             <img style="margin-right: 6px" src="../../assets/ac.png" width="40" alt="" />
             AC
           </div>
-          <div :class="'mbm14 ac-btn '+uclActive" v-on:click="clkUcl">
-            <img style="margin-right: 6px" src="../../assets/ac.png" width="40" alt="" />
+          <div @click="chartIndex = 1" :class="'mbm14 ac-btn '+uclActive" v-on:click="clkUcl">
+            <img style="margin-right: 6px" src="../../assets/ucl.png" width="40" alt="" />
             UCL
           </div>
           <div class="mbm14 bc-btn" >播放信号<p class="c9">[空格]</p></div>
@@ -42,18 +42,21 @@ import speakerChart from "./components/speakerChart.vue";
 import userHeader from "../lay/MainHeader.vue";
 import { imitateApi } from "@/serve/api/user";
 import { onMounted,ref } from "vue";
-
+let chartIndex = ref(0)
 const clkUcl = () => {
   uclActive.value = 'btn-active'
   acActive.value = ''
+  chartIndex.value = 1
   console.log("clkUcl");
+  // console.log(chartIndex);
 }
 const clkAc = () => {
   uclActive.value = ''
   acActive.value = 'btn-active'
+  chartIndex.value = 0
   console.log("clkAc");
 }
-const acActive = ref('');
+const acActive = ref('btn-active');
 const uclActive = ref('');
 // getAudioTest
 const getAudioTest = async ()=> {
