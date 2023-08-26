@@ -1,12 +1,6 @@
 <!-- echarts组件 -->
 <template>
-  <div
-    id="myChart"
-    ref="chartRef"
-    :style="{ width: '940px', height: '526px' }"
-    @click="handleClkChart"
-    v-once
-  ></div>
+  <div id="myChart" ref="chartRef" :style="{ width: '940px', height: '526px' }" v-once></div>
   <!-- <p>转换后的X坐标值：{{ convertToPixel(200, 'x') }}</p> -->
 </template>
 <script setup lang="ts">
@@ -62,7 +56,6 @@ const option = {
       rich: {
         border: {
           borderWidth: 1,
-          borderColor: "black",
           borderRadius: 2,
           borderColor: "#d54949",
           padding: [3, 5],
@@ -193,23 +186,6 @@ const initChart = () => {
   chartInstance = echarts.init(chartRef.value as HTMLDivElement);
   chartInstance.setOption(option);
 };
-const handleClkChart = (event) => {
-  console.log(props.chartIndex);
-  // console.log(2222)
-  // console.log(chartRef.value.offsetWidth);
-  // initChart()
-};
-// const convertToPixel = (value: number, axisName: string) => {
-//   const chartInstance = chartRef.value;
-//   console.log(chartInstance)
-//   if (chartInstance) {
-//     return chartInstance.convertToPixel({ [axisName]: value }, "grid")[
-//       axisName
-//     ];
-//   }
-
-//   return 0;
-// };
 watch(props.chartIndex, (newValue, oldValue) => {
   console.log(props.chartIndex);
 });
@@ -217,11 +193,9 @@ const emit = defineEmits(["handleClk"]);
 onMounted(() => {
   // 获取挂载的组件实例
   // chart = init(chartRef.value as HTMLElement);
-
   initChart();
   chartInstance.getZr().on("click", async (params: any) => {
     let data = props.chartIndex == 0 ? AcData : UclData;
-
     const pointInPixel = [params.offsetX, params.offsetY];
     // console.log(chartInstance.convertFromPixel("grid", pointInPixel));
     // 使用 convertFromPixel方法 转换像素坐标值到逻辑坐标系上的点。获取点击位置对应的x轴数据的索引         值，借助于索引值的获取到其它的信息
@@ -274,11 +248,7 @@ onMounted(() => {
         [x, y]
       );
       if (data.length == xAxisData.length) {
-        ElMessage({
-          showClose: true,
-          message: "已超出最大数据量，请删除后再添加",
-          type: "error",
-        });
+        ElMessage({ showClose: true, message: "已超出最大数据量，请删除后再添加", type: "error", });
         return;
       }
       //TODO 判断Ac还是Ucl
@@ -288,11 +258,7 @@ onMounted(() => {
       //计算出最近的坐标
       let clkY = Math.round(yAxis / 20) * 20;
       if (20 > clkY || clkY > 80) {
-        ElMessage({
-          showClose: true,
-          message: "超出范围，请重新选择",
-          type: "error",
-        });
+        ElMessage({showClose: true,message: "超出范围，请重新选择",type: "error",});
         return;
       }
       data.push([xAxis, clkY]);
@@ -318,7 +284,7 @@ onMounted(() => {
   return {};
 });
 </script>
-  <style lang="scss" scoped>
+<style lang="scss" scoped>
 #myChart {
   // border: 1px solid #D8D8D8;
   background-color: #f6f6f6;

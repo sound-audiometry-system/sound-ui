@@ -6,17 +6,7 @@
     </el-header>
     <el-main v-loading="isOpenLoading" ref="main">
       <el-tabs v-model="typeName" stretch="true" type="border-card">
-        <!-- <el-tab-pane name="1" label="扬声器测听"> -->
-        <!-- echarts图表 -->
-        <!-- <amplifier-test></amplifier-test> -->
-        <!-- <div id="echarts-a" style="width: 600px;height:400px;"></div> -->
-        <!-- </el-tab-pane> -->
-        <el-tab-pane
-          align="left"
-          style="font-size: x-large"
-          name="2"
-          label="听力测试"
-        >
+        <el-tab-pane align="left" style="font-size: x-large" name="2" label="听力测试">
           <hearTest
             ref="childRef"
             :imageData="imageData"
@@ -73,12 +63,8 @@ import { onMounted, ref, computed, watch, reactive, inject } from "vue";
 import { ElMessage } from "element-plus";
 import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
-// import * as echarts from "echarts";
 import userHeader from "../lay/MainHeader.vue";
 import hearTest from "./hearTest.vue";
-// import amplifierTest from "./amplifierTest.vue";
-// import footer from "../../components/sound/index.vue";
-// import footerTab from "../../components/footerTab.vue";
 import { useRoute } from "vue-router";
 import { useStore } from "vuex";
 const typeName = ref("1");

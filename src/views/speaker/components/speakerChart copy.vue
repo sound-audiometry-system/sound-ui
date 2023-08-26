@@ -8,12 +8,11 @@
   ></div>
 </template>
   <script setup lang="ts">
-import { ref, Ref, reactive, defineComponent, onMounted, watch } from "vue";
-import { ECharts, EChartsOption, init } from "echarts";
+import { ref, Ref,onMounted } from "vue";
+import { ECharts, init } from "echarts";
 import customPointImage from "@/assets/ucl.png";
 let chart: ECharts;
 const chartRef: Ref<HTMLElement | null> = ref(null);
-const data1 = [120, 132, 101, 134, 90, 230, 210];
 const data2 = [220, 182, 191, 234, 290, 330, 310];
 // 自定义x轴的数字样式
 const formatter = (value: string) => {
