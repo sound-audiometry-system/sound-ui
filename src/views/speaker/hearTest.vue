@@ -128,79 +128,35 @@
         >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
       >
       <div style="height: 320px; width: 760px">
-        <sound
-          @handleClkItem="handleClkItem"
-          :sound-index="soundIndex"
-          env-index="122"
-        ></sound>
+        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" :bg-index="bgIndex" env-index="122"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button
-          :disabled="props.isPlay || isStop"
-          size="large"
-          plain
-          @click="handleStart"
-          >开始</el-button
-        >
-        <el-button
-          :disabled="!props.isPlay || !isStop"
-          size="large"
-          plain
-          @click="handleSave(1)"
-          >保存</el-button
-        >
-        <el-button
-          :disabled="!props.isPlay"
-          size="large"
-          plain
-          @click="handleSave(2)"
-          >提前结束</el-button
-        >
+        <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart" >开始</el-button>
+        <el-button :disabled="!props.isPlay || !isStop" size="large" plain @click="handleSave(1)" >保存</el-button>
+        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button
-          :disabled="!props.isPlay || isDisabled || enableManualplavMode"
-          @click="handlePrev"
-          >上一个(左键)</el-button
-        >
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev"
+          >上一个(左键)</el-button>
         <el-button
           :disabled="!props.isPlay || isDisabled || enableManualplavMode"
           @click="handleNext"
-          >下一个(右键)</el-button
-        >
+          >下一个(右键)</el-button>
         <el-button
           :disabled="!props.isPlay || isDisabled"
           @click="handleReImage"
-          >重复</el-button
-        >
+          >重复</el-button>
       </el-row>
       <el-row>
-        <div
-          style="
-            height: 300px;
-            width: 950px;
-            background-color: #e9e9e9;
-            margin-top: 15px;
-            padding: 12px 20px;
-          "
-        >
-          <div
-            style="
-              display: flex;
-              justify-content: space-between;
-              margin-bottom: 16px;
-              align-items: center;
-            "
-          >
-            <span style="font-weight: bold">答题进度</span
-            ><span style="font-size: 12px" @click="handleClk"
-              >查看全部<el-icon> <CaretRight /> </el-icon
-            ></span>
+        <div style="height: 300px; width: 950px; background-color: #e9e9e9; margin-top: 15px; padding: 12px 20px;">
+          <div style="display: flex; justify-content: space-between; margin-bottom: 16px; align-items: center;">
+            <span style="font-weight: bold">答题进度</span>
+            <span style="font-size: 12px" @click="handleClk">
+              查看全部<el-icon><CaretRight /></el-icon>
+            </span>
           </div>
           <div style="height: 36px; overflow: hidden">
-            <span
-              v-for="(item, index) in answerMarks"
-              :key="index"
+            <span v-for="(item, index) in answerMarks" :key="index" 
               :class="{
                 'answer-num': true,
                 'success-active': item.answerMark == 2,
@@ -220,15 +176,15 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch, provide } from "vue";
-import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
+import { onMounted, ref, watch } from "vue";
+import {  CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
-import { useStore, mapState } from "vuex";
+import { useStore } from "vuex";
 import { useThrottle } from "../../utils/index";
 let store = useStore();
 const testData = store.getters.getTestData;
@@ -242,7 +198,9 @@ let isOpen = ref(false);
 let isDisabled = ref(false);
 let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
-let soundIndex = ref(30);
+//TODO
+const soundIndex = ref(30);
+const bgIndex = ref(11);
 let syncDisabledBtn = ref(false);
 let source = "";
 let answerForm = {};

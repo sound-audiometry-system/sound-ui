@@ -8,13 +8,7 @@
       <el-col class="dot" :span="12">
         <div class="dot-outer">
           <div class="dot-center"><img src="../../assets/header.png" width="30" alt=""></div>
-          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="{ 
-            'dot-control': true, 
-            'error-active': item.active && index <= 4, 
-            'success-active': item.active && index > 5 && index <= 10,
-            'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,
-            'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,
-            'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index  }">
+          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="getActive(item, index)">
             {{ index }}
           </div>
         </div>
@@ -32,7 +26,7 @@
       <el-col :span="6">
         <p>右</p>
         <div class="right-indicate"></div>
-    </el-col>
+      </el-col>
     </el-row>
   </div>
 </template>
@@ -41,47 +35,83 @@
 import { onMounted, ref, watch, watchEffect } from 'vue'
 // background: linear-gradient(to right, #ffbd26 50%, #b0b912 50%);
 const emit = defineEmits(['handleClkItem'])
-
-console.log(props.soundIndex,"props.soundIndex")
-console.log(props,"props")
+const bgIndex = props.bgIndex
 const soundList = ref([
-  {soundVal: '0', active: false,},
-  {soundVal: '1', active: false,},
-  {soundVal: '2', active: false,},
-  {soundVal: '3', active: false,},
-  {soundVal: '4', active: false,},
-  {soundVal: '5', active: false,},
-  {soundVal: '6', active: false,},
-  {soundVal: '7', active: false,},
-  {soundVal: '8', active: false,},
-  {soundVal: '9', active: false,},
-  {soundVal: '10', active: false,},
-  {soundVal: '11', active: false,},
+  { soundVal: '0', active: false, },
+  { soundVal: '1', active: false, },
+  { soundVal: '2', active: false, },
+  { soundVal: '3', active: false, },
+  { soundVal: '4', active: false, },
+  { soundVal: '5', active: false, },
+  { soundVal: '6', active: false, },
+  { soundVal: '7', active: false, },
+  { soundVal: '8', active: false, },
+  { soundVal: '9', active: false, },
+  { soundVal: '10', active: false, },
+  { soundVal: '11', active: false, },
 ])
+const getActive = (item, index) => {
+
+  let clz = {
+    'dot-control': true,
+    'error-active': item.active && index <= 4,
+    'success-active': item.active && index > 5 && index <= 10,
+  };
+  // 
+  // 'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,
+  // 'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,
+  // 'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index
+  let si = parseInt(props.soundIndex / 2)
+  let bi = parseInt(props.bgIndex / 2)
+
+  if (bgIndex == props.bgIndex) {
+    clz['config-active1'] = true
+  }
+
+  if (si == index || bi == index) {//两者相同，则混合样式
+    clz['config-active3'] = true
+  } else if (si == index) {
+    clz['config-active2'] = true
+  } else if (bi == index) {
+    clz['config-active1'] = true
+  }
+  if (props.deviceConfig && props.deviceConfig.length != 0) {
+    if (props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated) {
+      clz['config-active3'] = true
+    } else if (props.deviceConfig[index]?.signalCalibrated) {
+      clz['config-active2'] = true
+    } else if (props.deviceConfig[index]?.environmentalCalibrated) {
+      clz['config-active1'] = true
+    }
+  }
+  return clz;
+}
+
 type Props = {
   sounds: any;
-  deviceConfig:any;
+  deviceConfig: any;
   soundIndex: Number;
+  bgIndex: Number;
 };
 const props = defineProps<Props>();
-watch(()=>props.sounds, (newValue, oldValue)=> {
+watch(() => props.sounds, (newValue, oldValue) => {
   if (props.sounds && props.sounds.length != 0) {
-    console.log(props.sounds,"sounds")
     for (const item of props.sounds) {
+      console.log(props.sounds, "sounds")
       for (const obj of soundList.value) {
-        if (obj.soundVal == item.substring(1,2)) {
+        if (obj.soundVal == item.substring(1, 2)) {
           obj.active = true
         }
       }
     }
   }
-}, {deep: true})
- 
-onMounted(async ()=> {
-  
+}, { deep: true })
+
+onMounted(async () => {
+
 })
 const handleClkItem = (index: number) => {
-    emit('handleClkItem', index)
+  emit('handleClkItem', index)
 }
 </script>
 
