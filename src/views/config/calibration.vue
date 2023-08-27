@@ -2,22 +2,21 @@
 <template>
   <div v-loading="loading" class="main">
     <el-row :gutter="20">
-      <el-col :span="23">
-        <el-input
-          v-model="value"
-          class="w-50 m-2"
-          placeholder="搜索"
-          :prefix-icon="Search"
-        />
+      <el-col :span="14">
+        <el-input v-model="value" class="w-50 m-2" placeholder="搜索" :prefix-icon="Search"/>
       </el-col>
-      <!-- <el-col :span="8">
+      <el-col :span="4">
+        <el-button color="#208571" @click="searchData">查询</el-button>
+        <el-button>重置</el-button>
+      </el-col>
+      <el-col :span="6">
         <div class="mb-2 flex items-center text-sm">
           <el-radio-group v-model="radio1" class="ml-4">
             <el-radio label="1" size="large">仅显示已校准</el-radio>
             <el-radio label="2" size="large">仅显示未校准</el-radio>
           </el-radio-group>
         </div>
-      </el-col> -->
+      </el-col>
     </el-row>
     <el-table :height="735" :data="tableData" stripe style="width: 100%" empty-text="暂无数据">
       <el-table-column prop="name" label="测试名称" min-width="180" />
@@ -54,14 +53,19 @@
 <script setup lang="ts">
 import { onMounted, ref, watch, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
+import { imitateApi } from "@/serve/api/user";
 const value = ref("");
 const radio1 = ref("1");
 let loading = ref(false);
-import { imitateApi } from "@/serve/api/user";
 let tableData = ref([]);
 
 let tableDatas = []
 const queryForm = reactive({});
+
+const searchData = () => {
+  getListTestMode(value.value);
+};
+
 const currentChange = (current:number) => {
   queryForm.current = current
   getListTestMode()
@@ -72,7 +76,8 @@ const handleCalibration = (index, row) => {
 };
 const getListTestMode = async (name: string = "") => {
   loading.value = true;
-  const res = await imitateApi.getListThresholdMode({name: name, ...queryForm });
+  let calibrated = false
+  const res = await imitateApi.getListThresholdMode({name: name,calibrated:calibrated, ...queryForm });
   console.log(res);
   loading.value = false;
   if (res.code == 0) {
