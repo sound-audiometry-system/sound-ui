@@ -261,6 +261,9 @@ const handleCheck = () => {
   isCheckFlag.value = true;
   syncDisabledBtn.value = true;
   emit("handlePause");
+  window.setTimeout(()=> {
+    emit("handleResume");
+  }, 3000)
 };
 
 const removeItem = () => {
@@ -277,6 +280,7 @@ const removeItem = () => {
 };
 // 上一个
 const handlePrev = async () => {
+  // if (answerIndex.value <= 0) return
   //删除答案
   removeItem();
   isDisabled.value = true;
