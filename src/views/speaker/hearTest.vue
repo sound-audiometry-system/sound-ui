@@ -337,9 +337,6 @@ const handleReImage = useThrottle(
   1500,
   isDisabled
 );
-const mod = (n: number, m: number) => {
-  return parseInt(n / m + "");
-};
 const handkeyCode = (e) => {
   if (e.keyCode === 32) {
     handleCheck();
@@ -367,16 +364,8 @@ onMounted(() => {
   window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
-      // for (const item of answerMarks.value) {
-      //   // console.log(item)
-      //   item.answerMark = 1;
-      // }
       answerIndex.value = -1;
       isStop.value = true;
-      // soundIndex.value = 0;
-      // displayId = 0;
-      // console.log(props.isSave);
-      // !props.isSave && emit("handleSave", 1, Array.from(answerMap.values()));
       return;
     }
     let item = JSON.parse(e.newValue);
@@ -386,8 +375,8 @@ onMounted(() => {
     if (e.key === "imageData") {
       if (rePlayId != item.id || answerIndex.value + 1 != item.id)
         answerIndex.value += 1;
-      isCheckFlag.value = false;
-    }
+        isCheckFlag.value = false;
+      }
     // 1111
     if (e.key === "audioStart") {
       syncDisabledBtn.value = false;
@@ -396,7 +385,7 @@ onMounted(() => {
       // displayId != e.id && displayId = e?.id
       displayId = item.id;
       itemId.value = item.file;
-      soundIndex.value = mod(item.target, 2);
+      soundIndex.value = item.target
       answerForm.file = item.file; //题目id
       answerForm.correct = true; //默认正确
       if (enableManualplavMode) {
