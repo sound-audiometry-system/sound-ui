@@ -136,10 +136,10 @@
         <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev"
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex <= 0" @click="handlePrev"
           >上一个(左键)</el-button>
         <el-button
-          :disabled="!props.isPlay || isDisabled || enableManualplavMode"
+          :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex + 1 === answerMarks.length"
           @click="handleNext"
           >下一个(右键)</el-button>
         <el-button
@@ -286,6 +286,9 @@ const handleCheck = () => {
   isCheckFlag.value = true;
   syncDisabledBtn.value = true;
   emit("handlePause");
+  window.setTimeout(()=> {
+    emit("handleResume");
+  }, 3000)
 };
 
 const removeItem = () => {
@@ -302,6 +305,7 @@ const removeItem = () => {
 };
 // 上一个
 const handlePrev = async () => {
+  // if (answerIndex.value <= 0) return
   //删除答案
   removeItem();
   isDisabled.value = true;

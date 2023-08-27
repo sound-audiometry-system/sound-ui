@@ -76,6 +76,7 @@ const option = {
   },
   series: [
     {
+      name: "AC",
       data: AcData,
       type: "line",
       symbolSize: [12, 12],
@@ -89,6 +90,7 @@ const option = {
       },
     },
     {
+      name: "UCL",
       data: UclData,
       type: "line",
       symbol: `image://${customPointImage}`, // 自定义点的图标
@@ -103,7 +105,6 @@ const option = {
       },
     },
     {
-      name: "Email",
       type: "line",
       stack: "Total",
       areaStyle: {},
@@ -138,7 +139,6 @@ const option = {
       },
     },
     {
-      name: "Email",
       type: "line",
       stack: "Total",
       areaStyle: {},
@@ -182,6 +182,15 @@ const option = {
     },
   ],
 };
+const handleDelLine = ()=> {
+  let data = props.chartIndex == 0 ? AcData : UclData;
+  if(data.length === 0) return
+    data.splice(data.length - 1, 1);
+    if (chartInstance) {
+      option.series[props.chartIndex].data = data;
+      chartInstance.setOption(option);
+    }
+}
 const initChart = () => {
   chartInstance = echarts.init(chartRef.value as HTMLDivElement);
   chartInstance.setOption(option);
@@ -190,6 +199,9 @@ watch(props.chartIndex, (newValue, oldValue) => {
   console.log(props.chartIndex);
 });
 const emit = defineEmits(["handleClk"]);
+defineExpose({
+  handleDelLine,
+});
 onMounted(() => {
   // 获取挂载的组件实例
   // chart = init(chartRef.value as HTMLElement);
@@ -218,68 +230,87 @@ onMounted(() => {
     //获取到x轴的索引值和option之后，我们就可以获取我们需要的任意数据。
     // 点击点的X轴对应坐标的名称
     var xValue = op.xAxis[0].data[xIndex];
-    
+
     // 点击点的series -- data对应的值
     // console.log(op.series)
     const seriesData = op.series[props.chartIndex].data;
     // 如果之前已经在x轴上绘制过，终止执行
-    const xData = seriesData.map(dataPoint=> dataPoint[0])
-    if (xData.includes(xValue)) return
+    const xData = seriesData.map((dataPoint) => dataPoint[0]);
+    if (xData.includes(xValue)) return;
     // console.log(seriesData);
     var value = seriesData[xIndex] && seriesData[xIndex][1];
-    const dataIndex = seriesData.findIndex((dataPoint) => {
-      return dataPoint[0] === xIndex && dataPoint[1] === value;
-    });
-    if (dataIndex > -1) {
-      // 处理点击折线点的逻辑
-      const form = {
-        file: xValue + "x" + value,
-        volume: 80,
-      };
-      const res = await imitateApi.playAudioTest(form);
-    } else {
-      // 处理点击画布的逻辑
-      // 如果绘制的点已等于x轴数量，停止执行
-      // if (xAxisData.length === data.length) return;
-      // console.log(params);
-      let x = params.offsetX;
-      let y = params.offsetY;
-      let pixel = chartInstance.convertFromPixel(
-        {
-          seriesIndex: 0,
-          xAxisIndex: 0,
-        },
-        [x, y]
-      );
-      if (data.length == xAxisData.length) {
-        ElMessage({ showClose: true, message: "已超出最大数据量，请删除后再添加", type: "error", });
-        return;
-      }
-      //TODO 判断Ac还是Ucl
-      //获取到坐标后，需要自动计算它靠近那个数据
-      let xAxis = pixel[0];
-      let yAxis = pixel[1];
-      //计算出最近的坐标
-      let clkY = Math.round(yAxis / 20) * 20;
-      if (20 > clkY || clkY > 80) {
-        ElMessage({showClose: true,message: "超出范围，请重新选择",type: "error",});
-        return;
-      }
-      data.push([xAxis, clkY]);
-      //TODO 区分Ac和Ucl
-      option.series[props.chartIndex].data = data;
-      chartInstance.setOption(option);
+    // const dataIndex = seriesData.findIndex((dataPoint) => {
+    //   return dataPoint[0] === xIndex && dataPoint[1] === value;
+    // });
+    // console.log(value)
+    // if (dataIndex > -1) {
+
+    // } else {
+    // 处理点击画布的逻辑
+    // 如果绘制的点已等于x轴数量，停止执行
+    // if (xAxisData.length === data.length) return;
+    // console.log(params);
+    let x = params.offsetX;
+    let y = params.offsetY;
+    let pixel = chartInstance.convertFromPixel(
+      {
+        seriesIndex: 0,
+        xAxisIndex: 0,
+      },
+      [x, y]
+    );
+    //TODO 判断Ac还是Ucl
+    //获取到坐标后，需要自动计算它靠近那个数据
+    let xAxis = pixel[0];
+    let yAxis = pixel[1];
+    //计算出最近的坐标
+    let clkY = Math.round(yAxis / 20) * 20;
+    if (20 > clkY || clkY > 80) {
+      ElMessage({
+        showClose: true,
+        message: "超出范围，请重新选择",
+        type: "error",
+      });
+      return;
     }
+    let isPush = false;
+    data.forEach((arr, index) => {
+      if (arr[0] === xAxis) {
+        data.splice(index, 1, [xAxis, clkY]);
+        isPush = true;
+      }
+    });
+    if (data.length == xAxisData.length && !isPush) {
+      ElMessage({
+        showClose: true,
+        message: "已超出最大数据量，请删除后再添加",
+        type: "error",
+      });
+      return;
+    }
+    !isPush && data.push([data.length, clkY]);
+    //TODO 区分Ac和Ucl
+    option.series[props.chartIndex].data = data;
+    chartInstance.setOption(option);
+    // }
   });
 
   // 自适应
   window.onresize = function () {
     chartInstance.resize();
   };
+  chartInstance.on("click", async (params: nay) => {
+    // 处理点击折线点的逻辑
+    const form = {
+      file: params.name + "x" + params.data[1],
+      volume: 80,
+    };
+    const res = await imitateApi.playAudioTest(form);
+  });
   chartInstance.on("contextmenu", (params: any) => {
     params.event.event.preventDefault();
     let data = props.chartIndex == 0 ? AcData : UclData;
-    data.splice(params.dataIndex, 1);
+    data.splice(data.length - 1, 1);
     if (chartInstance) {
       option.series[props.chartIndex].data = data;
       chartInstance.setOption(option);
