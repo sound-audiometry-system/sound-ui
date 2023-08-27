@@ -31,7 +31,6 @@
       astilectron.onMessage((message) => {
         console.log(message, 'message')
         if (message.cmdType == 'imageDisplay') {
-          
           sessionStorage.setItem('imageData', JSON.stringify(message))
           // console.log('==获取数据>>>',sessionStorage.getItem('imageData'))
         }

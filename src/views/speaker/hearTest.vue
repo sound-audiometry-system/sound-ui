@@ -200,7 +200,7 @@ let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
 //TODO
 const soundIndex = ref(30);
-const bgIndex = ref(11);
+const bgIndex = ref(-1);
 let syncDisabledBtn = ref(false);
 let source = "";
 let answerForm = {};
@@ -363,12 +363,18 @@ const checkedImg = (item, index) => {
 onMounted(() => {
   window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
+    console.log("setItemEvent", e.newValue);
     if (!e.newValue) {
       answerIndex.value = -1;
+      //TODO
       isStop.value = true;
       return;
     }
     let item = JSON.parse(e.newValue);
+    if(item.id== -1){//播放背景声
+      bgIndex.value = item.target;
+      return;
+    }
     if (e.key === "recordStart" || e.key === "recordStop") {
       handleAudio(e.key);
     }
@@ -401,13 +407,17 @@ onMounted(() => {
       }
       answerForm = {};
       // if (answerIndex.value + 1 === answerMarks.length) {
-      //   isStop.value = true;
-      // }
-      if (enableManualplavMode) {
-        isDisabled.value = false;
+        //   isStop.value = true;
+        // }
+        if (enableManualplavMode) {
+          isDisabled.value = false;
       }
       // handleStop()
     }
+    // if (e.key === "playFinish") {
+    //   bgIndex.value = -1;
+    //   soundIndex.value = 30;
+    // }
   });
 });
 </script>
