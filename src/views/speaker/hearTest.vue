@@ -17,25 +17,8 @@
         </span>
       </div>
       <div
-        style="
-          margin-left: 10px;
-          width: 920px;
-          height: 335px;
-          padding: 0 6px;
-          display: flex;
-        "
-      >
-        <el-row
-          style="
-            background-color: #000;
-            width: 82%;
-            height: 100%;
-            align-items: center;
-            overflow: auto;
-          "
-          align="center"
-          :gutter="10"
-        >
+        style="margin-left: 10px; width: 920px; height: 335px; padding: 0 6px; display: flex;">
+        <el-row style=" background-color: #000; width: 82%; height: 100%; align-items: center; overflow: auto;" align="center" :gutter="10">
           <el-col
             v-for="(item, index) in props.imageData.answerList"
             :key="item.id"
@@ -58,6 +41,7 @@
             <el-switch v-model="value3" @change="beforeChange1" />
           </div>
           <p style="font-size: 12px">同时打开两边显示器</p>
+          <p style="font-size: 14px">当前正在答 {{ answerIndex && answerIndex <= 0 ?'':answerIndex+1 }} 题</p>
         </div>
       </div>
 
@@ -136,16 +120,10 @@
         <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev"
-          >上一个(左键)</el-button>
-        <el-button
-          :disabled="!props.isPlay || isDisabled || enableManualplavMode"
-          @click="handleNext"
-          >下一个(右键)</el-button>
-        <el-button
-          :disabled="!props.isPlay || isDisabled"
-          @click="handleReImage"
-          >重复</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev">上一个(左键)</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleNext">下一个(右键)</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled" @click="handleReImage">重复</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || !isStop" @click="handleStop">测试结束</el-button>
       </el-row>
       <el-row>
         <div style="height: 300px; width: 950px; background-color: #e9e9e9; margin-top: 15px; padding: 12px 20px;">
@@ -168,10 +146,7 @@
         </div>
       </el-row>
     </el-main>
-    <answer-dialog
-      ref="answerDialogRef"
-      :answerMarks="answerMarks"
-    ></answer-dialog>
+    <answer-dialog ref="answerDialogRef" :answerMarks="answerMarks" ></answer-dialog>
     <sound-dialog ref="soundDialogRef"></sound-dialog>
   </el-container>
 </template>
