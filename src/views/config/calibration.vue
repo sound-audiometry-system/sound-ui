@@ -2,18 +2,18 @@
 <template>
   <div v-loading="loading" class="main">
     <el-row :gutter="20">
-      <el-col :span="14">
+      <el-col :span="16">
         <el-input v-model="value" class="w-50 m-2" placeholder="搜索" :prefix-icon="Search"/>
       </el-col>
-      <el-col :span="4">
+      <el-col :span="2">
         <el-button color="#208571" @click="searchData">查询</el-button>
         <el-button>重置</el-button>
       </el-col>
       <el-col :span="6">
-        <div class="mb-2 flex items-center text-sm">
-          <el-radio-group v-model="radio1" class="ml-4">
-            <el-radio label="1" size="large">仅显示已校准</el-radio>
-            <el-radio label="2" size="large">仅显示未校准</el-radio>
+        <div class="mb-2 flex items-center" style="height: 28px;">
+          <el-radio-group v-model="radio1" class="ml-4" @change="changRadio">
+            <el-radio label="1"  size="large">仅显示已校准</el-radio>
+            <el-radio label="0" size="large">仅显示未校准</el-radio>
           </el-radio-group>
         </div>
       </el-col>
@@ -55,15 +55,17 @@ import { onMounted, ref, watch, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { imitateApi } from "@/serve/api/user";
 const value = ref("");
-const radio1 = ref("1");
+const radio1 = ref("0");
 let loading = ref(false);
 let tableData = ref([]);
 
 let tableDatas = []
 const queryForm = reactive({});
-
+const changRadio = (val) => {
+  getListTestMode(value.value,val==1?true:false);
+};
 const searchData = () => {
-  getListTestMode(value.value);
+  getListTestMode(value.value,radio1.value == "0"?false:true);
 };
 
 const currentChange = (current:number) => {
@@ -74,9 +76,8 @@ const emit = defineEmits(["handleCalibration"]);
 const handleCalibration = (index, row) => {
   emit("handleCalibration", index, row);
 };
-const getListTestMode = async (name: string = "") => {
+const getListTestMode = async (name: string = "",calibrated:boolean = false) => {
   loading.value = true;
-  let calibrated = false
   const res = await imitateApi.getListThresholdMode({name: name,calibrated:calibrated, ...queryForm });
   console.log(res);
   loading.value = false;
