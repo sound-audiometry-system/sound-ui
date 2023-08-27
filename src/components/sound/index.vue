@@ -63,7 +63,6 @@ const getActive = (item, index) => {
   // 'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index
   let si = parseInt(props.soundIndex / 2)
   let bi = parseInt(props.bgIndex / 2)
-  console.log(index, si, bi, "config-active")
   if (si == index && bi == index) {//两者相同，则混合样式
     clz['config-active3'] = true
   } else if (si == index) {
@@ -93,7 +92,6 @@ const props = defineProps<Props>();
 watch(() => props.sounds, (newValue, oldValue) => {
   if (props.sounds && props.sounds.length != 0) {
     for (const item of props.sounds) {
-      console.log(props.sounds, "sounds")
       for (const obj of soundList.value) {
         if (obj.soundVal == item.substring(1, 2)) {
           obj.active = true

@@ -307,10 +307,7 @@ onMounted(() => {
       isPlay.value = true;
       // imageData = {}
       if (!isSuccess) {
-        ElMessage({
-          message: "方案播放完成",
-          type: "success",
-        });
+        ElMessage({message: "方案播放完成",type: "success",});
       }
       isSuccess = true;
       window.setTimeout(() => {
