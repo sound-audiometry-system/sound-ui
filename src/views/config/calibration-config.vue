@@ -131,7 +131,6 @@ import type { CSSProperties } from "vue";
 import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
-import { pa, tr } from "element-plus/es/locale";
 
 const setup = ()=>{
   //清空答案记录
@@ -259,8 +258,8 @@ const handleStart = async () => {
   let param = {id:props.testData.id,"enableManualPlayMode":false,signalSource:[{
     audios:[{"target": queryForm.index, "file": item.signalSource,"volume": queryForm.signalSoundVolume}],
   }]}
-  
-  const res = await auditionApi.startTest(param,true);
+  console.log(param,"param")
+  const res = await auditionApi.startTest(param);
   if (res.code == 0) {
     isStart = true;
   }
@@ -286,25 +285,12 @@ const handleCirculate = async () => {
     {"target": queryForm.index, "file": item.environmentalSource,"volume": queryForm.environmentalSoundVolume},
   ]}
   //调用接口
-  const res = await auditionApi.startTest(param,true);
+  const res = await auditionApi.startTest(param);
   if (res.code == 0) {
     isStart = true;
   }
 };
 
-const handleSave = async () => {
-  const res = await auditionApi.stopTest();
-  console.log(res);
-  if (res.code == 0) {
-    isStart = false;
-  }
-};
-const reImageTest = async () => {
-  const res = await auditionApi.reImageTest();
-  if (res.code == 0) {
-    isStart = true;
-  }
-};
 const handleBack = () => {
   emit("handleBack", false);
 };
