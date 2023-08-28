@@ -8,7 +8,7 @@
       <el-col class="dot" :span="12">
         <div class="dot-outer">
           <div class="dot-center"><img src="../../assets/header.png" width="30" alt=""></div>
-          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="getActive(item, index)">
+          <div @click="handleClkItem(index)" v-for="(item, index) in soundList" :key="index" :class="getActive(item, index)" :style="getBgCor(item, index)">
             {{ index }}
           </div>
         </div>
@@ -33,9 +33,15 @@
 
 <script setup lang="ts">
 import { onMounted, ref, watch, watchEffect } from 'vue'
+import { useRoute } from 'vue-router'
+const route = useRoute();
 // background: linear-gradient(to right, #ffbd26 50%, #b0b912 50%);
 const emit = defineEmits(['handleClkItem'])
+const isCheck = ref(false)
 const bgIndex = props.bgIndex
+if (route.name === 'checkConfig') {
+  isCheck.value = true
+}
 const soundList = ref([
   { soundVal: '0', active: false, },
   { soundVal: '1', active: false, },
@@ -80,6 +86,26 @@ const getActive = (item, index) => {
     }
   }
   return clz;
+}
+const getBgCor = (item, index) => {
+  const obj = {
+    backgroundColor: ''
+  }
+  if (index === 0 || index === 6) {
+    obj['backgroundColor'] = '#fff'
+    obj['color'] = '#000'
+  }
+  if (isCheck && index !== 0 && index !== 6) {
+    soundList.value.forEach((item, itemIndex)=> {
+      if (item.active && index === itemIndex) {
+        return index < 6 ? obj['backgroundColor'] = 'red' : obj['backgroundColor'] ='configActive4'
+      }
+    })
+    // if (index) {
+
+    // }
+  }
+  return obj
 }
 
 type Props = {
