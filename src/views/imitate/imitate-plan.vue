@@ -173,6 +173,7 @@ const handleReImage = async () => {
 onMounted(() => {
   window.addEventListener("setItemEvent", function (e: any) {
     if (!e.newValue) {
+      isStart.value = false
       return
     }
 
