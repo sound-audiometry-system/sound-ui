@@ -43,16 +43,16 @@ if (route.name === 'checkConfig') {
   isCheck.value = true
 }
 const soundList = ref([
-  { soundVal: '0', active: false, },
-  { soundVal: '1', active: false, },
-  { soundVal: '2', active: false, },
-  { soundVal: '3', active: false, },
-  { soundVal: '4', active: false, },
-  { soundVal: '5', active: false, },
-  { soundVal: '6', active: false, },
-  { soundVal: '7', active: false, },
-  { soundVal: '8', active: false, },
-  { soundVal: '9', active: false, },
+  { soundVal: '00', active: false, },
+  { soundVal: '01', active: false, },
+  { soundVal: '02', active: false, },
+  { soundVal: '03', active: false, },
+  { soundVal: '04', active: false, },
+  { soundVal: '05', active: false, },
+  { soundVal: '06', active: false, },
+  { soundVal: '07', active: false, },
+  { soundVal: '08', active: false, },
+  { soundVal: '09', active: false, },
   { soundVal: '10', active: false, },
   { soundVal: '11', active: false, },
 ])
@@ -125,7 +125,7 @@ watch(() => props.sounds, (newValue, oldValue) => {
   if (props.sounds && props.sounds.length != 0) {
     for (const item of props.sounds) {
       for (const obj of soundList.value) {
-        if (item.active && obj.soundVal == item.substring(1, 2)) {
+        if (item.active && obj.soundVal == item.id) {
           obj.active = true
         }
       }
