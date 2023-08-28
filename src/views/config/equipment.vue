@@ -95,6 +95,9 @@ import { auditionApi } from "@/serve/api/user";
 const isSuccess = ref(true);
 let deviceset = ref([
   { id: "00", active: false },
+  { id: "04", active: false },
+  { id: "08", active: false },
+  { id: "01", active: false },
   { id: "05", active: false },
   { id: "09", active: false },
   { id: "02", active: false },
@@ -103,9 +106,6 @@ let deviceset = ref([
   { id: "03", active: false },
   { id: "07", active: false },
   { id: "11", active: false },
-  { id: "04", active: false },
-  { id: "08", active: false },
-  { id: "01", active: false },
 ]);
 const devices = [
   { soundVal: "001", soundVal2: "002", active: false },
