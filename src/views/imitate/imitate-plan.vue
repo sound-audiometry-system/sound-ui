@@ -59,9 +59,9 @@
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" :bg-index="bgIndex"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button :disabled="props.isPlay" size="large" plain @click="handleStart">开始</el-button>
-        <el-button :disabled="!props.isPlay" size="large" plain>保存</el-button>
-        <el-button :disabled="!props.isPlay" size="large" plain>提前结束</el-button>
+        <el-button :disabled="isStart" size="large" plain @click="handleStart">开始</el-button>
+        <!-- <el-button :disabled="!props.isPlay" size="large" plain>保存</el-button>
+        <el-button :disabled="!props.isPlay" size="large" plain>提前结束</el-button> -->
       </el-row>
       <el-row class="el-btn b">
         <el-button :disabled="!props.isPlay" @click="handlePrev">上一个(左键)</el-button><el-button :disabled="!props.isPlay"
@@ -96,6 +96,7 @@ let value1 = ref(false);
 let value2 = ref(false);
 let value3 = ref(false);
 let isOpen = ref(false)
+const isStart = ref(false)
 const soundIndex = ref(30)
 const bgIndex = ref(-1)
 // console.log(testData.commands, 'testData')
@@ -123,7 +124,27 @@ const handleClkItem = (index) => {
 
 };
 const handleStart = () => {
-  emit("handleStart", value1.value, value2.value);
+  startTest(value1.value, value2.value);
+  // emit("handleStart", value1.value, value2.value);
+};
+const startTest = async (value1, value2) => {
+  let params = {};
+  if (!value1) {
+    params["leftHide"] = value1;
+  }
+  if (!value2) {
+    params["rightHide"] = value2;
+  }
+  //开始
+  // isPlay.value = true;
+  if (!value1 && !value2) {
+    params["test"] = true;
+  }
+  const res = await auditionApi.startTest(testData[0], params);
+  if (res.code == 0) {
+    isStart.value = true;
+    // isPlay.value = false
+  }
 };
 // 上一个
 const handlePrev = async () => {
