@@ -91,14 +91,20 @@ const getBgCor = (item, index) => {
   const obj = {
     backgroundColor: ''
   }
-  if (index === 0 || index === 6) {
-    obj['backgroundColor'] = '#fff'
-    obj['color'] = '#000'
-  }
-  if (isCheck && index !== 0 && index !== 6) {
+  // if (index === 0 || index === 6) {
+  //   obj['backgroundColor'] = '#fff'
+  //   obj['color'] = '#000'
+  // }
+  if (isCheck) {
     soundList.value.forEach((item, itemIndex)=> {
       if (item.active && index === itemIndex) {
-        return index < 6 ? obj['backgroundColor'] = 'red' : obj['backgroundColor'] ='configActive4'
+        if (index === 0 || index === 6) {
+          obj['color'] = '#000'
+          obj['backgroundColor'] = '#fff'
+        } else {
+          index < 6 ? obj['backgroundColor'] = 'red' : obj['backgroundColor'] ='#3357C4'
+        }
+        // return index < 6 && index !== 0 ? obj['backgroundColor'] = 'red' : index === 6 || index === 0 ? obj['backgroundColor'] = '#fff' : obj['backgroundColor'] ='configActive4'
       }
     })
     // if (index) {
@@ -119,7 +125,7 @@ watch(() => props.sounds, (newValue, oldValue) => {
   if (props.sounds && props.sounds.length != 0) {
     for (const item of props.sounds) {
       for (const obj of soundList.value) {
-        if (obj.soundVal == item.substring(1, 2)) {
+        if (item.active && obj.soundVal == item.substring(1, 2)) {
           obj.active = true
         }
       }

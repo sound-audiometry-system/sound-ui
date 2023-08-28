@@ -1,17 +1,28 @@
 <!-- 设备连接 -->
 <template>
-  <el-row style="color: #000;">
+  <el-row style="color: #000">
     <el-col :span="24" style="display: flex">
-      <div style="width: 1920px;display: flex;justify-content: space-between;">
-        <label style="font-size: 15px;font-weight: bold;">测试前连接</label>
+      <div style="width: 1920px; display: flex; justify-content: space-between">
+        <label style="font-size: 15px; font-weight: bold">测试前连接</label>
         <button
-          style="outline: none; width: 100px;background-color:#F1871B;color: white;font-size: 16px;box-shadow: none;"
-          type="button" @click="buttClick">连接</button>
+          style="
+            outline: none;
+            width: 100px;
+            background-color: #f1871b;
+            color: white;
+            font-size: 16px;
+            box-shadow: none;
+          "
+          type="button"
+          @click="buttClick"
+        >
+          连接
+        </button>
       </div>
     </el-col>
   </el-row>
   <el-container>
-    <el-aside style="color: #000;">
+    <el-aside style="color: #000">
       <el-row style="height: 400px; width: 760px">
         <el-col :span="24">
           <sound :sounds="deviceset"></sound>
@@ -20,35 +31,56 @@
       <el-row class="xxx-a">
         <el-col :span="6" v-for="index in deviceset" :key="index">
           <div>
-            <div class="config-b"
-              :style="{ 'font-size': '13px', color: parseInt(index.id) == 1 || parseInt(index.id) == 7 ? '#000' : '#fff', 'display': 'inline-block', 'text-align': 'center', backgroundColor: getBgc(index) }">
-              {{ parseInt(index.id) - 1 }}
+            <div
+              class="config-b"
+              :style="{
+                'font-size': '13px',
+                color:
+                  index.active &&
+                  (parseInt(index.id) == 0 || parseInt(index.id) == 6)
+                    ? '#000'
+                    : '#fff',
+                display: 'inline-block',
+                'text-align': 'center',
+                backgroundColor: getBgc(index),
+              }"
+            >
+              {{ parseInt(index.id) }}
             </div>
-            <label style="color: #000; font-size: 13px;font-weight: bold;">{{ parseInt(index.id) - 1 }} 号音响</label>
+            <label style="color: #000; font-size: 13px; font-weight: bold"
+              >{{ parseInt(index.id) }} 号音响</label
+            >
           </div>
         </el-col>
       </el-row>
     </el-aside>
     <el-main>
-      <el-row :gutter="20" style="color: #000;">
+      <el-row :gutter="20" style="color: #000">
         <el-col :span="24">显示器</el-col>
         <el-col :span="12" class="monitor-a">
           <div style="display: flex; align-items: center; margin: 10px 0">
             <span
-              style="width: 20px; margin-right: 10px; color: #fff; height: 20px line-height: 20px; background-color: #3457C6; text-align: center;">
+              style="width: 20px; margin-right: 10px; color: #fff; height: 20px line-height: 20px; background-color: #3457C6; text-align: center;"
+            >
               左
             </span>
             <span>显示器</span>
           </div>
-          <div style="width: 400px; height: 300px; background-color: #000"></div>
+          <div
+            style="width: 400px; height: 300px; background-color: #000"
+          ></div>
         </el-col>
         <el-col :span="12" class="monitor-a">
           <div style="display: flex; align-items: center; margin: 10px 0">
             <span
-              style="width: 20px; margin-right: 10px; height: 20px line-height: 20px; background-color: #D8D8D8; text-align: center;">右</span>
+              style="width: 20px; margin-right: 10px; height: 20px line-height: 20px; background-color: #D8D8D8; text-align: center;"
+              >右</span
+            >
             <span>显示器</span>
           </div>
-          <div style="width: 400px; height: 300px; background-color: #000"></div>
+          <div
+            style="width: 400px; height: 300px; background-color: #000"
+          ></div>
         </el-col>
       </el-row>
     </el-main>
@@ -57,59 +89,107 @@
 
 <script setup lang="ts">
 import { ref, reactive } from "vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
+const isSuccess = ref(true);
 let deviceset = ref([
-  { id: '01', active: false },
-  { id: '05', active: false },
-  { id: '09', active: false },
-  { id: '02', active: false },
-  { id: '06', active: false },
-  { id: '10', active: false },
-  { id: '03', active: false },
-  { id: '07', active: false },
-  { id: '11', active: false },
-  { id: '04', active: false },
-  { id: '08', active: false },
-  { id: '12', active: false }
+  { id: "00", active: false },
+  { id: "05", active: false },
+  { id: "09", active: false },
+  { id: "02", active: false },
+  { id: "06", active: false },
+  { id: "10", active: false },
+  { id: "03", active: false },
+  { id: "07", active: false },
+  { id: "11", active: false },
+  { id: "04", active: false },
+  { id: "08", active: false },
+  { id: "01", active: false },
 ]);
 const devices = [
-  { soundVal: '001', soundVal2: '002', active: false, },
-  { soundVal: '011', soundVal2: '012', active: false, },
-  { soundVal: '021', soundVal2: '022', active: false, },
-  { soundVal: '031', soundVal2: '032', active: false, },
-  { soundVal: '041', soundVal2: '042', active: false, },
-  { soundVal: '051', soundVal2: '052', active: false, },
-  { soundVal: '061', soundVal2: '062', active: false, },
-  { soundVal: '071', soundVal2: '072', active: false, },
-  { soundVal: '081', soundVal2: '082', active: false, },
-  { soundVal: '091', soundVal2: '092', active: false, },
-  { soundVal: '101', soundVal2: '102', active: false, },
-  { soundVal: '111', soundVal2: '112', active: false, },
-]
-const getDevice = async (id) => {
-  const res = await auditionApi.getDevice({ id: id })
-  var idstr = id.substring(0, 2)
+  { soundVal: "001", soundVal2: "002", active: false },
+  { soundVal: "011", soundVal2: "012", active: false },
+  { soundVal: "021", soundVal2: "022", active: false },
+  { soundVal: "031", soundVal2: "032", active: false },
+  { soundVal: "041", soundVal2: "042", active: false },
+  { soundVal: "051", soundVal2: "052", active: false },
+  { soundVal: "061", soundVal2: "062", active: false },
+  { soundVal: "071", soundVal2: "072", active: false },
+  { soundVal: "081", soundVal2: "082", active: false },
+  { soundVal: "091", soundVal2: "092", active: false },
+  { soundVal: "101", soundVal2: "102", active: false },
+  { soundVal: "111", soundVal2: "112", active: false },
+];
+const getDevice = async (id, index) => {
+  const res = await auditionApi.getDevice({ id: id });
+  var idstr = id.substring(0, 2);
   if (res.code == 0) {
-    if (deviceset.includes(idstr)) return
+    if (deviceset.value.includes(idstr)) return;
+    deviceset.value.filter((item) => item.id == idstr).active = true;
+  }
 
+  if (index + 1 === devices.length) {
+    devices.forEach((ele, eleIndex) => {
+      if (!ele.active) {
+        isSuccess.value = false;
+        ElMessageBox.confirm(
+          "连接异常！",
+          "提示",
+          {
+            confirmButtonText: "重新连接",
+            cancelButtonText: "关闭",
+            type: "warning",
+          }
+        ).then(() => {
+          buttClick()
+        });
+        throw new Error();
+      } else if (ele.active && eleIndex + 1 === devices.length) {
+        isSuccess.value = true;
+        ElMessageBox.confirm(
+          "连接成功！",
+          "提示",
+          {
+            confirmButtonText: "完成连接",
+            showCancelButton: false,
+            type: "success",
+          }
+        ).then(() => {
+
+        });
+      }
+    });
   }
-  deviceset.value.filter(item => item.id == idstr).active = true
   // console.log('===>>deviceset',deviceset)
-}
+};
 let buttClick = async () => {
-  for (const item of devices) {
-    getDevice(item.soundVal)
-    // if (item.soundVal2) {
-    //   getDevice(item.soundVal2)
-    // }
-  }
+  devices.forEach((item, index) => {
+    getDevice(item.soundVal, index);
+  });
+  // for (const item of devices) {
+  //   getDevice(item.soundVal)
+  //   // if (item.soundVal2) {
+  //   //   getDevice(item.soundVal2)
+  //   // }
+  // }
 };
 let getBgc = (idx) => {
-  console.log("idx===>执行", idx.id)
+  // console.log("idx===>执行", idx.id)
   // if (!idx.active) return "#DEDEDE"
-  if (idx.id == '01' || idx.id == '07') return "rgb(250,250,245)"
-  return parseInt(idx.id) > 6 ? "#3357C4" : "red"
+  let bgCor = "";
+  // deviceset.value.forEach((ele, index) => {
+  // console.log(idx.id.substring(1, 2))
+  const strId = idx.id.charAt(0) === "0" ? idx.id.substring(1, 2) : idx.id;
+  if (idx.active && (strId === "0" || strId.id === "6")) {
+    bgCor = "#fff";
+  } else if (idx.active && (strId !== "0" || strId !== "6")) {
+    bgCor = strId < 6 ? "red" : "#3357C4";
+  }
+  // });
+  return bgCor;
+  // if (idx.id == '01' || idx.id == '07') return "rgb(250,250,245)"
+  // return parseInt(idx.id) > 6 ? "#3357C4" : "red"
 };
 </script>
 <style scoped lang="scss">
@@ -150,7 +230,7 @@ body {
     height: 306px;
     // flex-direction: column;
     flex-wrap: wrap;
-    // background-color: #f6f6f6;
+    background-color: #f6f6f6;
 
     .el-col {
       margin-left: 3px;
@@ -168,7 +248,7 @@ body {
         line-height: 24px;
         text-align: center;
         border-radius: 50%;
-        background-color: red;
+        background-color: #dddddd;
         margin: 3px;
       }
     }
@@ -183,4 +263,5 @@ body {
       align-content: center;
     }
   }
-}</style>
+}
+</style>
