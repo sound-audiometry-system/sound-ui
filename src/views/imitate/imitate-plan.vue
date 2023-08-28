@@ -99,7 +99,7 @@ let isOpen = ref(false)
 const isStart = ref(false)
 const soundIndex = ref(30)
 const bgIndex = ref(-1)
-// console.log(testData.commands, 'testData')
+// console.log(testData, 'testData')
 // answerDialogRef.value.show([])
 type Props = {
   imageData: any;
@@ -140,7 +140,7 @@ const startTest = async (value1, value2) => {
   if (!value1 && !value2) {
     params["test"] = true;
   }
-  const res = await auditionApi.startTest(testData[0], params);
+  const res = await auditionApi.startTest(testData, params);
   if (res.code == 0) {
     isStart.value = true;
     // isPlay.value = false
