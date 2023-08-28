@@ -122,13 +122,14 @@ const devices = [
   { soundVal: "111", soundVal2: "112", active: false },
 ];
 const getDevice = async (id, index) => {
+  console.log(index)
   const res = await auditionApi.getDevice({ id: id });
   var idstr = id.substring(0, 2);
-  if (res.code == 0) {
+  if (res && res.code == 0) {
     if (deviceset.value.includes(idstr)) return;
     deviceset.value.filter((item) => item.id == idstr).active = true;
   }
-
+  
   if (index + 1 === devices.length) {
     devices.forEach((ele, eleIndex) => {
       if (!ele.active) {
