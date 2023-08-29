@@ -293,7 +293,7 @@ const handleCirculate = async () => {
   //构建参数
   let param = {
     id: props.testData.id,name: props.testData.name, "enableManualPlayMode": true, envSoundConfig: [
-      { "target": queryForm.index, "file": item.environmentalSource, "volume": queryForm.environmentalSoundVolume },
+      { "target": queryForm.index, "file": item.environmentalSource, "volume": queryForm.environmentalSoundVolume ,duration:3000},
     ]
   }
   //调用接口
@@ -352,7 +352,6 @@ const handleSaveItem = async () => {
       x.signalCalibrated = true
     }
   })
-
 };
 //添加答案，如果存在则合并更新，不存在则直接存入
 const setData = (key, value) => {
@@ -383,10 +382,8 @@ const handleCalibration = async (item: any, index: number) => {
   item.isCalibration = isCalibration;
   const form = {
     id: props.testData.id,
-    audios: [...Array.from(testMap.values())],
+    indexs: [...Array.from(testMap.values())],
   };
-  console.log(form, "form");
-  console.log("报错校准值");
   const res = await imitateApi.dbCalibration(form);
   if (res.code == 0) {
     ElMessage({ message: "校准值上传成功", type: "success", });
