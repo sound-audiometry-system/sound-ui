@@ -55,7 +55,8 @@ class Api {
       (error) => {
         error.config && removePending(error.config)
         httpErrorStatusHandle(error)
-        return Promise.reject(error)
+        // return Promise.reject(error)
+        return error.data
       }
     )
   }
@@ -154,7 +155,7 @@ function httpErrorStatusHandle(error: any) {
       message,
     })
   } else {
-    this.$message.closeAll()
+    // this.$message.closeAll()
   }
   
 }
