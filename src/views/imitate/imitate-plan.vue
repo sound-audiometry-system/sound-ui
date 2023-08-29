@@ -5,7 +5,7 @@
   </el-row>
   <el-form-item label="测试名称">
     <el-input style="width: 1720px;" disabled v-model="testName" />
-    <el-button style="float: left;margin-left: 5px;" type="primary" @click="$router.back()">返回</el-button>
+    <el-button style="float: left;margin-left: 5px;" type="primary" @click="handleBack">返回</el-button>
   </el-form-item>
   <el-container>
     <el-aside>
@@ -85,10 +85,12 @@
 </template>
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import { Edit, CircleClose, CircleCheck } from "@element-plus/icons-vue";
+import { CircleClose } from "@element-plus/icons-vue";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
-import { useStore, mapState } from "vuex";
+import { useStore } from "vuex";
+import { useRouter } from "vue-router";
+const router = useRouter();
 let store = useStore();
 const testData = store.getters.getImitateData;
 let testName = ref(testData.name);
@@ -107,6 +109,10 @@ type Props = {
   isPlay: any
   soundIndex: Number
   bgIndex: Number
+};
+const handleBack = () => {
+  emit("handleStop");
+  router.back();
 };
 const emit = defineEmits([
   "handleStart",

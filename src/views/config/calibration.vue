@@ -7,7 +7,7 @@
       </el-col>
       <el-col :span="2">
         <el-button color="#208571" @click="searchData">查询</el-button>
-        <el-button>重置</el-button>
+        <el-button @click="resetSearch">重置</el-button>
       </el-col>
       <el-col :span="6">
         <div class="mb-2 flex items-center" style="height: 28px;">
@@ -61,9 +61,17 @@ let tableData = ref([]);
 
 let tableDatas = []
 const queryForm = reactive({});
+const resetSearch = ()=>{
+  //搜索条件置空
+  value.value = ""
+  radio1.value = "0"
+  getListTestMode("",false);
+}
+
 const changRadio = (val) => {
   getListTestMode(value.value,val==1?true:false);
 };
+
 const searchData = () => {
   getListTestMode(value.value,radio1.value == "0"?false:true);
 };

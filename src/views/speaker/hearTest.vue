@@ -47,16 +47,8 @@
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button
-          @click="handleCheck"
-          :disabled="syncDisabledBtn"
-          size="large"
-          style="margin-right: 5px"
-        >
-          <el-icon style="color: red; margin-right: 2px"
-            ><CircleClose /></el-icon
-          >错误</el-button
-        >
+        <el-button @click="handleCheck" :disabled="syncDisabledBtn" size="large" style="margin-right: 5px" >
+          <el-icon style="color: red; margin-right: 2px"><CircleClose /></el-icon>错误</el-button>
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
       <el-row
