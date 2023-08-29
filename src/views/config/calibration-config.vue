@@ -138,7 +138,9 @@ import sound from "../../components/sound/index.vue";
 const keyupEnter = () => {
   console.log("enter")
 }
-
+const globalParam = reactive({
+  leftHide: true, rightHide: true
+})
 const setup = () => {
   //清空答案记录
   testMap.clear()
@@ -261,14 +263,16 @@ const emit = defineEmits(["handleBack"]);
 const handleStart = async () => {
   auditionApi.stopTest()
   let item: any = getItem(queryForm.index);
-  //构建对象 signalSource
+  //构建对象 signalSource leftHide/rightHide
+  let targetIndex = parseInt(queryForm.index + "")
   let param = {
-    id: props.testData.id, "enableManualPlayMode": false, signalSource: [{
-      audios: [{ "target": queryForm.index, "file": item.signalSource, "volume": queryForm.signalSoundVolume }],
+    id: props.testData.id, "enableManualPlayMode": false,
+    signalSource: [{
+      audios: [{ "target": targetIndex, "file": item.signalSource, "volume": queryForm.signalSoundVolume }],
     }]
   }
   console.log(param, "param")
-  const res = await auditionApi.startTest(param);
+  const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {
     isStart = true;
   }
@@ -289,15 +293,17 @@ const handleCirculate = async () => {
   auditionApi.stopTest()
   //获取测试对象信息
   let item: any = getItem(queryForm.index);
+  let targetIndex = parseInt(queryForm.index + "")
   if (!item) return
-  //构建参数
+  //构建参数  
   let param = {
-    id: props.testData.id,name: props.testData.name, "enableManualPlayMode": true, envSoundConfig: [
-      { "target": queryForm.index, "file": item.environmentalSource, "volume": queryForm.environmentalSoundVolume ,duration:3000},
+    id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
+    envSoundConfig: [
+      { "target": targetIndex, "file": item.environmentalSource, "volume": queryForm.environmentalSoundVolume, duration: 3000 },
     ]
   }
   //调用接口
-  const res = await auditionApi.startTest(param);
+  const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {
     isStart = true;
   }
