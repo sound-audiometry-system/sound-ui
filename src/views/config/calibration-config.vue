@@ -263,12 +263,13 @@ const emit = defineEmits(["handleBack"]);
 const handleStart = async () => {
   auditionApi.stopTest()
   let item: any = getItem(queryForm.index);
-  //构建对象 signalSource leftHide/rightHide
+  //构建对象 leftHide/rightHide
   let targetIndex = parseInt(queryForm.index + "")
   let param = {
-    id: props.testData.id, "enableManualPlayMode": false,
-    signalSource: [{
-      audios: [{ "target": targetIndex, "file": item.signalSource, "volume": queryForm.signalSoundVolume }],
+    id: props.testData.id,name: props.testData.name, "enableManualPlayMode": false,
+    signalSoundConfig: [{
+      audios: [{ "target": targetIndex, "file": item.signalSource,"duration": 3000, "volume": queryForm.signalSoundVolume }],
+      "nextAudioInterval": 1
     }]
   }
   console.log(param, "param")
@@ -299,7 +300,12 @@ const handleCirculate = async () => {
   let param = {
     id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
     envSoundConfig: [
-      { "target": targetIndex, "file": item.environmentalSource, "volume": queryForm.environmentalSoundVolume, duration: 3000 },
+      { 
+        "target": targetIndex, 
+        "file": item.environmentalSource, 
+        "volume": queryForm.environmentalSoundVolume, 
+        duration: 3000 
+      },
     ]
   }
   //调用接口
