@@ -126,8 +126,8 @@ const getDevice = async (id, index) => {
   const res = await auditionApi.getDevice({ id: id });
   var idstr = id.substring(0, 2);
   if (res && res.code == 0) {
-    if (deviceset.value.includes(idstr)) return;
-    deviceset.value.filter((item) => item.id == idstr).active = true;
+    // if (deviceset.value.includes(idstr)) return;
+    deviceset.value.filter((item) => item.id == idstr)[0].active = true;
   }
   
   if (index + 1 === devices.length) {
@@ -182,7 +182,7 @@ let getBgc = (idx) => {
   // deviceset.value.forEach((ele, index) => {
   // console.log(idx.id.substring(1, 2))
   const strId = idx.id.charAt(0) === "0" ? idx.id.substring(1, 2) : idx.id;
-  if (idx.active && (strId === "0" || strId.id === "6")) {
+  if (idx.active && (strId === "0" || strId === "6")) {
     bgCor = "#fff";
   } else if (idx.active && (strId !== "0" || strId !== "6")) {
     bgCor = strId < 6 ? "red" : "#3357C4";
