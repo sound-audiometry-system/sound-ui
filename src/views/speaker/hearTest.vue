@@ -51,17 +51,7 @@
           <el-icon style="color: red; margin-right: 2px"><CircleClose /></el-icon>错误</el-button>
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
-      <el-row
-        :gutter="10"
-        style="
-          margin-left: 10px;
-          width: 920px;
-          height: 305px;
-          background-color: #efefef;
-          padding-top: 6px;
-          overflow: auto;
-        "
-      >
+      <el-row :gutter="10" style="margin-left: 10px; width: 920px; height: 305px; background-color: #efefef;padding-top: 6px;overflow: auto;">
         <el-col
           v-for="(item, index) in props.imageData.answerList"
           :key="item.id"
@@ -114,8 +104,8 @@
       <el-row class="el-btn b">
         <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev">上一个(左键)</el-button>
         <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleNext">下一个(右键)</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled" @click="handleReImage">重复</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled || !isStop" @click="handleStop">测试结束</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleReImage">重复</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || !isStop" @click="handleStop">测试结束</el-button>
       </el-row>
       <el-row>
         <div style="height: 300px; width: 950px; background-color: #e9e9e9; margin-top: 15px; padding: 12px 20px;">
@@ -304,9 +294,7 @@ const handleReImage = useThrottle(
       //因为 imageDate 会被修改，所以这里需要重新赋值 -1
       if (answerIndex.value > 0) answerIndex.value--;
     }
-  },
-  1500,
-  isDisabled
+  }, 1500, isDisabled
 );
 const handkeyCode = (e) => {
   if (e.keyCode === 32) {
