@@ -73,7 +73,7 @@
         </div>
       </el-col>
       <el-col :span="12">
-        <sound :sound-index="0"></sound>
+        <sound :sound-index="soundIndex" :bg-index="bgIndex"></sound>
         <div
           style="width: 230px;margin-top: 40px;margin-left: 20px;height: 61px;display: flex;align-items: center;background: #d8d8d8;justify-content: space-around;">
           <el-button size="large" @click="handleStart">播放</el-button>
@@ -98,7 +98,7 @@
               [Enter]</el-button>
           </el-col>
           <el-col>
-            <el-slider style="width: 96%" v-model="queryForm.signalSoundVolume" :min="25" :max="80" :marks="marks"
+            <el-slider style="width: 96%" v-model="queryForm.signalSoundVolume" :min="-2" :max="100" :marks="marks"
               :disabled="!isSignalCalibration" />
           </el-col>
         </el-row>
@@ -119,7 +119,7 @@
             <el-button :disabled="!isCalibration" @click="handleSaveEnv">保存点 [Enter]</el-button>
           </el-col>
           <el-col>
-            <el-slider style="width: 96%" v-model="queryForm.environmentalSoundVolume" :min="25" :max="80" :marks="marks"
+            <el-slider style="width: 96%" v-model="queryForm.environmentalSoundVolume" :min="-2" :max="100" :marks="marks"
               :disabled="!isCalibration" />
           </el-col>
         </el-row>
@@ -158,12 +158,16 @@ const getTagCss = (item) => {
 }
 const radioFlag = ref(-1)
 const radioFlagEnv = ref(-1)
+const soundIndex = ref(-2)
+const bgIndex = ref(-2)
 //点击校准
 const startCalibration = (item, flag) => {
   console.info(item, "勾选校准音频")
   //关闭所有勾选框
   radioFlagEnv.value = -1
   radioFlag.value = -1
+  bgIndex.value = -2
+  soundIndex.value = -2
   //判断按钮是否关闭
   /** 开启校准组件，缓存数据对象 index */
   isSignalCalibration.value = false
@@ -180,6 +184,7 @@ let startSignal = (item) => {
     return false
   }
   radioFlag.value = item.index
+  soundIndex.value = radioFlag.value * 2 +1
   // 打开信号声调试
   if (!item.signalCalibrated) {
     isSignalCalibration.value = true
@@ -193,6 +198,7 @@ let startEnvironment = (item) => {
   }
   //判断按钮是否开启
   radioFlagEnv.value = item.index
+  bgIndex.value = radioFlagEnv.value * 2
   //打开环境声调试
   if (!item.environmentalCalibrated) {
     isCalibration.value = true
@@ -247,7 +253,10 @@ interface Mark {
   label: string;
 }
 type Marks = Record<number, Mark | string>;
-const marks = reactive<Marks>({ 30: "30", 35: "35", 40: "40", 45: "45", 50: "50", 55: "55", 60: "60", 65: "65", 70: "70", 75: "75", 80: "80", });
+const marks = reactive<Marks>({
+  0: "0", 5: "5", 10: "10", 15: "15", 20: "20", 25: "25", 30: "30", 35: "35", 40: "40", 45: "45", 50: "50",
+  55: "55", 60: "60", 65: "65", 70: "70", 75: "75", 80: "80", 85: "85", 90: "90", 95: "95", 100: "100",
+});
 watch(
   () => props.testData,
   (newValue, oldValue) => {
@@ -258,21 +267,24 @@ watch(
 const emit = defineEmits(["handleBack"]);
 /**
  * 播放
- * TODO 构建参数
+ * 构建参数
  */
 const handleStart = async () => {
   auditionApi.stopTest()
   let item: any = getItem(queryForm.index);
   //构建对象 leftHide/rightHide
+  
+  console.info(radioFlagEnv.value, "item radioFlagEnv")
+  console.info(radioFlag.value, "item radioFlag")
+  // TODO 判断音箱index
   let targetIndex = parseInt(queryForm.index + "")
   let param = {
-    id: props.testData.id,name: props.testData.name, "enableManualPlayMode": false,
+    id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
     signalSoundConfig: [{
-      audios: [{ "target": targetIndex, "file": item.signalSource,"duration": 3000, "volume": queryForm.signalSoundVolume }],
+      audios: [{ "target": targetIndex, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
       "nextAudioInterval": 1
     }]
   }
-  console.log(param, "param")
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {
     isStart = true;
@@ -288,7 +300,7 @@ const getItem = (index) => {
 }
 /**
  * 循环播放
- * TODO 构建参数
+ * 构建参数
  */
 const handleCirculate = async () => {
   auditionApi.stopTest()
@@ -300,11 +312,11 @@ const handleCirculate = async () => {
   let param = {
     id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
     envSoundConfig: [
-      { 
-        "target": targetIndex, 
-        "file": item.environmentalSource, 
-        "volume": queryForm.environmentalSoundVolume, 
-        duration: 3000 
+      {
+        "target": targetIndex,
+        "file": item.environmentalSource,
+        "volume": queryForm.environmentalSoundVolume,
+        duration: 3000
       },
     ]
   }
