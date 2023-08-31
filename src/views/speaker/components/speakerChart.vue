@@ -29,6 +29,9 @@ const option = {
   tooltip: {
     trigger: "axis",
   },
+  legend: {
+    data: ['AC', 'UCL']
+  },
   grid: {
     left: 40,
     right: 40,
@@ -108,9 +111,9 @@ const option = {
       type: "line",
       stack: "Total",
       areaStyle: {},
-      emphasis: {
-        focus: "series",
-      },
+      // emphasis: {
+      //   focus: "series",
+      // },
       data: [20, 20, 20, 20, 20, 20, 20],
       // itemStyle: {
       //   normal: {
@@ -182,12 +185,15 @@ const option = {
     },
   ],
 };
+/**
+ * 删除按钮，删除当前选中线条所有数据
+ */
 const handleDelLine = ()=> {
   let data = props.chartIndex == 0 ? AcData : UclData;
   if(data.length === 0) return
     data.splice(data.length - 1, 1);
     if (chartInstance) {
-      option.series[props.chartIndex].data = data;
+      option.series[props.chartIndex].data.length =0;
       chartInstance.setOption(option);
     }
 }
