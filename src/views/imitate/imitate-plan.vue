@@ -46,7 +46,7 @@
           </el-icon>错误</el-button>
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
-      <el-row :gutter="10" style=" margin-left: 10px; width: 920px;height: 300px;background-color: #8cdcfe;padding-top: 6px;overflow: auto;">
+      <el-row :gutter="10" style=" margin-left: 10px; width: 920px;height: 300px;background-color: #EFEFEF;padding-top: 6px;overflow: auto;">
       </el-row>
     </el-aside>
 
@@ -56,7 +56,7 @@
           <Microphone />
         </el-icon>{{ isOpen ? "关闭录音" : "开启录音" }}</el-button>
       <div style="height: 320px; width: 760px">
-        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" :bg-index="bgIndex"></sound>
+        <sound @handleClkItem="handleClkItem" :sound-index="0"></sound>
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="isStart" size="large" plain @click="handleStart">开始</el-button>
@@ -99,7 +99,7 @@ let value2 = ref(false);
 let value3 = ref(false);
 let isOpen = ref(false)
 const isStart = ref(false)
-const soundIndex = ref(30)
+// const soundIndex = ref(30)
 const bgIndex = ref(-1)
 // console.log(testData, 'testData')
 // answerDialogRef.value.show([])
@@ -107,7 +107,7 @@ type Props = {
   imageData: any;
   answerIndex: any;
   isPlay: any
-  soundIndex: Number
+  // soundIndex: Number
   bgIndex: Number
 };
 const handleBack = () => {
@@ -185,12 +185,12 @@ onMounted(() => {
 
     let item = JSON.parse(e.newValue)
     if (item.id == -1) {//播放背景声
-      bgIndex.value = item.target;
+      // bgIndex.value = item.target;
       return;
     }
     // 1111
     if (e.key === "audioStart") {
-      soundIndex.value = item.target
+      // soundIndex.value = item.target
     }
   });
 })
