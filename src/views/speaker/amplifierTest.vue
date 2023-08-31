@@ -24,9 +24,9 @@
               <div style="display: flex; align-items: center">
                 <span class="left-box"></span>强制性频率
               </div>
-              <div>
+              <!-- <div>
                 <el-button type="info" plain>保存并进行另一侧</el-button>
-              </div>
+              </div> -->
             </div>
           </el-col>
           <el-col :span="11">
