@@ -58,7 +58,7 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Male width="1.2em" height="1.2em" v-if="userInfo[0]?.gender == '1'"/>
+            <Male width="1.2em" height="1.2em" v-if="userInfo?.gender == '1'"/>
             <Female width="1.2em" height="1.2em" v-else />
             <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
           </div>
@@ -107,8 +107,7 @@ const chooseTypeVisble = ref(false);
 const inputUserId = ref(null);
 //存储选择的用户信息
 // const userInfo = ;
-const userInfo =
-sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo")||"") :
+const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo")||"") :
   ref({
     name: null,
     gender: "",
@@ -117,7 +116,7 @@ sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo
 const userSearchData = ref([
   // { gender: 1, name: "000032" },
 ]);
-inputUserId.value = userInfo[0]?.uid;
+inputUserId.value = userInfo?.uid;
 userSearchData.value = userInfo;
 
 //测试列表
@@ -192,6 +191,7 @@ const handleNav = () => {
 const toTest = (info) => {
   // inputUserId.value = info.name;
   userInfo.value = info;
+  sessionStorage.setItem("userInfo", JSON.stringify(info));
   getUserPatient(info.uid);
   chooseTypeVisble.value = true;
 };
