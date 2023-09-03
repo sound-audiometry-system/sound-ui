@@ -39,10 +39,10 @@
               </div>
               <div class="mbm14 bc-btn " :class="{'btn-active':signalBtn}" @click="playSignal"> 播放信号<p class="c9">[空格]</p>
               </div>
-              <div class="mbm14 bc-btn">
+              <!-- <div class="mbm14 bc-btn">
                 <p>保存点</p>
                 <p class="c9">[Enter]</p>
-              </div>
+              </div> -->
             </div>
           </el-col>
         </el-row>
