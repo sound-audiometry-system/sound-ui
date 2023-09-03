@@ -88,8 +88,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref, reactive } from "vue";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ref } from "vue";
+import { ElMessageBox } from "element-plus";
 import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
 const isSuccess = ref(true);
@@ -122,7 +122,6 @@ const devices = [
   { soundVal: "111", soundVal2: "112", active: false },
 ];
 const getDevice = async (id, index) => {
-  console.log(index)
   const res = await auditionApi.getDevice({ id: id });
   var idstr = id.substring(0, 2);
   if (res && res.code == 0) {
@@ -165,16 +164,13 @@ const getDevice = async (id, index) => {
   // console.log('===>>deviceset',deviceset)
 };
 let buttClick = async () => {
-  devices.forEach((item, index) => {
-    getDevice(item.soundVal, index);
-  });
-  // for (const item of devices) {
-  //   getDevice(item.soundVal)
-  //   // if (item.soundVal2) {
-  //   //   getDevice(item.soundVal2)
-  //   // }
-  // }
+  for(let i = 0;i<=devices.length;i++){
+    let item = devices[i];
+    getDevice(item.soundVal, i);
+    await sleep(2000)
+  }
 };
+const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
 let getBgc = (idx) => {
   // console.log("idx===>执行", idx.id)
   // if (!idx.active) return "#DEDEDE"
