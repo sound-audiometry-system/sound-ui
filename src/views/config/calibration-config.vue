@@ -94,7 +94,7 @@
           </el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="2">(步幅)</el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4">
-            <el-button :disabled="!isSignalCalibration" @keyup.enter.native="keyupEnter()" @click="handleSaveItem">保存点
+            <el-button :disabled="!isSignalCalibration" @click="handleSaveItem">保存点
               [Enter]</el-button>
           </el-col>
           <el-col>
@@ -135,9 +135,7 @@ import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
 
-const keyupEnter = () => {
-  console.log("enter")
-}
+
 const globalParam = reactive({
   leftHide: true, rightHide: true
 })
@@ -274,8 +272,6 @@ const handleStart = async () => {
   let item: any = getItem(queryForm.index);
   //构建对象 leftHide/rightHide
   
-  console.info(radioFlagEnv.value, "item radioFlagEnv")
-  console.info(radioFlag.value, "item radioFlag")
   // TODO 判断音箱index
   let targetIndex = parseInt(queryForm.index + "")
   let param = {

@@ -5,21 +5,18 @@
       <div class="titleItem">
         <span>扬声器测试</span>
       </div>
-      <el-button
-        size="large"
-        style="float: right; position: relative; z-index: 999; margin-top: 3px"
-        @click="$router.back()"
-        >返回</el-button
-      >
+      <el-button size="large" style="float: right; position: relative; z-index: 999; margin-top: 3px"
+        @click="$router.back()">返回</el-button>
     </el-header>
     <el-main>
       <div style="margin-top: 80px">
         <el-row :gutter="10">
           <el-col :span="13">
-            <el-icon style="position: absolute;right: 82px;top: -24px;font-size: 18px;cursor: pointer;" @click="handleDelLine">
+            <el-icon style="position: absolute;right: 82px;top: -24px;font-size: 18px;cursor: pointer;"
+              @click="handleDelLine">
               <Delete />
             </el-icon>
-            <speaker-chart ref="chartRef" :chartIndex="chartIndex"></speaker-chart>
+            <speaker-chart ref="chartRef" :chartIndex="chartIndex" :clickXY="clickXY"></speaker-chart>
             <div class="chart-btm">
               <div style="display: flex; align-items: center">
                 <span class="left-box"></span>强制性频率
@@ -33,30 +30,14 @@
             <sound :sound-index="soundIndex"></sound>
             <div style="margin-top: 60px">
               <div :class="'mbm14 ac-btn ' + acActive" v-on:click="clkAc">
-                <img
-                  style="margin-right: 6px"
-                  src="../../assets/ac.png"
-                  width="40"
-                  alt=""
-                />
+                <img style="margin-right: 6px" src="../../assets/ac.png" width="40" alt="" />
                 AC
               </div>
-              <div
-                @click="chartIndex = 1"
-                :class="'mbm14 ac-btn ' + uclActive"
-                v-on:click="clkUcl"
-              >
-                <img
-                  style="margin-right: 6px"
-                  src="../../assets/ucl.png"
-                  width="40"
-                  alt=""
-                />
+              <div @click="chartIndex = 1" :class="'mbm14 ac-btn ' + uclActive" v-on:click="clkUcl">
+                <img style="margin-right: 6px" src="../../assets/ucl.png" width="40" alt="" />
                 UCL
               </div>
-              <div class="mbm14 bc-btn">
-                播放信号
-                <p class="c9">[空格]</p>
+              <div class="mbm14 bc-btn " :class="{'btn-active':signalBtn}" @click="playSignal"> 播放信号<p class="c9">[空格]</p>
               </div>
               <div class="mbm14 bc-btn">
                 <p>保存点</p>
@@ -74,12 +55,29 @@ import sound from "../../components/sound/index.vue";
 import speakerChart from "./components/speakerChart.vue";
 import userHeader from "../lay/MainHeader.vue";
 import { imitateApi } from "@/serve/api/user";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, toRefs } from "vue";
 const acActive = ref("btn-active");
 const uclActive = ref("");
+const signalBtn = ref(false);
 let chartIndex = ref(0);
 const soundIndex = ref(1);
 const chartRef = ref(null);
+//点击时x,y
+const clickXY: any = ref([])
+
+const playSignal = async () => {
+  signalBtn.value = true
+  // console.info(clickXY.value[0],"clickXY")
+  if (clickXY.value.length > 0) {
+    let form = {
+      file: clickXY.value[0] + "x" + clickXY.value[1],
+      volume: 80,
+    };
+    const res = await imitateApi.playAudioTest(form);
+  }
+  signalBtn.value = false
+}
+
 const clkUcl = () => {
   uclActive.value = "btn-active";
   acActive.value = "";
@@ -91,18 +89,28 @@ const clkAc = () => {
   uclActive.value = "";
   acActive.value = "btn-active";
   chartIndex.value = 0;
-  console.log("clkAc");
 };
 
 // getAudioTest
 const getAudioTest = async () => {
   const res = await imitateApi.getAudioTest();
 };
-const handleDelLine = ()=> {
+const handleDelLine = () => {
   chartRef.value.handleDelLine();
 }
 onMounted(() => {
   getAudioTest();
+  window.addEventListener("keyup", (e: any) => {
+    if (e.keyCode == 32) {
+      playSignal()
+      signalBtn.value = false
+    }
+  })
+  window.addEventListener("keydown",(e:any)=>{
+    if (e.keyCode == 32) {
+      signalBtn.value = true
+    }
+  })
 });
 </script>
 
@@ -136,6 +144,7 @@ onMounted(() => {
   font-weight: 500;
   font-size: 14px;
 }
+
 .bc-btn {
   width: 261px;
   height: 56px;
@@ -144,19 +153,24 @@ onMounted(() => {
   margin: auto;
   text-align: center;
 }
+
 .btn-active {
   background: #c2c76a;
 }
+
 .mbm14 {
   margin-bottom: 14px;
 }
+
 .c9 {
   color: #989898;
 }
+
 .chart-btm {
   display: flex;
   justify-content: space-between;
   padding: 20px;
+
   .left-box {
     display: inline-block;
     width: 40px;

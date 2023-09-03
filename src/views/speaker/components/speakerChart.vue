@@ -12,7 +12,8 @@ import { ElMessage } from "element-plus";
 import { imitateApi } from "@/serve/api/user";
 let chartInstance: ECharts;
 type Props = {
-  chartIndex: any;
+  chartIndex: any
+  clickXY:any
 };
 const chartRef = ref<ECharts | null>(null);
 const props = defineProps<Props>();
@@ -202,7 +203,6 @@ const initChart = () => {
   chartInstance.setOption(option);
 };
 watch(props.chartIndex, (newValue, oldValue) => {
-  console.log(props.chartIndex);
 });
 const emit = defineEmits(["handleClk"]);
 defineExpose({
@@ -213,6 +213,8 @@ onMounted(() => {
   // chart = init(chartRef.value as HTMLElement);
   initChart();
   chartInstance.getZr().on("click", async (params: any) => {
+    //初始化点击鼠标
+    props.clickXY.length = 0
     let data = props.chartIndex == 0 ? AcData : UclData;
     const pointInPixel = [params.offsetX, params.offsetY];
     // console.log(chartInstance.convertFromPixel("grid", pointInPixel));
@@ -283,6 +285,7 @@ onMounted(() => {
     data.forEach((arr, index) => {
       if (arr[0] === xAxis) {
         data.splice(index, 1, [xAxis, clkY]);
+        props.clickXY.push(xAxisData[xAxis],clkY);
         isPush = true;
       }
     });
@@ -294,6 +297,7 @@ onMounted(() => {
       });
       return;
     }
+    !isPush && props.clickXY.push(xAxisData[data.length],clkY);
     !isPush && data.push([data.length, clkY]);
     //TODO 区分Ac和Ucl
     option.series[props.chartIndex].data = data;
