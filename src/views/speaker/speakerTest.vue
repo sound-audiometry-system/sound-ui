@@ -2,7 +2,7 @@
 <template>
   <el-container>
     <el-header>
-      <userHeader :isPlay="isPlay"></userHeader>
+      <userHeader v-if="prevRouter !== '/imitate'" :isPlay="isPlay"></userHeader>
     </el-header>
     <el-main v-loading="isOpenLoading" ref="main">
       <el-tabs v-model="typeName" stretch="true" type="border-card">
@@ -65,7 +65,7 @@ import type { FormInstance, FormRules } from "element-plus";
 import { auditionApi } from "@/serve/api/user";
 import userHeader from "../lay/MainHeader.vue";
 import hearTest from "./hearTest.vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 const typeName = ref("1");
 let isStart = false;
@@ -77,6 +77,8 @@ const isOpenLoading = ref(false)
 const fileUrl = [];
 let store = useStore();
 const route = useRoute();
+const router = useRouter();
+const prevRouter = router.options.history.state.back
 let isSuccess = false;
 if (route.query.type) typeName.value = route.query.type;
 // console.log(store, 'store')
@@ -87,16 +89,16 @@ let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
-const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "");
+const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") : ""
 const openType = ref(0);
 const handleTestStop = inject<() => void>("handleStop");
 interface RuleForm {
   operator: string;
 }
 // console.log(userInfo[0])
-// console.log(testData)
+console.log(testData)
 const form = reactive({
-  uid: userInfo[0].uid,
+  uid: userInfo && userInfo[0].uid,
   testId: testData[0].id,
   answerList: [],
   // answerList: testData[0].signalSoundConfig,

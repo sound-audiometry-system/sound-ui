@@ -144,15 +144,19 @@ const handleNav = () => {
   //   router.push({ path: "/speaker" });
   // }
 };
-//加载测试数据
+// 加载测试数据
 // loadTestData()
 // getUserInfo();
 
 //跳转到测试页面
 const toTest = (info) => {
   // chooseTypeVisble.value = true;
-  store.commit("setImitateData", info);
-  router.push("/imitate-plan");
+  // store.commit("setImitateData", info);
+  // console.log(info)
+  // console.log([info])
+  store.commit("setTestData", [info]);
+  // router.push("/imitate-plan");
+  router.push({ path: "/speaker", query:{ type: '2' } });
 };
 
 onMounted(() => {

@@ -41,7 +41,7 @@
             <el-switch v-model="value3" @change="beforeChange1" />
           </div>
           <p style="font-size: 12px">同时打开两边显示器</p>
-          <p style="font-size: 14px">当前正在答 {{ answerIndex && answerIndex <= 0 ?'':answerIndex+1 }} 题</p>
+          <p v-if="prevRouter !== '/imitate'" style="font-size: 14px">当前正在答 {{ answerIndex && answerIndex <= 0 ?'':answerIndex+1 }} 题</p>
         </div>
       </div>
 
@@ -61,9 +61,9 @@
             @click="checkedImg(item, index)"
             :class="{
               'is-checked-img-error':
-                item.isCheckFlag && index + 1 != props.imageData.target,
+              index === checkedImgIndex && index + 1 != props.imageData.target,
               'is-checked-img-success':
-                item.isCheckFlag && index + 1 == props.imageData.target,
+              index === checkedImgIndex  && index + 1 == props.imageData.target,
             }"
             style="width: 100%; height: 160px"
             :src="item.sourceUrl"
@@ -71,13 +71,13 @@
           />
           <div style="text-align: center">
             <el-icon
-              v-if="item.isCheckFlag && index + 1 != props.imageData.target"
+              v-if="index === checkedImgIndex  && index + 1 != props.imageData.target"
               style="color: red; font-size: 26px; margin: 0 auto"
             >
               <CircleClose />
             </el-icon>
             <el-icon
-              v-if="item.isCheckFlag && index + 1 == props.imageData.target"
+              v-if="index === checkedImgIndex  && index + 1 == props.imageData.target"
               style="color: green; font-size: 26px"
             >
               <CircleCheck />
@@ -98,14 +98,14 @@
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart" >开始</el-button>
-        <el-button :disabled="answerIndex + 1 !== answerMarks.length && (!props.isPlay || !isStop)" size="large" plain @click="handleSave(1)" >保存</el-button>
-        <el-button :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="answerIndex + 1 !== answerMarks.length && (!props.isPlay || !isStop)" size="large" plain @click="handleSave(1)" >保存</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handlePrev">上一个(左键)</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleNext">下一个(右键)</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode" @click="handleReImage">重复</el-button>
-        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || !isStop" @click="handleStop">测试结束</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex <= 0" @click="handlePrev">上一个(左键)</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex + 1 === answerMarks.length" @click="handleNext">下一个(右键)</el-button>
+        <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex < 0" @click="handleReImage">重复</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay || isDisabled || enableManualplavMode || !isStop" @click="handleStop">测试结束</el-button>
       </el-row>
       <el-row>
         <div style="height: 300px; width: 950px; background-color: #e9e9e9; margin-top: 15px; padding: 12px 20px;">
@@ -135,7 +135,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
 import {  CircleClose, CircleCheck } from "@element-plus/icons-vue";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
 import answerDialog from "./components/answerDialog.vue";
 import soundDialog from "./components/soundDialog.vue";
@@ -144,14 +144,17 @@ import { auditionApi } from "@/serve/api/user";
 import { useStore } from "vuex";
 import { useThrottle } from "../../utils/index";
 let store = useStore();
+const route = useRoute();
 const testData = store.getters.getTestData;
 let testName = ref(testData[0].name);
+const prevRouter = router.options.history.state.back
 const answerDialogRef = ref(null) as any;
 const soundDialogRef = ref(null) as any;
 let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
+const checkedImgIndex = ref(-1)
 let isDisabled = ref(false);
 let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
@@ -270,7 +273,7 @@ const handlePrev = async () => {
   if (res.code == 0) {
     isCheckFlag.value = false;
     //因为 imageDate 会+1，所以这里需要重新赋值 -2
-    if (answerIndex.value > 0) answerIndex.value -= 2;
+    if (answerIndex.value > 0) answerIndex.value -= 1;
   }
 };
 // 下一个
@@ -292,7 +295,7 @@ const handleReImage = useThrottle(
       isCheckFlag.value = false;
       rePlayId = displayId;
       //因为 imageDate 会被修改，所以这里需要重新赋值 -1
-      if (answerIndex.value > 0) answerIndex.value--;
+      // if (answerIndex.value > 0) answerIndex.value--;
     }
   }, 1500, isDisabled
 );
@@ -302,8 +305,9 @@ const handkeyCode = (e) => {
   }
 };
 const checkedImg = (item, index) => {
-  if (!isCheckFlag.value) return;
+  // if (!isCheckFlag.value) return;
   sycnDisabledBtn.value = false;
+  checkedImgIndex.value = index
   // console.error("props.imageData  ====>>>>>>   " , props.imageData)
   props.imageData.answerList[index].isCheckFlag = true;
   //构建错误答案
@@ -338,12 +342,16 @@ onMounted(() => {
       handleAudio(e.key);
     }
     if (e.key === "imageData") {
-      if (rePlayId != item.id || answerIndex.value + 1 != item.id)
+      window.setTimeout(()=>{
+        if (rePlayId != item.id) {
         answerIndex.value += 1;
-        isCheckFlag.value = false;
+      }
+      isCheckFlag.value = false;
+      }, 300)
       }
     // 1111
     if (e.key === "audioStart") {
+      checkedImgIndex.value = -1
       syncDisabledBtn.value = false;
       isCheckFlag.value = false;
       //TODO newValue 数据结构问题
@@ -361,6 +369,7 @@ onMounted(() => {
       source = item.source;
     }
     if (e.key === "audioStop") {
+      console.error(answerIndex, 'answerIndex')
       if (answerMarks.value[answerIndex.value].answerMark !== 3) {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
