@@ -100,6 +100,7 @@
         <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart" >开始</el-button>
         <el-button v-if="prevRouter !== '/imitate'" :disabled="answerIndex + 1 !== answerMarks.length && (!props.isPlay || !isStop)" size="large" plain @click="handleSave(1)" >保存</el-button>
         <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button v-if="prevRouter === '/imitate'" :disabled="!isStop" size="large" plain @click="handleStop">模拟结束</el-button>
       </el-row>
       <el-row class="el-btn b">
         <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex <= 0" @click="handlePrev">上一个(左键)</el-button>
@@ -198,6 +199,7 @@ const isStop = ref(false);
 let answerMap: any = new Map();
 const itemId = ref("");
 let displayId = 0;
+let prevId = -1;
 let rePlayId = -1;
 watch(
   () => props.imageData,
@@ -269,8 +271,10 @@ const handlePrev = async () => {
   //删除答案
   removeItem();
   isDisabled.value = true;
+  
   const res = await auditionApi.prevTest();
   if (res.code == 0) {
+    prevId = displayId
     isCheckFlag.value = false;
     //因为 imageDate 会+1，所以这里需要重新赋值 -2
     if (answerIndex.value > 0) answerIndex.value -= 1;
@@ -343,7 +347,7 @@ onMounted(() => {
     }
     if (e.key === "imageData") {
       window.setTimeout(()=>{
-        if (rePlayId != item.id) {
+        if (rePlayId != item.id && prevId != displayId) {
         answerIndex.value += 1;
       }
       isCheckFlag.value = false;
@@ -351,6 +355,7 @@ onMounted(() => {
       }
     // 1111
     if (e.key === "audioStart") {
+      
       checkedImgIndex.value = -1
       syncDisabledBtn.value = false;
       isCheckFlag.value = false;
@@ -369,8 +374,8 @@ onMounted(() => {
       source = item.source;
     }
     if (e.key === "audioStop") {
-      console.error(answerIndex, 'answerIndex')
-      if (answerMarks.value[answerIndex.value].answerMark !== 3) {
+      // console.error(answerIndex, 'answerIndex')
+      if (answerMarks.value[answerIndex.value] && answerMarks.value[answerIndex.value].answerMark !== 3) {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
       answerForm = {};

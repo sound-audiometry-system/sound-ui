@@ -53,12 +53,10 @@
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                font-size: large; font-weight: bold
               "
-            >
-              <text
-                style="margin-left: 2px; font-size: large; font-weight: bold"
-                >{{ item.name }}</text
-              >
+              :title="item.name"
+            >{{ item.name }}
             </div>
             <el-button
               type="success"
@@ -156,7 +154,7 @@ const toTest = (info) => {
   // console.log([info])
   store.commit("setTestData", [info]);
   // router.push("/imitate-plan");
-  router.push({ path: "/speaker", query:{ type: '2' } });
+  router.push({ path: "/speaker", query: { type: "2" } });
 };
 
 onMounted(() => {
@@ -180,6 +178,9 @@ onMounted(() => {
   justify-content: space-between;
   align-items: center;
   line-height: 40px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .icon {

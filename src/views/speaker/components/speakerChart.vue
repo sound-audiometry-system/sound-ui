@@ -1,6 +1,11 @@
 <!-- echarts组件 -->
 <template>
-  <div id="myChart" ref="chartRef" :style="{ width: '940px', height: '526px' }" v-once></div>
+  <div
+    id="myChart"
+    ref="chartRef"
+    :style="{ width: '940px', height: '526px' }"
+    v-once
+  ></div>
   <!-- <p>转换后的X坐标值：{{ convertToPixel(200, 'x') }}</p> -->
 </template>
 <script setup lang="ts">
@@ -12,8 +17,8 @@ import { ElMessage } from "element-plus";
 import { imitateApi } from "@/serve/api/user";
 let chartInstance: ECharts;
 type Props = {
-  chartIndex: any
-  clickXY:any
+  chartIndex: any;
+  clickXY: any;
 };
 const chartRef = ref<ECharts | null>(null);
 const props = defineProps<Props>();
@@ -31,7 +36,7 @@ const option = {
     trigger: "axis",
   },
   legend: {
-    data: ['AC', 'UCL']
+    data: ["AC", "UCL"],
   },
   grid: {
     left: 40,
@@ -189,21 +194,26 @@ const option = {
 /**
  * 删除按钮，删除当前选中线条所有数据
  */
-const handleDelLine = ()=> {
+const handleDelLine = () => {
   let data = props.chartIndex == 0 ? AcData : UclData;
-  if(data.length === 0) return
+  if (data.length === 0) return;
+  ElMessageBox.confirm("确认删除当前选中线条所有数据？", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(async () => {
     data.splice(data.length - 1, 1);
     if (chartInstance) {
-      option.series[props.chartIndex].data.length =0;
+      option.series[props.chartIndex].data.length = 0;
       chartInstance.setOption(option);
     }
-}
+  });
+};
 const initChart = () => {
   chartInstance = echarts.init(chartRef.value as HTMLDivElement);
   chartInstance.setOption(option);
 };
-watch(props.chartIndex, (newValue, oldValue) => {
-});
+watch(props.chartIndex, (newValue, oldValue) => {});
 const emit = defineEmits(["handleClk"]);
 defineExpose({
   handleDelLine,
@@ -214,7 +224,7 @@ onMounted(() => {
   initChart();
   chartInstance.getZr().on("click", async (params: any) => {
     //初始化点击鼠标
-    props.clickXY.length = 0
+    props.clickXY.length = 0;
     let data = props.chartIndex == 0 ? AcData : UclData;
     const pointInPixel = [params.offsetX, params.offsetY];
     // console.log(chartInstance.convertFromPixel("grid", pointInPixel));
@@ -285,7 +295,7 @@ onMounted(() => {
     data.forEach((arr, index) => {
       if (arr[0] === xAxis) {
         data.splice(index, 1, [xAxis, clkY]);
-        props.clickXY.push(xAxisData[xAxis],clkY);
+        props.clickXY.push(xAxisData[xAxis], clkY);
         isPush = true;
       }
     });
@@ -297,7 +307,7 @@ onMounted(() => {
       });
       return;
     }
-    !isPush && props.clickXY.push(xAxisData[data.length],clkY);
+    !isPush && props.clickXY.push(xAxisData[data.length], clkY);
     !isPush && data.push([data.length, clkY]);
     //TODO 区分Ac和Ucl
     option.series[props.chartIndex].data = data;
@@ -320,11 +330,17 @@ onMounted(() => {
   chartInstance.on("contextmenu", (params: any) => {
     params.event.event.preventDefault();
     let data = props.chartIndex == 0 ? AcData : UclData;
-    data.splice(data.length - 1, 1);
-    if (chartInstance) {
-      option.series[props.chartIndex].data = data;
-      chartInstance.setOption(option);
-    }
+    ElMessageBox.confirm("是否删除此节点？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    }).then(async () => {
+      data.splice(data.length - 1, 1);
+      if (chartInstance) {
+        option.series[props.chartIndex].data = data;
+        chartInstance.setOption(option);
+      }
+    });
   });
   return {};
 });
