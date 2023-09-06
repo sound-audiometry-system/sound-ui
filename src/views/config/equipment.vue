@@ -132,7 +132,7 @@ const getDevice = async (id, index, id2) => {
   }
   
   if (index + 1 === devices.length) {
-    devices.forEach((ele, eleIndex) => {
+    deviceset.value.forEach((ele, eleIndex) => {
       if (!ele.active) {
         isSuccess.value = false;
         ElMessageBox.confirm(
