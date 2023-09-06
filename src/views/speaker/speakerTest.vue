@@ -2,7 +2,7 @@
 <template>
   <el-container>
     <el-header>
-      <userHeader v-if="prevRouter !== '/imitate'" :isPlay="isPlay"></userHeader>
+      <userHeader v-if="prevRouter !== '/imitate'" :isPlay="isChangeSelect"></userHeader>
     </el-header>
     <el-main v-loading="isOpenLoading" ref="main">
       <el-tabs v-model="typeName" stretch="true" type="border-card">
@@ -69,6 +69,7 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 const typeName = ref("1");
 let isStart = false;
+const isChangeSelect = ref(false)
 let isPlay = ref(false);
 let isSave = false;
 const dialogVisible = ref(false);
@@ -127,6 +128,7 @@ const startTest = async (value1, value2) => {
   const res = await auditionApi.startTest(testData[0], params);
   if (res.code == 0) {
     isStart = true;
+    isChangeSelect.value = true
     // isPlay.value = false
   }
 };
@@ -140,6 +142,7 @@ const stopTest = async () => {
   if (res.code == 0) {
     isStart = false;
     isPlay.value = false;
+    isChangeSelect.value = false
     sessionStorage.setItem("imageData", "");
   }
 };
@@ -306,7 +309,7 @@ onMounted(() => {
     // console.log('eee=>',e)
     if (!e.newValue) {
       isStart = false;
-      isPlay.value = true;
+      isPlay.value = false;
       // imageData = {}
       if (!isSuccess) {
         ElMessage({message: "方案播放完成",type: "success",});
