@@ -94,8 +94,7 @@
           </el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="2">(步幅)</el-col>
           <el-col style="font-size: 14px; color: #b0b0b0" :span="4">
-            <el-button :disabled="!isSignalCalibration" @click="handleSaveItem">保存点
-              [Enter]</el-button>
+            <el-button :disabled="!isSignalCalibration" @click="handleSaveItem">保存点 [Enter]</el-button>
           </el-col>
           <el-col>
             <el-slider style="width: 96%" v-model="queryForm.signalSoundVolume" :min="-2" :max="100" :marks="marks"
@@ -182,7 +181,7 @@ let startSignal = (item) => {
     return false
   }
   radioFlag.value = item.index
-  soundIndex.value = radioFlag.value * 2 +1
+  soundIndex.value = radioFlag.value * 2 + 1
   // 打开信号声调试
   if (!item.signalCalibrated) {
     isSignalCalibration.value = true
@@ -270,22 +269,59 @@ const emit = defineEmits(["handleBack"]);
 const handleStart = async () => {
   auditionApi.stopTest()
   let item: any = getItem(queryForm.index);
+  if(!item) return 
   //构建对象 leftHide/rightHide
-  
-  // TODO 判断音箱index
-  let targetIndex = parseInt(queryForm.index + "")
-  let param = {
-    id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
-    signalSoundConfig: [{
-      audios: [{ "target": targetIndex, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
-      "nextAudioInterval": 1
-    }]
-  }
+  // 判断音箱index
+  // let param = {
+  //   id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
+  //   signalSoundConfig: [{
+  //     audios: [{ "target": targetIndex, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
+  //     "nextAudioInterval": 1
+  //   }]
+  // }
+  let param = getPlayParam()
+  console.info(param,isSignalCalibration.value,isCalibration.value,"handleStart.param")
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {
     isStart = true;
   }
 };
+const getPlayParam = () => {
+  //当前勾选什么，生成对应的参数格式，返回。
+  let item: any = getItem(queryForm.index);
+  //构建对象 leftHide/rightHide
+  // 判断音箱index
+  let targetIndex = parseInt(queryForm.index + "")
+  if (isSignalCalibration.value) {
+    let signalParam = {
+      id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
+      signalSoundConfig: [{
+        audios: [{ "target": targetIndex, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
+        "nextAudioInterval": 1
+      }]
+    }
+    return signalParam;
+  }
+  // isCalibration.value = false
+  //信号声参数
+  if (isCalibration.value) {
+    let evnParam = {
+      id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
+      envSoundConfig: [
+        {
+          "target": targetIndex,
+          "file": item.environmentalSource,
+          "volume": queryForm.environmentalSoundVolume,
+          duration: 3000
+        },
+      ]
+    }
+    return evnParam;
+  }
+
+}
+
+
 /**
  * 根据index后去对象信息，index为数组中对象index字段
  * @param index 对象索引，根据索引获取对象
@@ -295,27 +331,31 @@ const getItem = (index) => {
   return devices.value.filter(x => x.index == index)[0]
 }
 /**
- * 循环播放
+ * 循环播放，构建不同播放参数
  * 构建参数
  */
 const handleCirculate = async () => {
+  // isSignalCalibration.value = false
+  // isCalibration.value = false
   auditionApi.stopTest()
+  //TODO
   //获取测试对象信息
   let item: any = getItem(queryForm.index);
-  let targetIndex = parseInt(queryForm.index + "")
   if (!item) return
   //构建参数  
-  let param = {
-    id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
-    envSoundConfig: [
-      {
-        "target": targetIndex,
-        "file": item.environmentalSource,
-        "volume": queryForm.environmentalSoundVolume,
-        duration: 3000
-      },
-    ]
-  }
+  // let param = {
+  //   id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
+  //   envSoundConfig: [
+  //     {
+  //       "target": targetIndex,
+  //       "file": item.environmentalSource,
+  //       "volume": queryForm.environmentalSoundVolume,
+  //       duration: 3000
+  //     },
+  //   ]
+  // }
+  let param = getPlayParam()
+  console.info(param,isSignalCalibration.value,isCalibration.value,"handleCirculate.param")
   //调用接口
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {

@@ -161,7 +161,7 @@ let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
 //TODO
 const soundIndex = ref(30);
-const bgIndex = ref(-1);
+const bgIndex = ref(-2);
 let syncDisabledBtn = ref(false);
 let source = "";
 let answerForm = {};

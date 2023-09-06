@@ -34,12 +34,7 @@
       </el-table-column>
       <el-table-column prop="address" label="操作">
         <template #default="scope">
-          <el-button
-            size="small"
-            type="text"
-            @click="handleCalibration(scope.$index, scope.row)"
-            >点击校准</el-button
-          >
+          <el-button size="small" type="text" @click="handleCalibration(scope.$index, scope.row)">点击校准</el-button>
         </template>
       </el-table-column>
     </el-table>
