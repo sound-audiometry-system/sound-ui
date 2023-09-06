@@ -35,7 +35,14 @@ const option = {
   tooltip: {
     trigger: "axis",
     formatter: function (params) {
-      console.log(params)
+      let res = ""
+      for (const item of params) {
+        if (item.seriesName != 'test') {
+          res += `<div><span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#A01616;"></span><span>${item.seriesName}</span><span style="margin-left: 8px;">${item.data[1]}</span></div>`
+        }
+        //  return  `<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#A01616;"></span><span>${item.seriesName}</span>`
+      }
+      return res
     }
   },
   legend: {
@@ -117,6 +124,7 @@ const option = {
       },
     },
     {
+      name: "test",
       type: "line",
       stack: "Total",
       areaStyle: {},
@@ -151,6 +159,7 @@ const option = {
       },
     },
     {
+      name: "test",
       type: "line",
       stack: "Total",
       areaStyle: {},

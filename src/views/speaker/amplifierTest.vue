@@ -155,7 +155,7 @@ onMounted(() => {
 }
 
 .btn-active {
-  background: #c2c76a;
+  background: #C9D8D5;
 }
 
 .mbm14 {

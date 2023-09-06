@@ -41,10 +41,10 @@
           <el-input v-model="form.operator" />
         </el-form-item>
         <el-form-item v-if="openType == 2" label="结束原因" prop="reason">
-          <el-input v-model="form.reason" type="textarea" rows="5" />
+          <el-input v-model="form.reason" maxlength="200" type="textarea" rows="5" show-word-limit />
         </el-form-item>
         <el-form-item v-if="openType == 1" label="结果分析与建议" prop="advice">
-          <el-input v-model="form.advice" type="textarea" rows="5" />
+          <el-input v-model="form.advice" maxlength="200" type="textarea" rows="5" show-word-limit />
         </el-form-item>
       </el-form>
       <template #footer>
