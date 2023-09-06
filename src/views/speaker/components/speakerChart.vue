@@ -34,6 +34,9 @@ const formatter = (value: string) => {
 const option = {
   tooltip: {
     trigger: "axis",
+    formatter: function (params) {
+      console.log(params)
+    }
   },
   legend: {
     data: ["AC", "UCL"],

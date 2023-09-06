@@ -245,6 +245,16 @@ const handleStopAudio = () => {
   emit("handleStopAudio");
 }; 
 const handleCheck = () => {
+  if(!props.imageData.answerList || props.imageData.answerList.length <= 1) {
+    const item = props.imageData.answerList[0]
+    answerMap.set(item.uuid, {
+    file: itemId.value,
+    correct: false,
+    wrongFile: item.image,
+  });
+  answerMarks.value[answerIndex.value].answerMark = 3
+  return
+}
   isCheckFlag.value = true;
   syncDisabledBtn.value = true;
   emit("handlePause");

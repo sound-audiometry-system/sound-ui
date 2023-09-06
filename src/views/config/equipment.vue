@@ -121,10 +121,12 @@ const devices = [
   { soundVal: "101", soundVal2: "102", active: false },
   { soundVal: "111", soundVal2: "112", active: false },
 ];
-const getDevice = async (id, index) => {
+const getDevice = async (id, index, id2) => {
   const res = await auditionApi.getDevice({ id: id });
+  const res2 = await auditionApi.getDevice({ id: id2 });
   var idstr = id.substring(0, 2);
-  if (res && res.code == 0) {
+  // var idstr2 = id2.substring(0, 2);
+  if (res && res.code == 0 && res2 && res2.code == 0) {
     // if (deviceset.value.includes(idstr)) return;
     deviceset.value.filter((item) => item.id == idstr)[0].active = true;
   }
@@ -164,9 +166,9 @@ const getDevice = async (id, index) => {
   // console.log('===>>deviceset',deviceset)
 };
 let buttClick = async () => {
-  for(let i = 0;i<=devices.length;i++){
+  for(let i = 0;i<devices.length;i++){
     let item = devices[i];
-    getDevice(item.soundVal, i);
+    getDevice(item.soundVal, i, item.soundVal2);
     await sleep(2000)
   }
 };
