@@ -46,8 +46,6 @@
           >
             <div
               style="
-                display: flex;
-                align-items: center;
                 margin: 2px 0px 2px 15px;
                 width: 500px;
                 white-space: nowrap;
