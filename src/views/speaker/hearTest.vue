@@ -100,7 +100,7 @@
         <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart" >开始</el-button>
         <el-button v-if="prevRouter !== '/imitate'" :disabled="answerIndex + 1 !== answerMarks.length" size="large" plain @click="handleSave(1)" >保存</el-button>
         <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
-        <el-button v-if="prevRouter === '/imitate'" :disabled="!isStop" size="large" plain @click="handleStop">模拟结束</el-button>
+        <el-button v-if="prevRouter === '/imitate'" :disabled="!props.isPlay" size="large" plain @click="handleStop">模拟结束</el-button>
       </el-row>
       <el-row class="el-btn b">
         <el-button :disabled="!props.isPlay || isDisabled || enableManualplavMode || answerIndex <= 0" @click="handlePrev">上一个(左键)</el-button>
