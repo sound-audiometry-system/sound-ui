@@ -296,11 +296,13 @@ onMounted(() => {
     //计算出最近的坐标
     let clkY = Math.round(yAxis / 20) * 20;
     if (20 > clkY || clkY > 80) {
-      ElMessage({
+      if (yAxis<=120) {
+        ElMessage({
         showClose: true,
         message: "超出范围，请重新选择",
         type: "error",
       });
+      }
       return;
     }
     let isPush = false;
@@ -342,7 +344,7 @@ onMounted(() => {
   chartInstance.on("contextmenu", (params: any) => {
     params.event.event.preventDefault();
     let data = props.chartIndex == 0 ? AcData : UclData;
-    ElMessageBox.confirm("是否删除此节点？", "提示", {
+    ElMessageBox.confirm("是否删除最后一个节点？", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       type: "warning",

@@ -98,7 +98,7 @@
       </div>
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart" >开始</el-button>
-        <el-button v-if="prevRouter !== '/imitate'" :disabled="answerIndex + 1 !== answerMarks.length" size="large" plain @click="handleSave(1)" >保存</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="answerIndex + 1 !== answerMarks.length && !isStop" size="large" plain @click="handleSave(1)" >保存</el-button>
         <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay" size="large" plain @click="handleSave(2)">提前结束</el-button>
         <el-button v-if="prevRouter === '/imitate'" :disabled="!props.isPlay" size="large" plain @click="handleStop">模拟结束</el-button>
       </el-row>
@@ -157,6 +157,7 @@ let value3 = ref(true);
 let isOpen = ref(false);
 const checkedImgIndex = ref(-1)
 let isDisabled = ref(false);
+let answerCheckIndex = -1
 let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
 //TODO
@@ -245,16 +246,18 @@ const handleStopAudio = () => {
   emit("handleStopAudio");
 }; 
 const handleCheck = () => {
-  if(!props.imageData.answerList || props.imageData.answerList.length <= 1) {
+  if(props.imageData.answerList && props.imageData.answerList.length <= 1) {
     const item = props.imageData.answerList[0]
     answerMap.set(item.uuid, {
     file: itemId.value,
     correct: false,
     wrongFile: item.image,
   });
-  answerMarks.value[answerIndex.value].answerMark = 3
+  checkedImg(item, 0)
+  // answerMarks.value[answerIndex.value].answerMark = 3
   return
 }
+answerCheckIndex = answerIndex.value
   isCheckFlag.value = true;
   syncDisabledBtn.value = true;
   emit("handlePause");
@@ -319,7 +322,7 @@ const handkeyCode = (e) => {
   }
 };
 const checkedImg = (item, index) => {
-  // if (!isCheckFlag.value) return;
+  if (!isCheckFlag.value) return;
   sycnDisabledBtn.value = false;
   checkedImgIndex.value = index
   // console.error("props.imageData  ====>>>>>>   " , props.imageData)
@@ -365,8 +368,9 @@ onMounted(() => {
       }
     // 1111
     if (e.key === "audioStart") {
-      
-      checkedImgIndex.value = -1
+      if (answerCheckIndex !== answerIndex.value) {
+        checkedImgIndex.value = -1
+      }
       syncDisabledBtn.value = false;
       isCheckFlag.value = false;
       //TODO newValue 数据结构问题

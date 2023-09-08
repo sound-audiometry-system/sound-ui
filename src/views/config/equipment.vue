@@ -129,6 +129,8 @@ const getDevice = async (id, index, id2) => {
   if (res && res.code == 0 && res2 && res2.code == 0) {
     // if (deviceset.value.includes(idstr)) return;
     deviceset.value.filter((item) => item.id == idstr)[0].active = true;
+  } else if (!res || res.code != 0 || !res2 || res2.code != 0) {
+    deviceset.value.filter((item) => item.id == idstr)[0].active = false;
   }
   
   if (index + 1 === devices.length) {
