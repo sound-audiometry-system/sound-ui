@@ -258,6 +258,7 @@ const handleCheck = () => {
   return
 }
 answerCheckIndex = answerIndex.value
+console.error(answerCheckIndex, 'answerCheckIndex')
   isCheckFlag.value = true;
   syncDisabledBtn.value = true;
   emit("handlePause");
@@ -337,7 +338,7 @@ const checkedImg = (item, index) => {
   index + 1 == props.imageData.target
     ? (answerMarks.value[answerIndex.value].answerMark = 2)
     : (answerMarks.value[answerIndex.value].answerMark = 3);
-  isCheckFlag.value = false;
+  // isCheckFlag.value = false;
   emit("handleResume");
 };
 onMounted(() => {
@@ -363,16 +364,17 @@ onMounted(() => {
         if (rePlayId != item.id && prevId != displayId) {
         answerIndex.value += 1;
       }
-      isCheckFlag.value = false;
+      if (answerCheckIndex !== answerIndex.value) {
+        checkedImgIndex.value = -1
+        isCheckFlag.value = false;
+      }
       }, 300)
       }
     // 1111
     if (e.key === "audioStart") {
-      if (answerCheckIndex !== answerIndex.value) {
-        checkedImgIndex.value = -1
-      }
+      
       syncDisabledBtn.value = false;
-      isCheckFlag.value = false;
+      // isCheckFlag.value = false;
       //TODO newValue 数据结构问题
       // displayId != e.id && displayId = e?.id
       displayId = item.id;
