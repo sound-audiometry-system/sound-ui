@@ -133,10 +133,13 @@ import type { CSSProperties } from "vue";
 import { ElMessage } from 'element-plus'
 import { auditionApi, imitateApi } from "@/serve/api/user";
 import sound from "../../components/sound/index.vue";
+import { GoldMedal } from "@element-plus/icons-vue/dist/types";
 
 
 const globalParam = reactive({
-  leftHide: true, rightHide: true
+  envLoop:false,
+  signalLoop:false,
+  test:true
 })
 const setup = () => {
   //清空答案记录
@@ -270,15 +273,13 @@ const handleStart = async () => {
   auditionApi.stopTest()
   let item: any = getItem(queryForm.index);
   if(!item) return 
-  //构建对象 leftHide/rightHide
-  // 判断音箱index
-  // let param = {
-  //   id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
-  //   signalSoundConfig: [{
-  //     audios: [{ "target": targetIndex, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
-  //     "nextAudioInterval": 1
-  //   }]
-  // }
+  //调整播放参数
+  if (isSignalCalibration.value){
+    globalParam.signalLoop = false
+  }else{
+   globalParam.envLoop = false
+  }
+  console.info(globalParam,"handleStart,handleStart")
   let param = getPlayParam()
   console.info(param,isSignalCalibration.value,isCalibration.value,"handleStart.param")
   const res = await auditionApi.startTest(param, globalParam);
@@ -296,7 +297,7 @@ const getPlayParam = () => {
     let signalParam = {
       id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
       signalSoundConfig: [{
-        audios: [{ "target": targetIndex, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
+        audios: [{ "target": targetIndex * 2 + 1, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
         "nextAudioInterval": 1
       }]
     }
@@ -309,7 +310,7 @@ const getPlayParam = () => {
       id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
       envSoundConfig: [
         {
-          "target": targetIndex,
+          "target": targetIndex * 2,
           "file": item.environmentalSource,
           "volume": queryForm.environmentalSoundVolume,
           duration: 3000
@@ -342,18 +343,15 @@ const handleCirculate = async () => {
   //获取测试对象信息
   let item: any = getItem(queryForm.index);
   if (!item) return
-  //构建参数  
-  // let param = {
-  //   id: props.testData.id, name: props.testData.name, "enableManualPlayMode": true,
-  //   envSoundConfig: [
-  //     {
-  //       "target": targetIndex,
-  //       "file": item.environmentalSource,
-  //       "volume": queryForm.environmentalSoundVolume,
-  //       duration: 3000
-  //     },
-  //   ]
-  // }
+  //构建公共播放参数
+  if(isSignalCalibration.value){
+    globalParam.signalLoop =true
+    globalParam.envLoop =  false
+  }else{
+    globalParam.signalLoop =false
+    globalParam.envLoop =true
+  }
+  console.info(globalParam,"handleCirculate,globalParam")
   let param = getPlayParam()
   console.info(param,isSignalCalibration.value,isCalibration.value,"handleCirculate.param")
   //调用接口
