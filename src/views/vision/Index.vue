@@ -12,14 +12,8 @@
         <div style="display: flex; margin: 3% 3% 0 3%; flex-direction: column">
           <el-form :model="form" ref="form" label-width="200px" class="form" @submit.native.prevent="() => searchUser">
             <el-form-item>
-              <el-input
-                v-model="inputUserId"
-                placeholder="请输入用户ID"
-                class="input-with-select"
-                clearable
-                @clear="userSearchData = []"
-                @blur="searchUser"
-              >
+              <el-input v-model="inputUserId" placeholder="请输入用户ID" class="input-with-select" clearable
+                @clear="userSearchData = []" @blur="searchUser">
                 <template #prepend>
                   <el-button @click="searchUser" :icon="Search" />
                 </template>
@@ -33,8 +27,8 @@
               <text style=" margin-left: 2px;font-size: large;font-weight: bold;width: 80%;">{{ item.name }}</text>
             </div>
             <div style="display: flex;align-items: center; margin-right: 15px;">
-              <el-button type="warning" style="text-align: end;" @click="handleNavgator(item)" >扬声器测听</el-button>
-              <el-button type="success" style="text-align: end;" @click="toTest(item)" >开始测试</el-button>
+              <el-button type="warning" style="text-align: end;" @click="handleNavgator(item)">扬声器测听</el-button>
+              <el-button type="success" style="text-align: end;" @click="toTest(item)">开始测试</el-button>
             </div>
           </div>
           <el-empty description="暂无数据" v-else />
@@ -42,12 +36,7 @@
       </div>
     </el-main>
     <footer-tab></footer-tab>
-    <el-dialog
-      v-model="chooseTypeVisble"
-      width="40%"
-      center
-      :close-on-click-modal="false"
-    >
+    <el-dialog v-model="chooseTypeVisble" width="40%" center :close-on-click-modal="false">
       <template #header="{ close, titleId, titleClass }">
         <div style="display: flex; justify-content: left">
           <Setting class="icon" />
@@ -58,25 +47,19 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Male width="1.2em" height="1.2em" v-if="userInfo[0]?.gender == '1' || userInfo?.gender == '1'"/>
+            <Male width="1.2em" height="1.2em" v-if="userInfo[0]?.gender == '1' || userInfo?.gender == '1'" />
             <Female width="1.2em" height="1.2em" v-else />
             <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
           </div>
         </div>
         <text style="font-weight: bold; margin-top: 2%">测试选择</text>
-        <el-select v-model="testResult" :popper-append-to-body="false" placeholder="请选择" style="margin-top: 2%" no-data-text="暂无数据" >
-          <el-option
-            v-for="(item, idx) in testData"
-            :key="idx"
-            :label="item.name"
-            :value="item.id"
-          />
+        <el-select v-model="testResult" :popper-append-to-body="false" placeholder="请选择" style="margin-top: 2%"
+          no-data-text="暂无数据">
+          <el-option v-for="(item, idx) in testData" :key="idx" :label="item.name" :value="item.id" />
         </el-select>
       </div>
       <template #footer>
-        <el-button color="#f2f3f5" @click="chooseTypeVisble = false"
-          >取消</el-button
-        >
+        <el-button color="#f2f3f5" @click="chooseTypeVisble = false">取消</el-button>
         <el-button color="#208571" @click="handleNav">确定</el-button>
       </template>
     </el-dialog>
@@ -107,7 +90,7 @@ const chooseTypeVisble = ref(false);
 const inputUserId = ref(null);
 //存储选择的用户信息
 // const userInfo = ;
-const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo")||"") :
+const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") :
   ref({
     name: null,
     gender: "",
@@ -131,8 +114,8 @@ const testData = ref([
     commands: [],
   },
 ]);
-const handleNavHead = ()=> {
-  
+const handleNavHead = () => {
+
 }
 
 //测试结果
@@ -155,7 +138,7 @@ const getUserInfo = async () => {
     console.info(res.data);
     userSearchData.value = [res.data];
   } else {
-    ElMessage.error( res.msg || "用户不存在")
+    ElMessage.error(res.msg || "用户不存在")
   }
 };
 
@@ -165,22 +148,26 @@ const getUserPatient = async (uid: string | number) => {
   testData.value = res.data;
   sessionStorage.setItem("testData", JSON.stringify(res.data));
   // store.commit("setTestData", res.data)
-  console.log(res.data,"userConfig");
+  console.log(res.data, "userConfig");
   // store['_mutations'].setTestData()
   // console.log(res, '2222222')
   // userSearchData.value = [res.data]
 };
-const handleNavgator =()=>{
+const handleNavgator = () => {
   sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
-  router.push({ path: "/amplifierTest"});
+  router.push({ path: "/amplifierTest" });
 }
 const handleNav = () => {
   chooseTypeVisble.value = false;
   sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
   const testArr = testData.value.filter((item) => item.id == testResult.value);
+  if (testArr.length == 0) {
+    ElMessage({ message: '请选择测试方案方案', type: 'warning', })
+    return
+  }
   store.commit("setTestData", testArr);
   // if (testResult.value == 1) {
-  router.push({ path: "/speaker", query:{ type: '2' } });
+  router.push({ path: "/speaker", query: { type: '2' } });
   // }
 };
 //加载测试数据
@@ -204,8 +191,8 @@ const chooseItem = (val) => {
 </script>
 <style lang="scss" scoped>
 .el-select-dropdown__item.hover,
-.el-select-dropdown__item:hover{
-  color:#eff4f5;
+.el-select-dropdown__item:hover {
+  color: #eff4f5;
   background-color: rgba(32, 133, 112, 1);
 }
 
@@ -247,6 +234,7 @@ const chooseItem = (val) => {
   height: 967px;
   margin: 0 auto;
   margin-top: 50px;
+
   .el-header {
     width: 1920px;
     margin-left: 0px;
@@ -272,6 +260,7 @@ const chooseItem = (val) => {
     align-items: center;
   }
 }
+
 :deep(.el-form-item__content) {
   margin-left: 0 !important;
 }
