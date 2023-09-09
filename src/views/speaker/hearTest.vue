@@ -184,9 +184,8 @@ const itemId = ref("");
 let displayId = 0;
 let prevId = -1;
 let rePlayId = -1;
-watch(
-  () => props.imageData,
-  (newValue, oldValue) => {
+watch(() => props.imageData,(newValue, oldValue) => {
+
   }
 );
 const handleClk = () => {
@@ -336,19 +335,17 @@ onMounted(() => {
       handleAudio(e.key);
     }
     if (e.key === "imageData") {
-      window.setTimeout(() => {
-        if (rePlayId != item.id && prevId != displayId) {
-          answerIndex.value += 1;
-        }
-        if (answerCheckIndex !== answerIndex.value) {
-          checkedImgIndex.value = -1
-          isCheckFlag.value = false;
-        }
-      }, 300)
+
     }
     // 1111
     if (e.key === "audioStart") {
-      console.info(answerIndex.value, "222222222222222222222222222222222222")
+      if (rePlayId != item.id && prevId != displayId) {
+        answerIndex.value += 1;
+      }
+      if (answerCheckIndex !== answerIndex.value) {
+        checkedImgIndex.value = -1
+        isCheckFlag.value = false;
+      }
       syncDisabledBtn.value = false;
       // isCheckFlag.value = false;
       //TODO newValue 数据结构问题

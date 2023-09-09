@@ -20,7 +20,7 @@
       width: 100%;
       height: 100%;
     }
-    </style>
+  </style>
 </head>
 
 <body>
@@ -46,14 +46,16 @@
         if (message.cmdType == 'audioStop') {
           sessionStorage.setItem('audioStop', JSON.stringify(message))
         }
-        if(message.cmdType == 'imageClean'){
-          
+        if (message.cmdType == 'imageClean') {
+
           sessionStorage.setItem('imageClean', JSON.stringify(message))
         }
-        
+
         if (message.cmdType == 'playFinish') {
-          // sessionStorage.setItem('imageData', JSON.stringify(message))
-          sessionStorage.setItem('imageData', "")
+          if (message.id != -1) {
+            // sessionStorage.setItem('imageData', JSON.stringify(message))
+            sessionStorage.setItem('imageData', "")
+          }
         }
       });
     })
