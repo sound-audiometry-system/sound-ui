@@ -155,7 +155,7 @@
         >
         <el-button
           v-if="prevRouter !== '/imitate'"
-          :disabled="answerIndex + 1 !== answerMarks.length && !isStop"
+          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode || !enableManualplavMode && enableManualplavModePlay"
           size="large"
           plain
           @click="handleSave(1)"
@@ -213,6 +213,7 @@
           v-if="prevRouter !== '/imitate' && !enableManualplavMode"
           :disabled="
             !props.isPlay
+            &&answerIndex + 1 !== answerMarks.length
           "
           @click="handleStop"
           >测试结束</el-button
@@ -289,6 +290,7 @@ let value3 = ref(true);
 let isOpen = ref(false);
 const checkedImgIndex = ref(-1);
 let isDisabled = ref(false);
+let enableManualplavModePlay = true
 let answerCheckIndex = -1;
 let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
@@ -353,6 +355,7 @@ const handleStart = () => {
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
+  enableManualplavModePlay = false
   emit("handleStop");
   router.back();
 };
@@ -376,7 +379,7 @@ const handleStopAudio = () => {
   emit("handleStopAudio");
 };
 const handleCheck = () => {
-  console.log(props.imageData.answerList)
+  // console.log(props.imageData.answerList)
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList ? props.imageData.answerList[0] : null;
     const imageuuid = item?item.uuid : uuid

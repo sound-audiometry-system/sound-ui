@@ -137,6 +137,7 @@ const getUserInfo = async () => {
   if (res.code == 0) {
     console.info(res.data);
     userSearchData.value = [res.data];
+    sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
   } else {
     ElMessage.error(res.msg || "用户不存在")
   }
