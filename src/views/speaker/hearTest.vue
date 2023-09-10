@@ -155,7 +155,7 @@
         >
         <el-button
           v-if="prevRouter !== '/imitate'"
-          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode || !enableManualplavMode && enableManualplavModePlay"
+          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode"
           size="large"
           plain
           @click="handleSave(1)"
@@ -213,7 +213,7 @@
           v-if="prevRouter !== '/imitate' && !enableManualplavMode"
           :disabled="
             !props.isPlay
-            &&answerIndex + 1 !== answerMarks.length
+            &&enableManualplavModePlay
           "
           @click="handleStop"
           >测试结束</el-button
@@ -355,7 +355,7 @@ const handleStart = () => {
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
-  enableManualplavModePlay = false
+  // enableManualplavModePlay = false
   emit("handleStop");
   router.back();
 };
@@ -531,7 +531,9 @@ onMounted(() => {
       // }
 
       // }, 500)
-
+        if(answerIndex.value + 1 === answerMarks.length) {
+          enableManualplavModePlay = false
+        }
       if (
         answerMarks.value[answerIndex.value] &&
         answerMarks.value[answerIndex.value].answerMark !== 3
