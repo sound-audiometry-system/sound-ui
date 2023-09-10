@@ -210,9 +210,9 @@
           >重复</el-button
         >
         <el-button
-          v-if="prevRouter !== '/imitate'"
+          v-if="prevRouter !== '/imitate' && !enableManualplavMode"
           :disabled="
-            !props.isPlay && enableManualplavMode
+            !props.isPlay
           "
           @click="handleStop"
           >测试结束</el-button
@@ -366,6 +366,7 @@ const handleSave = (type: number) => {
   emit("handleSave", type, Array.from(answerMap.values()));
 };
 const handleAudio = async (key) => {
+  console.log(isOpen.value)
   if (isOpen.value && key === "recordStart") return;
   if (!isOpen.value && key === "recordStop") return;
   isOpen.value = !isOpen.value;
