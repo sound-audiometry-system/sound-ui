@@ -99,7 +99,7 @@ const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.
 const userSearchData = ref([
   // { gender: 1, name: "000032" },
 ]);
-inputUserId.value = userInfo?.uid;
+inputUserId.value = userInfo?.uid || userInfo[0]?.uid;
 userSearchData.value = userInfo;
 
 //测试列表
