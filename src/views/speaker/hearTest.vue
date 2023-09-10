@@ -267,7 +267,7 @@ const handlePrev = async () => {
     prevId = displayId
     isCheckFlag.value = false;
     //因为 imageDate 会+1，所以这里需要重新赋值 -2
-    if (answerIndex.value > 0) answerIndex.value -= 1;
+    // if (answerIndex.value > 0) answerIndex.value -= 1;
   }
 };
 // 下一个
@@ -339,13 +339,7 @@ onMounted(() => {
     }
     // 1111
     if (e.key === "audioStart") {
-      if (rePlayId != item.id && prevId != displayId) {
-        answerIndex.value += 1;
-      }
-      if (answerCheckIndex !== answerIndex.value) {
-        checkedImgIndex.value = -1
-        isCheckFlag.value = false;
-      }
+      answerIndex.value = item.id
       syncDisabledBtn.value = false;
       // isCheckFlag.value = false;
       //TODO newValue 数据结构问题
@@ -357,11 +351,22 @@ onMounted(() => {
       if (enableManualplavMode) {
         isDisabled.value = true;
       }
+      if (answerCheckIndex !== answerIndex.value) {
+        checkedImgIndex.value = -1
+        isCheckFlag.value = false;
+      }
       //添加到答案集map中
       answerMap.set(item.uuid, answerForm);
       source = item.source;
     }
     if (e.key === "audioStop") {
+      // window.setTimeout(()=> {
+      //   if (rePlayId != item.id && prevId != displayId) {
+      //   answerIndex.value += 1;
+      // }
+      
+      // }, 500)
+      
       if (answerMarks.value[answerIndex.value] && answerMarks.value[answerIndex.value].answerMark !== 3) {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
