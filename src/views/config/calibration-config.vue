@@ -290,14 +290,17 @@ const handleStart = async () => {
 const getPlayParam = () => {
   //当前勾选什么，生成对应的参数格式，返回。
   let item: any = getItem(queryForm.index);
-  //构建对象 leftHide/rightHide
+  console.info(item,"getPlayParam   item")
   // 判断音箱index
   let targetIndex = parseInt(queryForm.index + "")
   if (isSignalCalibration.value) {
     let signalParam = {
       id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
       signalSoundConfig: [{
-        audios: [{ "target": targetIndex * 2 + 1, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
+        audios: [{ "target": targetIndex * 2 + 1, 
+        "file": item.signalSource, 
+        "duration": item.signalDuration?item.signalDuration:3000, 
+        "volume": queryForm.signalSoundVolume }],
         "nextAudioInterval": 1
       }]
     }
@@ -313,7 +316,7 @@ const getPlayParam = () => {
           "target": targetIndex * 2,
           "file": item.environmentalSource,
           "volume": queryForm.environmentalSoundVolume,
-          duration: 3000
+          "duration": item.environmentalDuration?item.environmentalDuration:3000
         },
       ]
     }
