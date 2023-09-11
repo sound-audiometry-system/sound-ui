@@ -298,6 +298,7 @@ let sycnDisabledBtn = ref(false);
 //TODO
 const soundIndex = ref(30);
 const bgIndex = ref(-2);
+let audioId = -1
 let syncDisabledBtn = ref(false);
 let source = "";
 let answerForm = {};
@@ -333,11 +334,14 @@ let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
 const isStop = ref(false);
 let answerMap: any = new Map();
+let answerKey = new Map()
+let answerI = -1
 const itemId = ref("");
 let displayId = 0;
 let prevId = -1;
 let rePlayId = -1;
 let uuid = ""
+let audioFiles = []
 watch(
   () => props.imageData,
   (newValue, oldValue) => {}
@@ -384,13 +388,20 @@ const handleStopAudio = () => {
 const handleCheck = () => {
   // console.log(props.imageData.answerList)
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
-    const item = props.imageData.answerList ? props.imageData.answerList[0] : null;
+    const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
     const imageuuid = item?item.uuid : uuid
+    answerForm.correct = false
+    answerForm.wrongFile = item?.image
     answerMap.set(imageuuid, {
-        file: itemId.value,
-        correct: false,
-        wrongFile: item?.image,
-      });
+    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).join(','): itemId.value,
+    correct: false,
+    wrongFile: item?.image
+  });
+    // answerMap.set(imageuuid, {
+    //     file: itemId.value,
+    //     correct: false,
+    //     wrongFile: item?.image,
+    //   });
     if (item) {
       checkedImg(item, 0);
     } else {
@@ -425,7 +436,7 @@ const removeItem = () => {
 const handlePrev = async () => {
   //删除答案
   if(answerIndex.value <= 0) return
-  
+  if(!enableManualplavMode && props.isPlay) return
   removeItem();
   isDisabled.value = true;
 
@@ -440,6 +451,7 @@ const handlePrev = async () => {
 // 下一个
 const handleNext = async () => {
   if(answerIndex.value + 1 === answerMarks.length) return
+  if(!enableManualplavMode && props.isPlay) return
   isDisabled.value = true;
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
@@ -467,9 +479,9 @@ const handkeyCode = (e) => {
   if (e.keyCode === 32) {
     handleCheck();
   }
-  if (e.keyCode === 37 && !enableManualplavMode && props.isPlay) { // 左键
+  if (e.keyCode === 37) { // 左键
     handlePrev()
-  } else if (e.keyCode === 39 && !enableManualplavMode && props.isPlay) { // 右键
+  } else if (e.keyCode === 39) { // 右键
     handleNext()
   }
 };
@@ -478,11 +490,13 @@ const checkedImg = (item, index) => {
   sycnDisabledBtn.value = false;
   checkedImgIndex.value = index;
   props.imageData.answerList[index].isCheckFlag = true;
+  answerForm.correct = false
+    answerForm.wrongFile = item?.image
   //构建错误答案
   answerMap.set(item.uuid, {
-    file: itemId.value,
+    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).join(',') : itemId.value,
     correct: false,
-    wrongFile: item.image,
+    wrongFile: item?.image
   });
 
   index + 1 == props.imageData.target
@@ -514,6 +528,8 @@ onMounted(() => {
     }
     // 1111
     if (e.key === "audioStart") {
+      answerI++
+      answerForm = {};
       answerIndex.value = item.id;
       syncDisabledBtn.value = false;
       // isCheckFlag.value = false;
@@ -522,7 +538,9 @@ onMounted(() => {
       displayId = item.id;
       itemId.value = item.file;
       soundIndex.value = item.target;
-      answerForm.file = item.file; //题目id
+      answerKey.set(answerI, item.file)
+      // audioFiles.push(item.file)
+      // answerForm.file = item.file; //题目id
       answerForm.correct = true; //默认正确
       if (enableManualplavMode) {
         isDisabled.value = true;
@@ -532,7 +550,7 @@ onMounted(() => {
         isCheckFlag.value = false;
       }
       //添加到答案集map中
-      answerMap.set(item.uuid, answerForm);
+      
       source = item.source;
     }
     if (e.key === "audioStop") {
@@ -540,8 +558,14 @@ onMounted(() => {
       //   if (rePlayId != item.id && prevId != displayId) {
       //   answerIndex.value += 1;
       // }
-
       // }, 500)
+      //构建答案
+      if (audioId !== item.id) {
+        answerForm.file = Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).join(',') : itemId.value
+        // audioFiles = []
+        answerMap.set(item.uuid, answerForm);
+      }
+      
         if(answerIndex.value + 1 === answerMarks.length) {
           enableManualplavModePlay = false
         }
@@ -551,8 +575,9 @@ onMounted(() => {
       ) {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
-      answerForm = {};
-
+      answerI = -1
+      
+      audioId = item.id
       if (enableManualplavMode) {
         isDisabled.value = false;
       }
