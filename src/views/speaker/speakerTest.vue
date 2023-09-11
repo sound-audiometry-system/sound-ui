@@ -213,6 +213,7 @@ const handleSave = async (formEl: FormInstance | undefined) => {
           message: "保存成功",
           type: "success",
         });
+        router.back()
       }
     } else {
       ElMessage({

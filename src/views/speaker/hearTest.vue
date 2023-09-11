@@ -393,7 +393,7 @@ const handleCheck = () => {
     answerForm.correct = false
     answerForm.wrongFile = item?.image
     answerMap.set(imageuuid, {
-    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).join(','): itemId.value,
+    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0,answerI + 1).join(','): itemId.value,
     correct: false,
     wrongFile: item?.image
   });
@@ -494,7 +494,7 @@ const checkedImg = (item, index) => {
     answerForm.wrongFile = item?.image
   //构建错误答案
   answerMap.set(item.uuid, {
-    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).join(',') : itemId.value,
+    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0,answerI + 1).join(',') : itemId.value,
     correct: false,
     wrongFile: item?.image
   });
@@ -561,7 +561,7 @@ onMounted(() => {
       // }, 500)
       //构建答案
       if (audioId !== item.id) {
-        answerForm.file = Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).join(',') : itemId.value
+        answerForm.file = Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0,answerI + 1).join(',') : itemId.value
         // audioFiles = []
         answerMap.set(item.uuid, answerForm);
       }
