@@ -47,9 +47,9 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Male width="1.2em" height="1.2em" v-if="userInfo[0]?.gender == '1' || userInfo?.gender == '1'" />
+            <Male width="1.2em" height="1.2em" v-if="userSearchData[0]?.gender == '1' || userInfo[0]?.gender == '1' || userInfo?.gender == '1'" />
             <Female width="1.2em" height="1.2em" v-else />
-            <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
+            <text style="font-weight: bold">{{ userSearchData[0]?.name || userInfo[0]?.name || userInfo.name }}</text>
           </div>
         </div>
         <text style="font-weight: bold; margin-top: 2%">测试选择</text>
