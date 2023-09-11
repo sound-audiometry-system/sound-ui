@@ -36,7 +36,7 @@
       </div>
     </el-main>
     <footer-tab></footer-tab>
-    <el-dialog v-model="chooseTypeVisble" width="40%" center :close-on-click-modal="false">
+    <el-dialog v-if="chooseTypeVisble" v-model="chooseTypeVisble" width="40%" center :close-on-click-modal="false">
       <template #header="{ close, titleId, titleClass }">
         <div style="display: flex; justify-content: left">
           <Setting class="icon" />
@@ -90,7 +90,7 @@ const chooseTypeVisble = ref(false);
 const inputUserId = ref(null);
 //存储选择的用户信息
 // const userInfo = ;
-const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") :
+let userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") :
   ref({
     name: null,
     gender: "",
@@ -138,6 +138,7 @@ const getUserInfo = async () => {
     console.info(res.data);
     userSearchData.value = [res.data];
     sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
+    userInfo.value = userSearchData.value
   } else {
     ElMessage.error(res.msg || "用户不存在")
   }
@@ -178,6 +179,7 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // inputUserId.value = info.name;
+  console.error(userInfo, 'userInfo')
   userInfo.value = info;
   sessionStorage.setItem("userInfo", JSON.stringify(info));
   getUserPatient(info.uid);

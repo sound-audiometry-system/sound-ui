@@ -155,7 +155,7 @@
         >
         <el-button
           v-if="prevRouter !== '/imitate'"
-          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode"
+          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode || !enableManualplavMode && !isTestStop"
           size="large"
           plain
           @click="handleSave(1)"
@@ -163,7 +163,7 @@
         >
         <el-button
           v-if="prevRouter !== '/imitate'"
-          :disabled="!props.isPlay"
+          :disabled="!props.isPlay || answerIndex + 1 === answerMarks.length"
           size="large"
           plain
           @click="handleSave(2)"
@@ -288,6 +288,7 @@ let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
+let isTestStop = false
 const checkedImgIndex = ref(-1);
 let isDisabled = ref(false);
 let enableManualplavModePlay = true
@@ -355,11 +356,13 @@ const handleStart = () => {
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
+  // isTestStop = true
   // enableManualplavModePlay = false
   emit("handleStop");
   router.back();
 };
 const handleStop = () => {
+  isTestStop = true
   // for (const item of answerMarks.value) {
   //   item.answerMark = 1;
   // }
@@ -421,6 +424,8 @@ const removeItem = () => {
 // 上一个
 const handlePrev = async () => {
   //删除答案
+  if(answerIndex.value <= 0) return
+  
   removeItem();
   isDisabled.value = true;
 
@@ -434,6 +439,7 @@ const handlePrev = async () => {
 };
 // 下一个
 const handleNext = async () => {
+  if(answerIndex.value + 1 === answerMarks.length) return
   isDisabled.value = true;
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
@@ -460,6 +466,11 @@ const handleReImage = useThrottle(
 const handkeyCode = (e) => {
   if (e.keyCode === 32) {
     handleCheck();
+  }
+  if (e.keyCode === 37 && !enableManualplavMode && props.isPlay) { // 左键
+    handlePrev()
+  } else if (e.keyCode === 39 && !enableManualplavMode && props.isPlay) { // 右键
+    handleNext()
   }
 };
 const checkedImg = (item, index) => {
