@@ -36,7 +36,7 @@
       </div>
     </el-main>
     <footer-tab></footer-tab>
-    <el-dialog v-model="chooseTypeVisble" width="40%" center :close-on-click-modal="false">
+    <el-dialog v-model="chooseTypeVisble" width="40%" destroy-on-close="true" center :close-on-click-modal="false">
       <template #header="{ close, titleId, titleClass }">
         <div style="display: flex; justify-content: left">
           <Setting class="icon" />
@@ -47,9 +47,9 @@
         <div style="display: flex">
           <text style="font-weight: bold">用户ID:</text>
           <div style="margin-left: 2%; display: flex; align-items: center">
-            <Male width="1.2em" height="1.2em" v-if="userInfo[0]?.gender == '1' || userInfo?.gender == '1'" />
+            <Male width="1.2em" height="1.2em" v-if="userInfo?.gender == '1'" />
             <Female width="1.2em" height="1.2em" v-else />
-            <text style="font-weight: bold">{{ userInfo[0]?.name || userInfo.name }}</text>
+            <text style="font-weight: bold">{{ userInfo.name }}</text>
           </div>
         </div>
         <text style="font-weight: bold; margin-top: 2%">测试选择</text>
@@ -75,23 +75,15 @@ import footerTab from "../../components/footerTab.vue";
 import { ElMessage } from 'element-plus'
 // import { useStore } from '../../store'
 let store = useStore();
-// console.log()
-// const queryData = async () => {
-//     const res = await userApi.getPageData(params)
-// }
 const router = useRouter();
 const active = ref(1);
-
 const form = reactive({});
-
 const chooseTypeVisble = ref(false);
-
 //定义输入的用户id
 const inputUserId = ref(null);
 //存储选择的用户信息
-// const userInfo = ;
-const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") :
-  ref({
+const userInfo = sessionStorage.getItem("userInfo") ? reactive(JSON.parse(sessionStorage.getItem("userInfo") + "")) :
+  reactive({
     name: null,
     gender: "",
   });
@@ -103,21 +95,7 @@ inputUserId.value = userInfo?.uid || userInfo[0]?.uid;
 userSearchData.value = userInfo;
 
 //测试列表
-const testData = ref([
-  {
-    name: "听力测试",
-    id: 1,
-    questionsControl: true,
-    directControl: true,
-    wrongControl: true,
-    jammingMode: 1,
-    commands: [],
-  },
-]);
-const handleNavHead = () => {
-
-}
-
+const testData = ref([]);
 //测试结果
 const testResult = ref();
 
@@ -133,11 +111,10 @@ const loadTestData = () => {
 
 const getUserInfo = async () => {
   const res = await userApi.getUserInfo({ uid: inputUserId.value });
-  // console.log(res, '2222222')
   if (res.code == 0) {
-    console.info(res.data);
+    console.info(res.data, "user res");
     userSearchData.value = [res.data];
-    sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
+    sessionStorage.setItem("userInfo", JSON.stringify(res.data));
   } else {
     ElMessage.error(res.msg || "用户不存在")
   }
@@ -151,16 +128,14 @@ const getUserPatient = async (uid: string | number) => {
   // store.commit("setTestData", res.data)
   console.log(res.data, "userConfig");
   // store['_mutations'].setTestData()
-  // console.log(res, '2222222')
   // userSearchData.value = [res.data]
 };
 const handleNavgator = () => {
-  sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
+  sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value[0]));
   router.push({ path: "/amplifierTest" });
 }
 const handleNav = () => {
   chooseTypeVisble.value = false;
-  sessionStorage.setItem("userInfo", JSON.stringify(userSearchData.value));
   const testArr = testData.value.filter((item) => item.id == testResult.value);
   if (testArr.length == 0) {
     ElMessage({ message: '请选择测试方案方案', type: 'warning', })
@@ -178,7 +153,7 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // inputUserId.value = info.name;
-  userInfo.value = info;
+  Object.assign(userInfo,info)
   sessionStorage.setItem("userInfo", JSON.stringify(info));
   getUserPatient(info.uid);
   chooseTypeVisble.value = true;

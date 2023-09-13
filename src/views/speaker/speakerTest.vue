@@ -121,7 +121,7 @@ interface RuleForm {
 // console.log(userInfo[0])
 console.log(testData);
 const form = reactive({
-  uid: userInfo && userInfo[0].uid,
+  uid: userInfo && userInfo.uid,
   testId: testData[0].id,
   answerList: [],
   // answerList: testData[0].signalSoundConfig,

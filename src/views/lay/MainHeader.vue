@@ -7,9 +7,9 @@
       </el-icon>
       <!-- <label style="margin-left: 10px; line-height: 48px;">{{ userInfo[0].name}}</label> -->
       <el-select
-        :v-model="userInfo[0].name"
+        :v-model="userInfo.name"
         class="m-2"
-        :placeholder="userInfo[0].name"
+        :placeholder="userInfo.name"
         size="large"
         @change="changePlan"
         :disabled="props.isPlay"
@@ -43,6 +43,7 @@
 import { ref, reactive } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import { ElMessageBox } from "element-plus";
 let store = useStore();
 const router = useRouter();
 type Props = {
@@ -50,6 +51,7 @@ type Props = {
 };
 const props = defineProps<Props>();
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "");
+console.info(userInfo,"111111111111111111111111111111111111111111")
 const testData = sessionStorage.getItem("testData") ? JSON.parse(sessionStorage.getItem("testData") || "") : "";
 let revertData = [
   {
