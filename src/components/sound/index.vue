@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch, watchEffect } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 const route = useRoute();
 // background: linear-gradient(to right, #ffbd26 50%, #b0b912 50%);
@@ -57,25 +57,11 @@ const soundList = ref([
   { soundVal: '11', active: false, },
 ])
 const getActive = (item, index) => {
-
   let clz = {
     'dot-control': true,
     'error-active': item.active && index <= 4,
     'success-active': item.active && index > 5 && index <= 10,
   };
-  // 
-  // 'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,
-  // 'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,
-  // 'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index
-  let si = parseInt(props.soundIndex / 2)
-  let bi = parseInt(props.bgIndex / 2)
-  if (si == index && bi == index) {//两者相同，则混合样式
-    clz['config-active3'] = true
-  } else if (si == index) {
-    clz['config-active2'] = true
-  } else if (bi == index) {
-    clz['config-active1'] = true
-  }
   if (props.deviceConfig && props.deviceConfig.length != 0) {
     if (props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated) {
       clz['config-active3'] = true
@@ -84,6 +70,23 @@ const getActive = (item, index) => {
     } else if (props.deviceConfig[index]?.environmentalCalibrated) {
       clz['config-active1'] = true
     }
+    return clz
+  }
+  if(props.soundIndex == undefined){
+    return clz
+  }
+  // 
+  // 'config-active3':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated && props.deviceConfig[index]?.environmentalCalibrated,
+  // 'config-active1':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.signalCalibrated,
+  // 'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index
+  let isSingl =  props.soundIndex.some(x=>x == index * 2 + 1)
+  let bi = parseInt(props.bgIndex / 2)
+  if (isSingl && bi == index) {//两者相同，则混合样式
+    clz['config-active3'] = true
+  } else if (isSingl) {
+    clz['config-active2'] = true
+  } else if (bi == index) {
+    clz['config-active1'] = true
   }
   return clz;
 }
@@ -107,9 +110,6 @@ const getBgCor = (item, index) => {
         // return index < 6 && index !== 0 ? obj['backgroundColor'] = 'red' : index === 6 || index === 0 ? obj['backgroundColor'] = '#fff' : obj['backgroundColor'] ='configActive4'
       }
     })
-    // if (index) {
-
-    // }
   }
   return obj
 }
@@ -117,7 +117,7 @@ const getBgCor = (item, index) => {
 type Props = {
   sounds: any;
   deviceConfig: any;
-  soundIndex: Number;
+  soundIndex: Number [];
   bgIndex: Number;
 };
 const props = defineProps<Props>();
