@@ -10,20 +10,9 @@
         <span><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
         </span>
       </div>
-      <div style="
-          margin-left: 10px;
-          width: 920px;
-          height: 335px;
-          padding: 0 6px;
-          display: flex;
-        ">
-        <el-row style="
-            background-color: #000;
-            width: 82%;
-            height: 100%;
-            align-items: center;
-            overflow: auto;
-          " align="center" :gutter="10">
+      <div style="margin-left: 10px; width: 920px; height: 335px; padding: 0 6px; display: flex;">
+        <el-row style="background-color: #000; width: 82%; height: 100%; align-items: center; overflow: auto;"
+          align="center" :gutter="10">
           <el-col v-for="(item, index) in props.imageData.answerList" :key="item.id" :span="8">
             <!-- @click="checkedImg(index)" -->
             <el-image style="width: 100%; height: 160px" :src="item.sourceUrl" :fit="item.label" />
@@ -94,10 +83,10 @@
       <el-row class="el-btn a">
         <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart">开始</el-button>
         <el-button v-if="prevRouter !== '/imitate'"
-          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode" size="large" plain
-          @click="handleSave(1)">保存</el-button>
-        <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay" size="large" plain
-          @click="handleSave(2)">提前结束</el-button>
+          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode || !enableManualplavMode && !isTestStop"
+          size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay || answerIndex + 1 === answerMarks.length"
+          size="large" plain @click="handleSave(2)">提前结束</el-button>
         <el-button v-if="prevRouter === '/imitate'" :disabled="!props.isPlay" size="large" plain
           @click="handleStop">模拟结束</el-button>
       </el-row>
@@ -180,6 +169,7 @@ let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
+let isTestStop = false
 const checkedImgIndex = ref(-1);
 let isDisabled = ref(false);
 let enableManualplavModePlay = true
@@ -191,6 +181,7 @@ const soundIndex = ref([]);
 let soundId = -2;
 const bgIndex = ref(-2);
 //
+let audioId = -1
 let syncDisabledBtn = ref(false);
 let source = "";
 let answerForm = {};
@@ -226,11 +217,14 @@ let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
 const isStop = ref(false);
 let answerMap: any = new Map();
+let answerKey = new Map()
+let answerI = -1
 const itemId = ref("");
 let displayId = 0;
 let prevId = -1;
 let rePlayId = -1;
 let uuid = ""
+let audioFiles = []
 watch(
   () => props.imageData,
   (newValue, oldValue) => { }
@@ -249,11 +243,13 @@ const handleStart = () => {
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
+  // isTestStop = true
   // enableManualplavModePlay = false
   emit("handleStop");
   router.back();
 };
 const handleStop = () => {
+  isTestStop = true
   // for (const item of answerMarks.value) {
   //   item.answerMark = 1;
   // }
@@ -275,12 +271,14 @@ const handleStopAudio = () => {
 const handleCheck = () => {
   // console.log(props.imageData.answerList)
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
-    const item = props.imageData.answerList ? props.imageData.answerList[0] : null;
+    const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
     const imageuuid = item ? item.uuid : uuid
+    answerForm.correct = false
+    answerForm.wrongFile = item?.image
     answerMap.set(imageuuid, {
-      file: itemId.value,
+      file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value,
       correct: false,
-      wrongFile: item?.image,
+      wrongFile: item?.image
     });
     if (item) {
       checkedImg(item, 0);
@@ -315,6 +313,8 @@ const removeItem = () => {
 // 上一个
 const handlePrev = async () => {
   //删除答案
+  if (answerIndex.value <= 0) return
+  if (!enableManualplavMode && props.isPlay) return
   removeItem();
   isDisabled.value = true;
 
@@ -328,6 +328,8 @@ const handlePrev = async () => {
 };
 // 下一个
 const handleNext = async () => {
+  if (answerIndex.value + 1 === answerMarks.length) return
+  if (!enableManualplavMode && props.isPlay) return
   isDisabled.value = true;
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
@@ -355,17 +357,24 @@ const handkeyCode = (e) => {
   if (e.keyCode === 32) {
     handleCheck();
   }
+  if (e.keyCode === 37) { // 左键
+    handlePrev()
+  } else if (e.keyCode === 39) { // 右键
+    handleNext()
+  }
 };
 const checkedImg = (item, index) => {
   if (!isCheckFlag.value) return;
   sycnDisabledBtn.value = false;
   checkedImgIndex.value = index;
   props.imageData.answerList[index].isCheckFlag = true;
+  answerForm.correct = false
+  answerForm.wrongFile = item?.image
   //构建错误答案
   answerMap.set(item.uuid, {
-    file: itemId.value,
+    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value,
     correct: false,
-    wrongFile: item.image,
+    wrongFile: item?.image
   });
 
   index + 1 == props.imageData.target
@@ -397,12 +406,15 @@ onMounted(() => {
     }
     // 1111
     if (e.key === "audioStart") {
-      if(item.id != soundId){
+      if (item.id != soundId) {
         soundIndex.value = []
       }
       soundIndex.value.push(item.target)
       // soundIndex.value = item.target;
       soundId = item.id
+
+      answerI++
+      answerForm = {};
       answerIndex.value = item.id;
       syncDisabledBtn.value = false;
       // isCheckFlag.value = false;
@@ -410,7 +422,7 @@ onMounted(() => {
       uuid = item.uuid
       displayId = item.id;
       itemId.value = item.file;
-      answerForm.file = item.file; //题目id
+      answerKey.set(answerI, item.file)
       answerForm.correct = true; //默认正确
       if (enableManualplavMode) {
         isDisabled.value = true;
@@ -420,10 +432,22 @@ onMounted(() => {
         isCheckFlag.value = false;
       }
       //添加到答案集map中
-      answerMap.set(item.uuid, answerForm);
+
       source = item.source;
     }
     if (e.key === "audioStop") {
+      // window.setTimeout(()=> {
+      //   if (rePlayId != item.id && prevId != displayId) {
+      //   answerIndex.value += 1;
+      // }
+      // }, 500)
+      //构建答案
+      if (audioId !== item.id) {
+        answerForm.file = Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value
+        // audioFiles = []
+        answerMap.set(item.uuid, answerForm);
+      }
+
       if (answerIndex.value + 1 === answerMarks.length) {
         enableManualplavModePlay = false
       }
@@ -433,8 +457,9 @@ onMounted(() => {
       ) {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
-      answerForm = {};
+      answerI = -1
 
+      audioId = item.id
       if (enableManualplavMode) {
         isDisabled.value = false;
       }

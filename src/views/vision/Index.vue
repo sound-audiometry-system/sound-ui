@@ -36,7 +36,7 @@
       </div>
     </el-main>
     <footer-tab></footer-tab>
-    <el-dialog v-model="chooseTypeVisble" width="40%" destroy-on-close="true" center :close-on-click-modal="false">
+    <el-dialog v-if="chooseTypeVisble" v-model="chooseTypeVisble" width="40%" destroy-on-close="true" center :close-on-click-modal="false">
       <template #header="{ close, titleId, titleClass }">
         <div style="display: flex; justify-content: left">
           <Setting class="icon" />
@@ -82,8 +82,9 @@ const chooseTypeVisble = ref(false);
 //定义输入的用户id
 const inputUserId = ref(null);
 //存储选择的用户信息
-const userInfo = sessionStorage.getItem("userInfo") ? reactive(JSON.parse(sessionStorage.getItem("userInfo") + "")) :
-  reactive({
+// const userInfo = ;
+const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") :
+  ref({
     name: null,
     gender: "",
   });
