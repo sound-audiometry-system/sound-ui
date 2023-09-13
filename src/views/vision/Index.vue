@@ -83,8 +83,8 @@ const chooseTypeVisble = ref(false);
 const inputUserId = ref(null);
 //存储选择的用户信息
 // const userInfo = ;
-const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") :
-  ref({
+const userInfo = sessionStorage.getItem("userInfo") ? reactive(JSON.parse(sessionStorage.getItem("userInfo")+"") ) :
+reactive({
     name: null,
     gender: "",
   });
@@ -154,7 +154,10 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // inputUserId.value = info.name;
+  console.info(userInfo,"111111111111")
   Object.assign(userInfo,info)
+  console.info(userInfo,"22222222222222")
+  console.info(info,"info")
   sessionStorage.setItem("userInfo", JSON.stringify(info));
   getUserPatient(info.uid);
   chooseTypeVisble.value = true;
