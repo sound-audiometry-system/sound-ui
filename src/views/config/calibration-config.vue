@@ -158,7 +158,7 @@ const getTagCss = (item) => {
 }
 const radioFlag = ref(-1)
 const radioFlagEnv = ref(-1)
-const soundIndex = ref(-2)
+const soundIndex = ref([])
 const bgIndex = ref(-2)
 //点击校准
 const startCalibration = (item, flag) => {
@@ -167,7 +167,7 @@ const startCalibration = (item, flag) => {
   radioFlagEnv.value = -1
   radioFlag.value = -1
   bgIndex.value = -2
-  soundIndex.value = -2
+  soundIndex.value = []
   //判断按钮是否关闭
   /** 开启校准组件，缓存数据对象 index */
   isSignalCalibration.value = false
@@ -184,7 +184,7 @@ let startSignal = (item) => {
     return false
   }
   radioFlag.value = item.index
-  soundIndex.value = radioFlag.value * 2 + 1
+  soundIndex.value.push(radioFlag.value * 2 + 1)
   // 打开信号声调试
   if (!item.signalCalibrated) {
     isSignalCalibration.value = true
