@@ -315,7 +315,7 @@ const handlePrev = async () => {
   //删除答案
   if (answerIndex.value <= 0) return
   if (!enableManualplavMode && props.isPlay) return
-  removeItem();
+  // removeItem();
   isDisabled.value = true;
 
   const res = await auditionApi.prevTest();
@@ -341,7 +341,7 @@ const handleNext = async () => {
 const handleReImage = useThrottle(
   async () => {
     //删除答案
-    removeItem();
+    // removeItem();
     const res = await auditionApi.reImageTest();
     if (res.code == 0) {
       isCheckFlag.value = false;
