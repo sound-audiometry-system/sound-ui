@@ -269,7 +269,7 @@ const handleStopAudio = () => {
   emit("handleStopAudio");
 };
 const handleCheck = () => {
-  // console.log(props.imageData.answerList)
+  // console.log(props.imageData.answerList[0])
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
     const imageuuid = item ? item.uuid : uuid
@@ -280,11 +280,11 @@ const handleCheck = () => {
       correct: false,
       wrongFile: item?.image
     });
-    if (item) {
-      checkedImg(item, 0);
-    } else {
+    // if (item) {
+    //   // checkedImg(item, 0);
+    // } else {
       answerMarks.value[answerIndex.value].answerMark = 3
-    }
+    // }
 
     // answerMarks.value[answerIndex.value].answerMark = 3
     return;
@@ -394,7 +394,7 @@ onMounted(() => {
       return;
     }
     let item = JSON.parse(e.newValue);
-    if (item.id == -1) {
+    if (item.id == -1 && (e.key !== "recordStart" || e.key !== "recordStop")) {
       //播放背景声
       bgIndex.value = item.target;
       return;
@@ -452,8 +452,7 @@ onMounted(() => {
         enableManualplavModePlay = false
       }
       if (
-        answerMarks.value[answerIndex.value] &&
-        answerMarks.value[answerIndex.value].answerMark !== 3
+        answerMarks.value[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value]?.correct
       ) {
         answerMarks.value[answerIndex.value].answerMark = 2;
       }
