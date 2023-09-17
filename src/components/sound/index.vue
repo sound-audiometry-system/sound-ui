@@ -39,6 +39,7 @@ const route = useRoute();
 const emit = defineEmits(['handleClkItem'])
 const isCheck = ref(false)
 const bgIndex = props.bgIndex
+console.info(bgIndex,"22222222222222222222222222")
 if (route.name === 'checkConfig') {
   isCheck.value = true
 }
@@ -81,6 +82,7 @@ const getActive = (item, index) => {
   // 'config-active2':props.deviceConfig && props.deviceConfig.length != 0 && props.deviceConfig[index]?.environmentalCalibrated || props.soundIndex == index
   let isSingl =  props.soundIndex.some(x=>x == index * 2 + 1)
   let bi = parseInt(props.bgIndex / 2)
+  console.info(bi,"11111111111111111111111")
   if (isSingl && bi == index) {//两者相同，则混合样式
     clz['config-active3'] = true
   } else if (isSingl) {

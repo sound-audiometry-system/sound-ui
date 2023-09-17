@@ -395,8 +395,7 @@ onMounted(() => {
     }
     let item = JSON.parse(e.newValue);
     if (item.id == -1 && (e.key !== "recordStart" || e.key !== "recordStop")) {
-      //播放背景声
-      bgIndex.value = item.target;
+      
       return;
     }
     if (e.key === "recordStart" || e.key === "recordStop") {
@@ -406,6 +405,12 @@ onMounted(() => {
     }
     // 1111
     if (e.key === "audioStart") {
+      if (item.id == -1){
+        //播放背景声
+        bgIndex.value = item.target;
+        return;
+      }
+
       if (item.id != soundId) {
         soundIndex.value = []
       }
