@@ -113,7 +113,6 @@ const loadTestData = () => {
 const getUserInfo = async () => {
   const res = await userApi.getUserInfo({ uid: inputUserId.value });
   if (res.code == 0) {
-    console.info(res.data, "user res");
     userSearchData.value = [res.data];
     sessionStorage.setItem("userInfo", JSON.stringify(res.data));
   } else {
@@ -154,10 +153,7 @@ const handleNav = () => {
 //跳转到测试页面
 const toTest = (info) => {
   // inputUserId.value = info.name;
-  console.info(userInfo,"111111111111")
   Object.assign(userInfo,info)
-  console.info(userInfo,"22222222222222")
-  console.info(info,"info")
   sessionStorage.setItem("userInfo", JSON.stringify(info));
   getUserPatient(info.uid);
   chooseTypeVisble.value = true;

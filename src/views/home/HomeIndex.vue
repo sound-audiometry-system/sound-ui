@@ -17,7 +17,6 @@ let planData = [
 let startTestDialogVisible = ref(false);
 
 let onSubmit = () => {
-  console.info(1);
 };
 let selectUser = (val) => {
   userInfo.id = val;

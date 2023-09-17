@@ -162,7 +162,7 @@ const soundIndex = ref([])
 const bgIndex = ref(-2)
 //点击校准
 const startCalibration = (item, flag) => {
-  console.info(item, "勾选校准音频")
+  // console.info(item, "勾选校准音频")
   //关闭所有勾选框
   radioFlagEnv.value = -1
   radioFlag.value = -1
@@ -279,9 +279,7 @@ const handleStart = async () => {
   }else{
    globalParam.envLoop = false
   }
-  console.info(globalParam,"handleStart,handleStart")
   let param = getPlayParam()
-  console.info(param,isSignalCalibration.value,isCalibration.value,"handleStart.param")
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {
     isStart = true;
@@ -290,7 +288,6 @@ const handleStart = async () => {
 const getPlayParam = () => {
   //当前勾选什么，生成对应的参数格式，返回。
   let item: any = getItem(queryForm.index);
-  console.info(item,"getPlayParam   item")
   // 判断音箱index
   let targetIndex = parseInt(queryForm.index + "")
   if (isSignalCalibration.value) {
@@ -354,9 +351,7 @@ const handleCirculate = async () => {
     globalParam.signalLoop =false
     globalParam.envLoop =true
   }
-  console.info(globalParam,"handleCirculate,globalParam")
   let param = getPlayParam()
-  console.info(param,isSignalCalibration.value,isCalibration.value,"handleCirculate.param")
   //调用接口
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {

@@ -259,7 +259,6 @@ const handleSave = (type: number) => {
   emit("handleSave", type, Array.from(answerMap.values()));
 };
 const handleAudio = async (key) => {
-  console.log(isOpen.value)
   if (isOpen.value && key === "recordStart") return;
   if (!isOpen.value && key === "recordStop") return;
   isOpen.value = !isOpen.value;
@@ -283,7 +282,7 @@ const handleCheck = () => {
     // if (item) {
     //   // checkedImg(item, 0);
     // } else {
-      answerMarks.value[answerIndex.value].answerMark = 3
+    answerMarks.value[answerIndex.value].answerMark = 3
     // }
 
     // answerMarks.value[answerIndex.value].answerMark = 3
@@ -386,16 +385,20 @@ const checkedImg = (item, index) => {
 onMounted(() => {
   window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
-    console.log("setItemEvent", e.newValue);
+    let item = JSON.parse(e.newValue);
+    //播放背景声
+    if (e.key === "audioStart" && item.id == -1) {
+      bgIndex.value = item.target;
+      return;
+    }
+    //TODO 此处应该优化
     if (!e.newValue) {
       answerIndex.value = -1;
-      //TODO
       isStop.value = true;
       return;
     }
-    let item = JSON.parse(e.newValue);
+
     if (item.id == -1 && (e.key !== "recordStart" || e.key !== "recordStop")) {
-      
       return;
     }
     if (e.key === "recordStart" || e.key === "recordStop") {
@@ -403,9 +406,8 @@ onMounted(() => {
     }
     if (e.key === "imageData") {
     }
-    // 1111
     if (e.key === "audioStart") {
-      if (item.id == -1){
+      if (item.id == -1) {
         //播放背景声
         bgIndex.value = item.target;
         return;
@@ -415,7 +417,6 @@ onMounted(() => {
         soundIndex.value = []
       }
       soundIndex.value.push(item.target)
-      // soundIndex.value = item.target;
       soundId = item.id
 
       answerI++
@@ -441,11 +442,11 @@ onMounted(() => {
       source = item.source;
     }
     if (e.key === "audioStop") {
-      // window.setTimeout(()=> {
-      //   if (rePlayId != item.id && prevId != displayId) {
-      //   answerIndex.value += 1;
-      // }
-      // }, 500)
+      if (item.id === -1) {
+        bgIndex.value = -2
+        return
+      }
+
       //构建答案
       if (audioId !== item.id) {
         answerForm.file = Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value

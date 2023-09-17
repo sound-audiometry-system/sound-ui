@@ -51,7 +51,6 @@ type Props = {
 };
 const props = defineProps<Props>();
 const userInfo = JSON.parse(sessionStorage.getItem("userInfo") || "");
-console.info(userInfo,"111111111111111111111111111111111111111111")
 const testData = sessionStorage.getItem("testData") ? JSON.parse(sessionStorage.getItem("testData") || "") : "";
 let revertData = [
   {

@@ -10,7 +10,6 @@ import hear from "../hear/Sound.vue"
 import { ref } from "vue"
 import type { TabsPaneContext } from 'element-plus'
 const handleClick = (tab: TabsPaneContext, event: Event) => {
-    console.log(tab, event)
 }
 const activeName = ref('first')
 
