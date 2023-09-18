@@ -14,7 +14,6 @@
         <el-row style="background-color: #000; width: 82%; height: 100%; align-items: center; overflow: auto;"
           align="center" :gutter="10">
           <el-col v-for="(item, index) in props.imageData.answerList" :key="item.id" :span="8">
-            <!-- @click="checkedImg(index)" -->
             <el-image style="width: 100%; height: 160px" :src="item.sourceUrl" :fit="item.label" />
           </el-col>
         </el-row>
@@ -217,7 +216,7 @@ let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
 const isStop = ref(false);
 let answerMap: any = new Map();
-let answerKey = new Map()
+const answerKey = ref([])
 let answerI = -1
 const itemId = ref("");
 let displayId = 0;
@@ -256,6 +255,7 @@ const handleStop = () => {
   emit("handleStop");
 };
 const handleSave = (type: number) => {
+  console.error("2xxxxx", answerMap)
   emit("handleSave", type, Array.from(answerMap.values()));
 };
 const handleAudio = async (key) => {
@@ -271,14 +271,19 @@ const handleCheck = () => {
   // console.log(props.imageData.answerList[0])
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
+    if (!item && !itemId) return
     const imageuuid = item ? item.uuid : uuid
-    answerForm.correct = false
-    answerForm.wrongFile = item?.image
-    answerMap.set(imageuuid, {
-      file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value,
+    // answerForm.correct = false
+    // answerForm.wrongFile = item?.image
+    console.info(itemId.value, answerKey, "handleCheck  up")
+    let wornObj = {
+      file: answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file).join(","),
       correct: false,
       wrongFile: item?.image
-    });
+    }
+    console.info(item, wornObj, "handleCheck  set")
+    answerMap.set(imageuuid, wornObj);
+    console.info(itemId.value, answerMap, "handleCheck  off")
     // if (item) {
     //   // checkedImg(item, 0);
     // } else {
@@ -369,12 +374,16 @@ const checkedImg = (item, index) => {
   props.imageData.answerList[index].isCheckFlag = true;
   answerForm.correct = false
   answerForm.wrongFile = item?.image
-  //构建错误答案
-  answerMap.set(item.uuid, {
-    file: Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value,
+  console.info(item, "checkedImg")
+  let imgError = {
+    file: answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file).join(","),
     correct: false,
     wrongFile: item?.image
-  });
+  }
+  console.info(imgError, "checkedImg")
+  //构建错误答案
+  answerMap.set(item.uuid, imgError);
+  console.info(answerMap, "checkedImg answerMap")
 
   index + 1 == props.imageData.target
     ? (answerMarks.value[answerIndex.value].answerMark = 2)
@@ -428,7 +437,7 @@ onMounted(() => {
       uuid = item.uuid
       displayId = item.id;
       itemId.value = item.file;
-      answerKey.set(answerI, item.file)
+      answerKey.value.push(item)
       answerForm.correct = true; //默认正确
       if (enableManualplavMode) {
         isDisabled.value = true;
@@ -449,9 +458,12 @@ onMounted(() => {
 
       //构建答案
       if (audioId !== item.id) {
-        answerForm.file = Array.from(answerKey.values()).length > 1 ? Array.from(answerKey.values()).slice(0, answerI + 1).join(',') : itemId.value
+        let itemFile = answerKey.value.length < 2 ? item.file : answerKey.value.filter(x => x.id == soundId).map(f => f.file).join(",")
+        answerForm.file = itemFile
+        console.info(itemId.value, answerForm, "answerForm")
         // audioFiles = []
         answerMap.set(item.uuid, answerForm);
+        console.info(answerMap, "11111111")
       }
 
       if (answerIndex.value + 1 === answerMarks.length) {
