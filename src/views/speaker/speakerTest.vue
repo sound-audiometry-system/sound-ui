@@ -152,6 +152,17 @@ const startTest = async (value1, value2) => {
     isStart = true;
     isChangeSelect.value = true;
     // isPlay.value = false
+    window.setTimeout(()=> {
+      if (!isOpen) {
+      ElMessageBox.confirm("当前录音未关闭，是否关闭？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    }).then(async () => {
+      handleAudio()
+    })
+    }
+    }, 500)
   }
 };
 const handleClose = () => {
