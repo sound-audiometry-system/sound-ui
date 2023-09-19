@@ -271,7 +271,7 @@ const handleCheck = () => {
   // console.log(props.imageData.answerList[0])
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
-    if (!item && !!itemId.value) return
+    if (!item && !itemId.value) return
     console.info(item,itemId)
     const imageuuid = item ? item.uuid : uuid
     answerForm.correct = false
