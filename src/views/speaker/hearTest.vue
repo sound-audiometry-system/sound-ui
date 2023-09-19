@@ -271,13 +271,14 @@ const handleCheck = () => {
   // console.log(props.imageData.answerList[0])
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
-    if (!item && !itemId) return
+    if (!item && !!itemId.value) return
+    console.info(item,itemId)
     const imageuuid = item ? item.uuid : uuid
     answerForm.correct = false
     answerForm.wrongFile = item?.image
     console.info(itemId.value, answerKey, "handleCheck  up")
     let answerArr = answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
-    let fileId = Array.from(new Set(answerArr)).join(",")
+    let fileId = Array.isArray(answerArr)? Array.from(new Set(answerArr)).join(","):answerArr
     let wornObj = {
       file: fileId,
       correct: false,
@@ -380,7 +381,7 @@ const checkedImg = (item, index) => {
   answerForm.wrongFile = item?.image
   console.info(item, "checkedImg")
   let answerArr = answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
-  let fileId = Array.from(new Set(answerArr)).join(",")
+  let fileId = Array.isArray(answerArr)? Array.from(new Set(answerArr)).join(","):answerArr
   let imgError = {
     file: fileId,
     correct: false,
@@ -467,8 +468,8 @@ onMounted(() => {
       //构建答案
       if (audioId !== item.id) {
         let itemFileArr = answerKey.value.length < 2 ? item.file : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
-        let itemFile = Array.from(new Set(itemFileArr)).join(",")
-        answerForm.file = itemFile
+        let fileId = Array.isArray(itemFileArr)? Array.from(new Set(itemFileArr)).join(","):itemFileArr
+        answerForm.file = fileId
         console.info(itemId.value, answerForm, "answerForm")
         // audioFiles = []
         answerMap.set(item.uuid, answerForm);
