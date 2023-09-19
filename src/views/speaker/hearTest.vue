@@ -273,11 +273,13 @@ const handleCheck = () => {
     const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
     if (!item && !itemId) return
     const imageuuid = item ? item.uuid : uuid
-    // answerForm.correct = false
-    // answerForm.wrongFile = item?.image
+    answerForm.correct = false
+    answerForm.wrongFile = item?.image
     console.info(itemId.value, answerKey, "handleCheck  up")
+    let answerArr = answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
+    let fileId = Array.from(new Set(answerArr)).join(",")
     let wornObj = {
-      file: answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file).join(","),
+      file: fileId,
       correct: false,
       wrongFile: item?.image
     }
@@ -331,16 +333,18 @@ const handlePrev = async () => {
   }
 };
 // 下一个
-const handleNext = async () => {
-  if (answerIndex.value + 1 === answerMarks.length) return
-  if (!enableManualplavMode && props.isPlay) return
-  isDisabled.value = true;
-  const res = await auditionApi.nextTest();
-  if (res.code == 0) {
-    // isCheckFlag.value = false;
-    // answerIndex.value++;
-  }
-};
+const handleNext = useThrottle(
+  async () => {
+    if (answerIndex.value + 1 === answerMarks.length) return
+    if (!enableManualplavMode && props.isPlay) return
+    isDisabled.value = true;
+    const res = await auditionApi.nextTest();
+    if (res.code == 0) {
+      // isCheckFlag.value = false;
+      // answerIndex.value++;
+    }
+  }, 1500, isDisabled
+);
 // 重复
 const handleReImage = useThrottle(
   async () => {
@@ -375,8 +379,10 @@ const checkedImg = (item, index) => {
   answerForm.correct = false
   answerForm.wrongFile = item?.image
   console.info(item, "checkedImg")
+  let answerArr = answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
+  let fileId = Array.from(new Set(answerArr)).join(",")
   let imgError = {
-    file: answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file).join(","),
+    file: fileId,
     correct: false,
     wrongFile: item?.image
   }
@@ -460,7 +466,8 @@ onMounted(() => {
 
       //构建答案
       if (audioId !== item.id) {
-        let itemFile = answerKey.value.length < 2 ? item.file : answerKey.value.filter(x => x.id == soundId).map(f => f.file).join(",")
+        let itemFileArr = answerKey.value.length < 2 ? item.file : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
+        let itemFile = Array.from(new Set(itemFileArr)).join(",")
         answerForm.file = itemFile
         console.info(itemId.value, answerForm, "answerForm")
         // audioFiles = []
