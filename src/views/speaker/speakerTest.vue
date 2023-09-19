@@ -154,7 +154,7 @@ const startTest = async (value1, value2) => {
     // isPlay.value = false
     window.setTimeout(()=> {
       if (!isOpen) {
-      ElMessageBox.confirm("当前录音未关闭，是否关闭？", "提示", {
+      ElMessageBox.confirm("当前录音未开启，是否开启？", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
       type: "warning",
