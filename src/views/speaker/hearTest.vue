@@ -320,6 +320,7 @@ const removeItem = () => {
 // 上一个
 const handlePrev = async () => {
   //删除答案
+  if(isDisabled.value) return
   if (answerIndex.value <= 0) return
   if (!enableManualplavMode && props.isPlay) return
   // removeItem();
@@ -334,8 +335,9 @@ const handlePrev = async () => {
   }
 };
 // 下一个
-const handleNext = useThrottle(
+const handleNext = 
   async () => {
+    if(isDisabled.value) return
     if (answerIndex.value + 1 === answerMarks.length) return
     if (!enableManualplavMode && props.isPlay) return
     isDisabled.value = true;
@@ -344,8 +346,7 @@ const handleNext = useThrottle(
       // isCheckFlag.value = false;
       // answerIndex.value++;
     }
-  }, 1500, isDisabled
-);
+  }
 // 重复
 const handleReImage = useThrottle(
   async () => {
