@@ -447,7 +447,9 @@ onMounted(() => {
         isCheckFlag.value = false;
       }
       //添加到答案集map中
-
+      if (answerMarks.value[answerIndex.value]) {
+        answerMarks.value[answerIndex.value].answerMark = 2;
+      }
       source = item.source;
     }
     if (e.key === "audioStop") {
@@ -463,17 +465,17 @@ onMounted(() => {
         console.info(itemId.value, answerForm, "answerForm")
         // audioFiles = []
         answerMap.set(item.uuid, answerForm);
-        console.info(answerMap, "11111111")
+        // console.info(answerMap, "11111111")
       }
 
       if (answerIndex.value + 1 === answerMarks.length) {
         enableManualplavModePlay = false
       }
-      if (
-        answerMarks.value[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value]?.correct
-      ) {
-        answerMarks.value[answerIndex.value].answerMark = 2;
-      }
+      // if (
+      //   answerMarks.value[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value]?.correct && isCheckFlag.value || !isCheckFlag.value && answerMarks.value[answerIndex.value]?.answerMark
+      // ) {
+      //   answerMarks.value[answerIndex.value]?.answerMark = 2;
+      // }
       answerI = -1
 
       audioId = item.id
