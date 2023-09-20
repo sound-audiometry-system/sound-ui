@@ -163,6 +163,11 @@ const startTest = async (value1, value2) => {
     })
     }
     }, 500)
+  } else {
+    ElMessage({
+          message: res?.msg || "操作失败",
+          type: "success",
+        });
   }
 };
 const handleClose = () => {
