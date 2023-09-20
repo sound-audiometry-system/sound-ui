@@ -34,7 +34,7 @@
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button @click="handleCheck" :disabled="syncDisabledBtn" size="large" style="margin-right: 5px">
+        <el-button @click="handleCheck" :disabled="syncDisabledBtn || !props.isPlay" size="large" style="margin-right: 5px">
           <el-icon style="color: red; margin-right: 2px">
             <CircleClose />
           </el-icon>错误</el-button>
@@ -249,6 +249,9 @@ const handleBack = () => {
 };
 const handleStop = () => {
   isTestStop = true
+  if (prevRouter === '/imitate') {
+    isStop.value = false
+  }
   // for (const item of answerMarks.value) {
   //   item.answerMark = 1;
   // }
@@ -401,19 +404,24 @@ const checkedImg = (item, index) => {
 onMounted(() => {
   window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
+    
+    //TODO 此处应该优化
+    if (!e.newValue) {
+      answerIndex.value = -1;
+      isStop.value = true;
+      if(prevRouter === '/imitate') {
+        answerMarks.value.forEach(item=> {
+          item.answerMark = 1
+        })
+      }
+      return;
+    }
     let item = JSON.parse(e.newValue);
     //播放背景声
     if (e.key === "audioStart" && item.id == -1) {
       bgIndex.value = item.target;
       return;
     }
-    //TODO 此处应该优化
-    if (!e.newValue) {
-      answerIndex.value = -1;
-      isStop.value = true;
-      return;
-    }
-
     if (item.id == -1 && (e.key !== "recordStart" || e.key !== "recordStop")) {
       return;
     }
