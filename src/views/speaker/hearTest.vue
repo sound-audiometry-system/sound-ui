@@ -357,10 +357,10 @@ const handleBack = () => {
   router.back();
 };
 const handleStop = () => {
-  for (const item of answerMarks.value) {
-    item.answerMark = 1;
-  }
-  // emit("handleStop");
+  // for (const item of answerMarks.value) {
+  //   item.answerMark = 1;
+  // }
+  emit("handleStop");
 };
 const handleSave = (type: number) => {
   emit("handleSave", type, Array.from(answerMap.values()));
@@ -375,14 +375,14 @@ const handleStopAudio = () => {
   emit("handleStopAudio");
 };
 const handleCheck = () => {
-  console.log(props.imageData.answerList)
+  // console.log(props.imageData.answerList)
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList ? props.imageData.answerList[0] : null;
     const imageuuid = item?item.uuid : uuid
     answerMap.set(imageuuid, {
         file: itemId.value,
         correct: false,
-        wrongFile: item?.image,
+        wrongFile: item ? item.image : null,
       });
     if (item) {
       checkedImg(item, 0);
@@ -416,6 +416,7 @@ const removeItem = () => {
 };
 // 上一个
 const handlePrev = async () => {
+  if(answerIndex.value <= 0) return
   //删除答案
   removeItem();
   isDisabled.value = true;
@@ -430,6 +431,7 @@ const handlePrev = async () => {
 };
 // 下一个
 const handleNext = async () => {
+  if(answerIndex.value + 1 === answerMarks.length) return
   isDisabled.value = true;
   const res = await auditionApi.nextTest();
   if (res.code == 0) {
@@ -457,6 +459,11 @@ const handkeyCode = (e) => {
   if (e.keyCode === 32) {
     handleCheck();
   }
+  if (e.keyCode === 37) { // 左键
+    handlePrev()
+  } else if (e.keyCode === 39) { // 右键
+    handleNext()
+  }
 };
 const checkedImg = (item, index) => {
   if (!isCheckFlag.value) return;
@@ -467,7 +474,7 @@ const checkedImg = (item, index) => {
   answerMap.set(item.uuid, {
     file: itemId.value,
     correct: false,
-    wrongFile: item.image,
+    wrongFile: item?.image,
   });
 
   index + 1 == props.imageData.target
