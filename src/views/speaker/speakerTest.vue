@@ -2,19 +2,11 @@
 <template>
   <el-container>
     <el-header>
-      <userHeader
-        v-if="prevRouter !== '/imitate'"
-        :isPlay="isChangeSelect"
-      ></userHeader>
+      <userHeader v-if="prevRouter !== '/imitate'" :isPlay="isChangeSelect"></userHeader>
     </el-header>
     <el-main v-loading="isOpenLoading" ref="main">
       <el-tabs v-model="typeName" stretch="true" type="border-card">
-        <el-tab-pane
-          align="left"
-          style="font-size: x-large"
-          name="2"
-          label="听力测试"
-        >
+        <el-tab-pane align="left" style="font-size: x-large" name="2" label="听力测试">
           <hearTest
             ref="childRef"
             :imageData="imageData"
@@ -49,22 +41,10 @@
           <el-input v-model="form.operator" />
         </el-form-item>
         <el-form-item v-if="openType == 2" label="结束原因" prop="reason">
-          <el-input
-            v-model="form.reason"
-            maxlength="200"
-            type="textarea"
-            rows="5"
-            show-word-limit
-          />
+          <el-input v-model="form.reason" maxlength="200" type="textarea" rows="5" show-word-limit />
         </el-form-item>
         <el-form-item v-if="openType == 1" label="结果分析与建议" prop="advice">
-          <el-input
-            v-model="form.advice"
-            maxlength="200"
-            type="textarea"
-            rows="5"
-            show-word-limit
-          />
+          <el-input v-model="form.advice" maxlength="200" type="textarea" rows="5" show-word-limit />
         </el-form-item>
       </el-form>
       <template #footer>
@@ -89,17 +69,17 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 const typeName = ref("1");
 let isStart = false;
-const isChangeSelect = ref(false);
+const isChangeSelect = ref(false)
 let isPlay = ref(false);
 let isSave = false;
 const dialogVisible = ref(false);
 let isOpen = false;
-const isOpenLoading = ref(false);
+const isOpenLoading = ref(false)
 const fileUrl = [];
 let store = useStore();
 const route = useRoute();
 const router = useRouter();
-const prevRouter = router.options.history.state.back;
+const prevRouter = router.options.history.state.back
 let isSuccess = false;
 if (route.query.type) typeName.value = route.query.type;
 // console.log(store, 'store')
@@ -110,18 +90,16 @@ let imageData = {};
 let answerIndex = ref(0); // 答题进度索引
 const ruleFormRef = ref<FormInstance>();
 var rec;
-const userInfo = sessionStorage.getItem("userInfo")
-  ? JSON.parse(sessionStorage.getItem("userInfo") || "")
-  : "";
+const userInfo = sessionStorage.getItem("userInfo") ? JSON.parse(sessionStorage.getItem("userInfo") || "") : ""
 const openType = ref(0);
 const handleTestStop = inject<() => void>("handleStop");
 interface RuleForm {
   operator: string;
 }
 // console.log(userInfo[0])
-console.log(testData);
+console.log(testData)
 const form = reactive({
-  uid: userInfo && userInfo.uid,
+  uid: userInfo && userInfo[0].uid,
   testId: testData[0].id,
   answerList: [],
   // answerList: testData[0].signalSoundConfig,
@@ -150,24 +128,8 @@ const startTest = async (value1, value2) => {
   const res = await auditionApi.startTest(testData[0], params);
   if (res.code == 0) {
     isStart = true;
-    isChangeSelect.value = true;
+    isChangeSelect.value = true
     // isPlay.value = false
-    window.setTimeout(()=> {
-      if (!isOpen) {
-      ElMessageBox.confirm("当前录音未开启，是否开启？", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    }).then(async () => {
-      handleAudio()
-    })
-    }
-    }, 500)
-  } else {
-    ElMessage({
-          message: res?.msg || "操作失败",
-          type: "success",
-        });
   }
 };
 const handleClose = () => {
@@ -180,7 +142,7 @@ const stopTest = async () => {
   if (res.code == 0) {
     isStart = false;
     isPlay.value = false;
-    isChangeSelect.value = false;
+    isChangeSelect.value = false
     sessionStorage.setItem("imageData", "");
   }
 };
@@ -200,15 +162,15 @@ const handleOpen = (type, answerList) => {
     }).then(async () => {
       openType.value = type;
       form.answerList = answerList;
-      await handleStopAudio();
+      await handleStopAudio()
       dialogVisible.value = true;
       handlePause();
     });
   } else {
     openType.value = type;
-    form.answerList = answerList;
-    dialogVisible.value = true;
-    handlePause();
+      form.answerList = answerList;
+      dialogVisible.value = true;
+      handlePause();
   }
 };
 const handleSave = async (formEl: FormInstance | undefined) => {
@@ -229,7 +191,6 @@ const handleSave = async (formEl: FormInstance | undefined) => {
           message: "保存成功",
           type: "success",
         });
-        router.back()
       }
     } else {
       ElMessage({
@@ -300,7 +261,7 @@ const handleAudio = async () => {
 };
 const handleStopAudio = () => {
   if (!isOpen) return;
-  isOpenLoading.value = true;
+  isOpenLoading.value = true
   rec.stop(
     async function (blob, duration) {
       //简单利用URL生成本地文件地址，注意不用了时需要revokeObjectURL，否则霸占内存
@@ -320,7 +281,7 @@ const handleStopAudio = () => {
         fileUrl.push(res.data);
       }
       isOpen = false;
-      isOpenLoading.value = false;
+      isOpenLoading.value = false
       ElMessage({ message: "录音关闭", type: "success" });
     },
     function (msg) {
@@ -328,7 +289,7 @@ const handleStopAudio = () => {
       rec.close(); //可以通过stop方法的第3个参数来自动调用close
       rec = null;
       isOpen = false;
-      isOpenLoading.value = false;
+      isOpenLoading.value = false
     }
   );
 };
@@ -351,10 +312,10 @@ onMounted(() => {
       isPlay.value = false;
       // imageData = {}
       if (!isSuccess) {
-        if (this.msgOption) {
-          this.msgOption.close();
+        if(this.msgOption){
+          this.msgOption.close()
         }
-        this.msgOption = ElMessage.success("方案播放完成");
+        this.msgOption = ElMessage.success("方案播放完成")
         // ElMessage({message: "方案播放完成",type: "success",});
         // ElMessage.success("方案播放完成")
       }
@@ -369,13 +330,8 @@ onMounted(() => {
       imageData = reactive({});
       return;
     }
-    let item = JSON.parse(e.newValue);
-      if (item.id == -1) {
-        //播放背景声
-        return;
-      }
-    if (e.key === "recordStart") {
-      isOpen = true;
+    if (e.key === 'recordStart') {
+      isOpen = true
     }
     if (e.key === "imageClean") {
       imageData = reactive({});
