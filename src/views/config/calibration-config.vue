@@ -158,16 +158,16 @@ const getTagCss = (item) => {
 }
 const radioFlag = ref(-1)
 const radioFlagEnv = ref(-1)
-const soundIndex = ref(-2)
+const soundIndex = ref([])
 const bgIndex = ref(-2)
 //点击校准
 const startCalibration = (item, flag) => {
-  console.info(item, "勾选校准音频")
+  // console.info(item, "勾选校准音频")
   //关闭所有勾选框
   radioFlagEnv.value = -1
   radioFlag.value = -1
   bgIndex.value = -2
-  soundIndex.value = -2
+  soundIndex.value = []
   //判断按钮是否关闭
   /** 开启校准组件，缓存数据对象 index */
   isSignalCalibration.value = false
@@ -184,7 +184,7 @@ let startSignal = (item) => {
     return false
   }
   radioFlag.value = item.index
-  soundIndex.value = radioFlag.value * 2 + 1
+  soundIndex.value.push(radioFlag.value * 2 + 1)
   // 打开信号声调试
   if (!item.signalCalibrated) {
     isSignalCalibration.value = true
@@ -279,9 +279,7 @@ const handleStart = async () => {
   }else{
    globalParam.envLoop = false
   }
-  console.info(globalParam,"handleStart,handleStart")
   let param = getPlayParam()
-  console.info(param,isSignalCalibration.value,isCalibration.value,"handleStart.param")
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {
     isStart = true;
@@ -290,14 +288,16 @@ const handleStart = async () => {
 const getPlayParam = () => {
   //当前勾选什么，生成对应的参数格式，返回。
   let item: any = getItem(queryForm.index);
-  //构建对象 leftHide/rightHide
   // 判断音箱index
   let targetIndex = parseInt(queryForm.index + "")
   if (isSignalCalibration.value) {
     let signalParam = {
       id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
       signalSoundConfig: [{
-        audios: [{ "target": targetIndex * 2 + 1, "file": item.signalSource, "duration": 3000, "volume": queryForm.signalSoundVolume }],
+        audios: [{ "target": targetIndex * 2 + 1, 
+        "file": item.signalSource, 
+        "duration": item.signalDuration?item.signalDuration:3000, 
+        "volume": queryForm.signalSoundVolume }],
         "nextAudioInterval": 1
       }]
     }
@@ -313,7 +313,7 @@ const getPlayParam = () => {
           "target": targetIndex * 2,
           "file": item.environmentalSource,
           "volume": queryForm.environmentalSoundVolume,
-          duration: 3000
+          "duration": item.environmentalDuration?item.environmentalDuration:3000
         },
       ]
     }
@@ -351,9 +351,7 @@ const handleCirculate = async () => {
     globalParam.signalLoop =false
     globalParam.envLoop =true
   }
-  console.info(globalParam,"handleCirculate,globalParam")
   let param = getPlayParam()
-  console.info(param,isSignalCalibration.value,isCalibration.value,"handleCirculate.param")
   //调用接口
   const res = await auditionApi.startTest(param, globalParam);
   if (res.code == 0) {

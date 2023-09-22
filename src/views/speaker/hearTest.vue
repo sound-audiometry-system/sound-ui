@@ -16,6 +16,7 @@
           ><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
         </span>
       </div>
+<<<<<<< HEAD
       <div
         style="
           margin-left: 10px;
@@ -47,6 +48,13 @@
               :src="item.sourceUrl"
               :fit="item.label"
             />
+=======
+      <div style="margin-left: 10px; width: 920px; height: 335px; padding: 0 6px; display: flex;">
+        <el-row style="background-color: #000; width: 82%; height: 100%; align-items: center; overflow: auto;"
+          align="center" :gutter="10">
+          <el-col v-for="(item, index) in props.imageData.answerList" :key="item.id" :span="8">
+            <el-image style="width: 100%; height: 160px" :src="item.sourceUrl" :fit="item.label" />
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
           </el-col>
         </el-row>
         <div style="width: 18%; margin-left: 10px">
@@ -60,34 +68,47 @@
           <p style="font-size: 12px">同时打开两边显示器</p>
           <p v-if="prevRouter !== '/imitate'" style="font-size: 14px">
             当前正在答
+<<<<<<< HEAD
             {{ answerIndex && answerIndex <= 0 ? "" : answerIndex + 1 }} 题
           </p>
+=======
+            {{ answerIndex && answerIndex <= 0 ? "" : answerIndex + 1 }} 题 </p>
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
         </div>
       </div>
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
+<<<<<<< HEAD
         <el-button
           @click="handleCheck"
           :disabled="syncDisabledBtn"
           size="large"
           style="margin-right: 5px"
         >
+=======
+        <el-button @click="handleCheck" :disabled="syncDisabledBtn || !props.isPlay" size="large" style="margin-right: 5px">
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
           <el-icon style="color: red; margin-right: 2px">
             <CircleClose /> </el-icon
           >错误</el-button
         >
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
+<<<<<<< HEAD
       <el-row
         :gutter="10"
         style="
+=======
+      <el-row :gutter="10" style="
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
           margin-left: 10px;
           width: 920px;
           height: 305px;
           background-color: #efefef;
           padding-top: 6px;
           overflow: auto;
+<<<<<<< HEAD
         "
       >
         <el-col
@@ -124,6 +145,25 @@
               "
               style="color: green; font-size: 26px"
             >
+=======
+        ">
+        <el-col v-for="(item, index) in props.imageData.answerList" :key="item.id" :span="8">
+          <el-image @click="checkedImg(item, index)" :class="{
+            'is-checked-img-error':
+              index === checkedImgIndex &&
+              index + 1 != props.imageData.target,
+            'is-checked-img-success':
+              index === checkedImgIndex &&
+              index + 1 == props.imageData.target,
+          }" style="width: 100%; height: 160px" :src="item.sourceUrl" :fit="item.label" />
+          <div style="text-align: center">
+            <el-icon v-if="index === checkedImgIndex && index + 1 != props.imageData.target
+              " style="color: red; font-size: 26px; margin: 0 auto">
+              <CircleClose />
+            </el-icon>
+            <el-icon v-if="index === checkedImgIndex && index + 1 == props.imageData.target
+              " style="color: green; font-size: 26px">
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
               <CircleCheck />
             </el-icon>
           </div>
@@ -146,6 +186,7 @@
         ></sound>
       </div>
       <el-row class="el-btn a">
+<<<<<<< HEAD
         <el-button
           :disabled="props.isPlay || isStop"
           size="large"
@@ -221,21 +262,63 @@
       <el-row>
         <div
           style="
+=======
+        <el-button :disabled="props.isPlay" size="large" plain @click="handleStart">开始</el-button>
+        <el-button v-if="prevRouter !== '/imitate'"
+          :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode || !enableManualplavMode && !isTestStop"
+          size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay || answerIndex + 1 === answerMarks.length"
+          size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button v-if="prevRouter === '/imitate'" :disabled="!props.isPlay" size="large" plain
+          @click="handleStop">模拟结束</el-button>
+      </el-row>
+      <el-row class="el-btn b">
+        <el-button :disabled="!props.isPlay ||
+          isDisabled ||
+          enableManualplavMode ||
+          answerIndex <= 0
+          " @click="handlePrev">上一个(左键)</el-button>
+        <el-button :disabled="!props.isPlay ||
+          isDisabled ||
+          enableManualplavMode ||
+          answerIndex + 1 === answerMarks.length
+          " @click="handleNext">下一个(右键)</el-button>
+        <el-button :disabled="!props.isPlay ||
+          isDisabled ||
+          enableManualplavMode ||
+          answerIndex < 0
+          " @click="handleReImage">重复</el-button>
+        <el-button v-if="prevRouter !== '/imitate' && !enableManualplavMode" :disabled="!props.isPlay
+          && enableManualplavModePlay
+          " @click="handleStop">测试结束</el-button>
+      </el-row>
+      <el-row>
+        <div style="
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
             height: 300px;
             width: 950px;
             background-color: #e9e9e9;
             margin-top: 15px;
             padding: 12px 20px;
+<<<<<<< HEAD
           "
         >
           <div
             style="
+=======
+          ">
+          <div style="
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
               display: flex;
               justify-content: space-between;
               margin-bottom: 16px;
               align-items: center;
+<<<<<<< HEAD
             "
           >
+=======
+            ">
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
             <span style="font-weight: bold">答题进度</span>
             <span style="font-size: 12px" @click="handleClk">
               查看全部<el-icon>
@@ -266,7 +349,7 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
@@ -276,6 +359,7 @@ import sound from "../../components/sound/index.vue";
 import { auditionApi } from "@/serve/api/user";
 import { useStore } from "vuex";
 import { useThrottle } from "../../utils/index";
+//变量声明区域
 let store = useStore();
 const route = useRoute();
 const testData = store.getters.getTestData;
@@ -283,18 +367,29 @@ let testName = ref(testData[0].name);
 const prevRouter = router.options.history.state.back;
 const answerDialogRef = ref(null) as any;
 const soundDialogRef = ref(null) as any;
+//是否开启屏幕控制
 let value1 = ref(true);
 let value2 = ref(true);
 let value3 = ref(true);
 let isOpen = ref(false);
+<<<<<<< HEAD
 const checkedImgIndex = ref(-1);
 let isDisabled = ref(false);
+=======
+let isTestStop = false
+const checkedImgIndex = ref(-1);
+let isDisabled = ref(false);
+let enableManualplavModePlay = true
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
 let answerCheckIndex = -1;
 let enableManualplavMode = ref(!testData[0].enableManualPlayMode);
 let sycnDisabledBtn = ref(false);
-//TODO
-const soundIndex = ref(30);
+//音频组件显示控制
+const soundIndex = ref([]);
+let soundId = -2;
 const bgIndex = ref(-2);
+//
+let audioId = -1
 let syncDisabledBtn = ref(false);
 let source = "";
 let answerForm = {};
@@ -325,19 +420,29 @@ const emit = defineEmits([
   "handlePause",
   "handleResume",
 ]);
+console.log(prevRouter)
 const props = defineProps<Props>();
 let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
 const isStop = ref(false);
 let answerMap: any = new Map();
+const answerKey = ref([])
+let answerI = -1
 const itemId = ref("");
 let displayId = 0;
 let prevId = -1;
 let rePlayId = -1;
 let uuid = ""
+<<<<<<< HEAD
 watch(
   () => props.imageData,
   (newValue, oldValue) => {}
+=======
+let audioFiles = []
+watch(
+  () => props.imageData,
+  (newValue, oldValue) => { }
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
 );
 const handleClk = () => {
   sycnDisabledBtn.value = true;
@@ -353,16 +458,27 @@ const handleStart = () => {
   emit("handleStart", value1.value, value2.value);
 };
 const handleBack = () => {
+  // isTestStop = true
+  // enableManualplavModePlay = false
   emit("handleStop");
   router.back();
 };
 const handleStop = () => {
+<<<<<<< HEAD
+=======
+  isTestStop = true
+  
+  if (prevRouter === '/imitate') {
+    isStop.value = false
+  }
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
   // for (const item of answerMarks.value) {
   //   item.answerMark = 1;
   // }
   emit("handleStop");
 };
 const handleSave = (type: number) => {
+  console.error("2xxxxx", answerMap)
   emit("handleSave", type, Array.from(answerMap.values()));
 };
 const handleAudio = async (key) => {
@@ -375,6 +491,7 @@ const handleStopAudio = () => {
   emit("handleStopAudio");
 };
 const handleCheck = () => {
+<<<<<<< HEAD
   // console.log(props.imageData.answerList)
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList ? props.imageData.answerList[0] : null;
@@ -389,6 +506,33 @@ const handleCheck = () => {
     } else {
       answerMarks.value[answerIndex.value].answerMark = 3
     }
+=======
+  // console.log(props.imageData.answerList[0])
+  if(!props.isPlay || !syncDisabledBtn.value) return
+  if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
+    const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
+    if (!item && !itemId.value) return
+    console.info(item,itemId)
+    const imageuuid = item ? item.uuid : uuid
+    answerForm.correct = false
+    answerForm.wrongFile = item?.image
+    console.info(itemId.value, answerKey, "handleCheck  up")
+    let answerArr = answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
+    let fileId = Array.isArray(answerArr)? Array.from(new Set(answerArr)).join(","):answerArr
+    let wornObj = {
+      file: fileId,
+      correct: false,
+      wrongFile: item?.image
+    }
+    console.info(item, wornObj, "handleCheck  set")
+    answerMap.set(imageuuid, wornObj);
+    console.info(itemId.value, answerMap, "handleCheck  off")
+    // if (item) {
+    //   // checkedImg(item, 0);
+    // } else {
+    answerMarks.value[answerIndex.value].answerMark = 3
+    // }
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
 
     // answerMarks.value[answerIndex.value].answerMark = 3
     return;
@@ -418,7 +562,11 @@ const removeItem = () => {
 const handlePrev = async () => {
   if(answerIndex.value <= 0) return
   //删除答案
-  removeItem();
+  if(isDisabled.value) return
+  console.log(answerIndex.value)
+  if (answerIndex.value <= 0) return
+  if (!enableManualplavMode && props.isPlay) return
+  // removeItem();
   isDisabled.value = true;
 
   const res = await auditionApi.prevTest();
@@ -430,6 +578,7 @@ const handlePrev = async () => {
   }
 };
 // 下一个
+<<<<<<< HEAD
 const handleNext = async () => {
   if(answerIndex.value + 1 === answerMarks.length) return
   isDisabled.value = true;
@@ -437,13 +586,34 @@ const handleNext = async () => {
   if (res.code == 0) {
     // isCheckFlag.value = false;
     // answerIndex.value++;
+=======
+const handleNext = 
+  async () => {
+    if(isDisabled.value) return
+    console.log(answerIndex.value)
+    console.log(answerMarks.value.length)
+    if (answerIndex.value + 1 === answerMarks.value.length) return
+    if (!enableManualplavMode && props.isPlay) return
+    isDisabled.value = true;
+    const res = await auditionApi.nextTest();
+    if (res.code == 0) {
+      // isCheckFlag.value = false;
+      // answerIndex.value++;
+    }
   }
-};
+  const handleStartAudio = ()=> {
+    isOpen.value = true
+  }
+  const handleStopTest = ()=> {
+    bgIndex.value = -2
+    soundIndex.value = []
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
+  }
 // 重复
 const handleReImage = useThrottle(
   async () => {
     //删除答案
-    removeItem();
+    // removeItem();
     const res = await auditionApi.reImageTest();
     if (res.code == 0) {
       isCheckFlag.value = false;
@@ -470,12 +640,25 @@ const checkedImg = (item, index) => {
   sycnDisabledBtn.value = false;
   checkedImgIndex.value = index;
   props.imageData.answerList[index].isCheckFlag = true;
-  //构建错误答案
-  answerMap.set(item.uuid, {
-    file: itemId.value,
+  answerForm.correct = false
+  answerForm.wrongFile = item?.image
+  console.info(item, "checkedImg")
+  let answerArr = answerKey.value.length < 2 ? itemId.value : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
+  let fileId = Array.isArray(answerArr)? Array.from(new Set(answerArr)).join(","):answerArr
+  let imgError = {
+    file: fileId,
     correct: false,
+<<<<<<< HEAD
     wrongFile: item?.image,
   });
+=======
+    wrongFile: item?.image
+  }
+  console.info(imgError, "checkedImg")
+  //构建错误答案
+  answerMap.set(item.uuid, imgError);
+  console.info(answerMap, "checkedImg answerMap")
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
 
   index + 1 == props.imageData.target
     ? (answerMarks.value[answerIndex.value].answerMark = 2)
@@ -483,20 +666,38 @@ const checkedImg = (item, index) => {
   // isCheckFlag.value = false;
   emit("handleResume");
 };
+defineExpose({
+  handleStartAudio,
+  handleStopTest
+});
+
 onMounted(() => {
-  window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
+  window.addEventListener("keyup", handkeyCode); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
-    console.log("setItemEvent", e.newValue);
+    
+    //TODO 此处应该优化
     if (!e.newValue) {
       answerIndex.value = -1;
-      //TODO
       isStop.value = true;
+      if(prevRouter === '/imitate') {
+        answerMarks.value.forEach(item=> {
+          item.answerMark = 1
+        })
+      }
       return;
     }
     let item = JSON.parse(e.newValue);
+<<<<<<< HEAD
     if (item.id == -1) {
       //播放背景声
+=======
+    //播放背景声
+    if (e.key === "audioStart" && item.id == -1) {
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
       bgIndex.value = item.target;
+      return;
+    }
+    if (item.id == -1 && (e.key !== "recordStart" || e.key !== "recordStop")) {
       return;
     }
     if (e.key === "recordStart" || e.key === "recordStop") {
@@ -504,8 +705,8 @@ onMounted(() => {
     }
     if (e.key === "imageData") {
     }
-    // 1111
     if (e.key === "audioStart") {
+<<<<<<< HEAD
       answerIndex.value = item.id;
       syncDisabledBtn.value = false;
       // isCheckFlag.value = false;
@@ -515,6 +716,30 @@ onMounted(() => {
       itemId.value = item.file;
       soundIndex.value = item.target;
       answerForm.file = item.file; //题目id
+=======
+      if (item.id == -1) {
+        //播放背景声
+        bgIndex.value = item.target;
+        return;
+      }
+
+      if (item.id != soundId) {
+        soundIndex.value = []
+      }
+      soundIndex.value.push(item.target)
+      soundId = item.id
+
+      answerI++
+      answerForm = {};
+      answerIndex.value = item.id;
+      syncDisabledBtn.value = false;
+      // isCheckFlag.value = false;
+      // newValue 数据结构问题
+      uuid = item.uuid
+      displayId = item.id;
+      itemId.value = item.file;
+      answerKey.value.push(item)
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
       answerForm.correct = true; //默认正确
       if (enableManualplavMode) {
         isDisabled.value = true;
@@ -524,10 +749,13 @@ onMounted(() => {
         isCheckFlag.value = false;
       }
       //添加到答案集map中
-      answerMap.set(item.uuid, answerForm);
+      if (answerMarks.value[answerIndex.value]) {
+        answerMarks.value[answerIndex.value].answerMark = 2;
+      }
       source = item.source;
     }
     if (e.key === "audioStop") {
+<<<<<<< HEAD
       // window.setTimeout(()=> {
       //   if (rePlayId != item.id && prevId != displayId) {
       //   answerIndex.value += 1;
@@ -540,15 +768,44 @@ onMounted(() => {
         answerMarks.value[answerIndex.value].answerMark !== 3
       ) {
         answerMarks.value[answerIndex.value].answerMark = 2;
+=======
+      if (item.id === -1) {
+        bgIndex.value = -2
+        return
+>>>>>>> 3e0810fc781471d55913504b14d8bee33e42eb4c
       }
-      answerForm = {};
 
+      //构建答案
+      if (audioId !== item.id) {
+        let itemFileArr = answerKey.value.length < 2 ? item.file : answerKey.value.filter(x => x.id == soundId).map(f => f.file)
+        let fileId = Array.isArray(itemFileArr)? Array.from(new Set(itemFileArr)).join(","):itemFileArr
+        answerForm.file = fileId
+        console.info(itemId.value, answerForm, "answerForm")
+        // audioFiles = []
+        answerMap.set(item.uuid, answerForm);
+        // console.info(answerMap, "11111111")
+      }
+
+      if (answerIndex.value + 1 === answerMarks.value.length) {
+        enableManualplavModePlay = false
+      }
+      // if (
+      //   answerMarks.value[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value] && Array.from(answerMap.values())[answerIndex.value]?.correct && isCheckFlag.value || !isCheckFlag.value && answerMarks.value[answerIndex.value]?.answerMark
+      // ) {
+      //   answerMarks.value[answerIndex.value]?.answerMark = 2;
+      // }
+      answerI = -1
+
+      audioId = item.id
       if (enableManualplavMode) {
         isDisabled.value = false;
       }
     }
   });
 });
+onBeforeUnmount(()=> {
+  window.removeEventListener("keyup", handkeyCode)
+})
 </script>
 
 <style lang="scss" scoped>

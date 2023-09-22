@@ -60,7 +60,7 @@ const acActive = ref("btn-active");
 const uclActive = ref("");
 const signalBtn = ref(false);
 let chartIndex = ref(0);
-const soundIndex = ref(1);
+const soundIndex = ref([1]);
 const chartRef = ref(null);
 //点击时x,y
 const clickXY: any = ref([])

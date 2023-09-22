@@ -6,20 +6,13 @@ export default {
       mounted:(el: { offsetWidth: number; offsetHeight: number; style: { transform: string; }; })=> {
         const setScale = () => {
           const screenWidth = window.innerWidth;
-          console.log(el.offsetWidth)
-          console.log(el.offsetHeight)
           const screenHeight = window.innerHeight;
-          console.log(screenHeight)
           const scaleX = screenWidth / el.offsetWidth;
           const scaleY = screenHeight / el.offsetHeight;
           const scale = scaleX > scaleY ? scaleY : scaleX;
-          // const scale = scaleX;
-          // console.log(scaleX)
-          // console.log(scaleY)
           el.style.transform = `scale(${scaleX})`;
         };
         setScale();
-        
         window.addEventListener('resize', setScale);
       }
     }

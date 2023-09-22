@@ -30,7 +30,6 @@ const form = reactive({
 })
 
 const onSubmit = () => {
-    console.log('submit!')
 }
 defineExpose({
     startTestDialogVisible
