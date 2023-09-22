@@ -80,7 +80,7 @@
         <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" :bg-index="bgIndex" env-index="122"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button :disabled="props.isPlay || isStop" size="large" plain @click="handleStart">开始</el-button>
+        <el-button :disabled="props.isPlay" size="large" plain @click="handleStart">开始</el-button>
         <el-button v-if="prevRouter !== '/imitate'"
           :disabled="answerIndex + 1 !== answerMarks.length && !isStop && enableManualplavMode || !enableManualplavMode && !isTestStop"
           size="large" plain @click="handleSave(1)">保存</el-button>
@@ -145,7 +145,7 @@
   </el-container>
 </template>
 <script setup lang="ts">
-import { onMounted, ref, watch } from "vue";
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
 import { CircleClose, CircleCheck } from "@element-plus/icons-vue";
 import { useRouter, useRoute } from "vue-router";
 const router = useRouter();
@@ -211,6 +211,7 @@ const emit = defineEmits([
   "handlePause",
   "handleResume",
 ]);
+console.log(prevRouter)
 const props = defineProps<Props>();
 let answerIndex = ref(-1);
 const isCheckFlag = ref(false);
@@ -249,6 +250,7 @@ const handleBack = () => {
 };
 const handleStop = () => {
   isTestStop = true
+  
   if (prevRouter === '/imitate') {
     isStop.value = false
   }
@@ -272,6 +274,7 @@ const handleStopAudio = () => {
 };
 const handleCheck = () => {
   // console.log(props.imageData.answerList[0])
+  if(!props.isPlay || !syncDisabledBtn.value) return
   if (props.imageData.answerList && props.imageData.answerList.length <= 1 || !props.imageData.answerList) {
     const item = props.imageData.answerList && props.imageData.answerList.length === 1 ? props.imageData.answerList[0] : null;
     if (!item && !itemId.value) return
@@ -324,6 +327,7 @@ const removeItem = () => {
 const handlePrev = async () => {
   //删除答案
   if(isDisabled.value) return
+  console.log(answerIndex.value)
   if (answerIndex.value <= 0) return
   if (!enableManualplavMode && props.isPlay) return
   // removeItem();
@@ -341,7 +345,9 @@ const handlePrev = async () => {
 const handleNext = 
   async () => {
     if(isDisabled.value) return
-    if (answerIndex.value + 1 === answerMarks.length) return
+    console.log(answerIndex.value)
+    console.log(answerMarks.value.length)
+    if (answerIndex.value + 1 === answerMarks.value.length) return
     if (!enableManualplavMode && props.isPlay) return
     isDisabled.value = true;
     const res = await auditionApi.nextTest();
@@ -349,6 +355,13 @@ const handleNext =
       // isCheckFlag.value = false;
       // answerIndex.value++;
     }
+  }
+  const handleStartAudio = ()=> {
+    isOpen.value = true
+  }
+  const handleStopTest = ()=> {
+    bgIndex.value = -2
+    soundIndex.value = []
   }
 // 重复
 const handleReImage = useThrottle(
@@ -402,8 +415,13 @@ const checkedImg = (item, index) => {
   // isCheckFlag.value = false;
   emit("handleResume");
 };
+defineExpose({
+  handleStartAudio,
+  handleStopTest
+});
+
 onMounted(() => {
-  window.addEventListener("keydown", handkeyCode, true); //开启监听键盘按下事件
+  window.addEventListener("keyup", handkeyCode); //开启监听键盘按下事件
   window.addEventListener("setItemEvent", function (e: any) {
     
     //TODO 此处应该优化
@@ -485,7 +503,7 @@ onMounted(() => {
         // console.info(answerMap, "11111111")
       }
 
-      if (answerIndex.value + 1 === answerMarks.length) {
+      if (answerIndex.value + 1 === answerMarks.value.length) {
         enableManualplavModePlay = false
       }
       // if (
@@ -502,6 +520,9 @@ onMounted(() => {
     }
   });
 });
+onBeforeUnmount(()=> {
+  window.removeEventListener("keyup", handkeyCode)
+})
 </script>
 
 <style lang="scss" scoped>

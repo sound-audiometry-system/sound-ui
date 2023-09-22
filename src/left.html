@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>test</title>
+    <title>left</title>
     <style>
         html, body {
             background-color: #000;
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
         .img-list {
             width: 100%;
@@ -46,7 +47,7 @@
         document.addEventListener('astilectron-ready', function () {
             astilectron.onMessage(function (message) {
                 var childs = imgList.childNodes;
-                if (childs && childs.length > 1) {
+                if (childs && childs.length >= 1) {
                     for (var i = childs.length - 1; i >= 0; i--) {
                         imgList.removeChild(childs[i]);
                     }

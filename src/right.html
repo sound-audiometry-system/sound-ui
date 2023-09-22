@@ -3,12 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>test</title>
+    <title>right</title>
     <style>
         html, body {
             background-color: #000;
             margin: 0;
             padding: 0;
+            overflow: hidden;
         }
         .img-list {
             width: 100%;
@@ -33,7 +34,7 @@
 </head>
 
 <body>
-
+    <div style="color: #000;">right</div>
     <!-- <a href="http://localhost:8080/ping">right</a> -->
     <div id="imgList" class="img-list">
 
@@ -46,12 +47,15 @@
         document.addEventListener('astilectron-ready', function () {
             astilectron.onMessage(function (message) {
                 var childs = imgList.childNodes;
-                if (childs && childs.length > 1) {
+                console.log(message, 'message')
+                console.log(childs, 'childs')
+                if (childs && childs.length >= 1) {
                     for (var i = childs.length - 1; i >= 0; i--) {
                         imgList.removeChild(childs[i]);
                     }
                 }
                 if (message.cmdType == 'imageDisplay') {
+                    console.log(message.answerList.length)
                     for (let i = 0; i < message.answerList.length; i++) {
                         var div = document.createElement('div');
                         div.className = "box";

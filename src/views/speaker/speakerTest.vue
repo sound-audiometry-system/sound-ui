@@ -159,7 +159,8 @@ const startTest = async (value1, value2) => {
       cancelButtonText: "取消",
       type: "warning",
     }).then(async () => {
-      handleAudio()
+      await handleAudio()
+      childRef.value.handleStartAudio()
     })
     }
     }, 500)
@@ -182,6 +183,7 @@ const stopTest = async () => {
     isPlay.value = false;
     isChangeSelect.value = false;
     sessionStorage.setItem("imageData", "");
+    childRef.value.handleStopTest()
   }
 };
 const handlePause = async () => {
