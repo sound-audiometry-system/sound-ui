@@ -102,7 +102,6 @@ const router = useRouter();
 const prevRouter = router.options.history.state.back;
 let isSuccess = false;
 if (route.query.type) typeName.value = route.query.type;
-// console.log(store, 'store')
 const testData = store.getters.getTestData;
 const main = ref();
 const childRef = ref(null);
@@ -118,7 +117,6 @@ const handleTestStop = inject<() => void>("handleStop");
 interface RuleForm {
   operator: string;
 }
-// console.log(userInfo[0])
 console.log(testData);
 const form = reactive({
   uid: userInfo && userInfo.uid,
@@ -227,17 +225,11 @@ const handleSave = async (formEl: FormInstance | undefined) => {
         isSave = true;
         handleStop();
         // handleTestStop?.()
-        ElMessage({
-          message: "保存成功",
-          type: "success",
-        });
+        ElMessage({message: "保存成功",type: "success"});
         router.back()
       }
     } else {
-      ElMessage({
-        message: "数据填写有误",
-        type: "warning",
-      });
+      ElMessage({message: "数据填写有误",type: "warning",});
     }
   });
 };
@@ -266,14 +258,10 @@ const recOpen = () => {
   //var dialog=createDelayDialog(); 我们可以选择性的弹一个对话框：为了防止移动端浏览器存在第三种情况：用户忽略，并且（或者国产系统UC系）浏览器没有任何回调，此处demo省略了弹窗的代码
   rec.open(
     function (success) {
-      ElMessage({
-        message: "已开启录音",
-        type: "success",
-      });
+      ElMessage({message: "已开启录音",type: "success",});
       //打开麦克风授权获得相关资源
       //dialog&&dialog.Cancel(); 如果开启了弹框，此处需要取消
       rec.start(); //此处可以立即开始录音，但不建议这样编写，因为open是一个延迟漫长的操作，通过两次用户操作来分别调用open和start是推荐的最佳流程
-
       success && success();
     },
     function (msg, isUserNotAllow) {
@@ -307,7 +295,6 @@ const handleStopAudio = () => {
     async function (blob, duration) {
       //简单利用URL生成本地文件地址，注意不用了时需要revokeObjectURL，否则霸占内存
       //此地址只能本地使用，比如赋值给audio.src进行播放，赋值给a.href然后a.click()进行下载（a需提供download="xxx.mp3"属性）
-      console.log(blob);
       var localUrl = (window.URL || webkitURL).createObjectURL(blob);
       console.log(blob, localUrl, "时长:" + duration + "ms");
       rec.close(); //释放录音资源，当然可以不释放，后面可以连续调用start；但不释放时系统或浏览器会一直提示在录音，最佳操作是录完就close掉
