@@ -25,7 +25,7 @@
               <el-row class="table-row">
                 <el-col :span="4">
                   <el-checkbox-group v-model="radioFlag">
-                    <el-checkbox :disabled="item.signalCalibrated" :label="item.index" :true-label="item.index"
+                    <el-checkbox :label="item.index" :true-label="item.index"
                       @change="startCalibration(item, 1)" :tabindex="item.index">信号声</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
@@ -49,7 +49,7 @@
               <el-row class="table-row">
                 <el-col :span="4">
                   <el-checkbox-group v-model="radioFlagEnv">
-                    <el-checkbox :disabled="item.environmentalCalibrated" :label="item.index" :true-label="item.index"
+                    <el-checkbox :label="item.index" :true-label="item.index"
                       @change="startCalibration(item, 2)" :tabindex="item.index">环境声</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
@@ -186,10 +186,10 @@ let startSignal = (item) => {
   radioFlag.value = item.index
   soundIndex.value.push(radioFlag.value * 2 + 1)
   // 打开信号声调试
-  if (!item.signalCalibrated) {
+  // if (!item.signalCalibrated) {
     isSignalCalibration.value = true
     queryForm.signalSoundVolume = item.signalSoundVolume
-  }
+  // }
 }
 let startEnvironment = (item) => {
   if (radioFlag.value == item.index) {
@@ -200,10 +200,10 @@ let startEnvironment = (item) => {
   radioFlagEnv.value = item.index
   bgIndex.value = radioFlagEnv.value * 2
   //打开环境声调试
-  if (!item.environmentalCalibrated) {
+  // if (!item.environmentalCalibrated) {
     isCalibration.value = true
     queryForm.environmentalSoundVolume = item.environmentalSoundVolume
-  }
+  // }
 }
 interface AlignData extends AlignDataSignal, AlignDataAmbient {
 }
