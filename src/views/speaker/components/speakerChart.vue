@@ -239,7 +239,6 @@ onMounted(() => {
     props.clickXY.length = 0;
     let data = props.chartIndex == 0 ? AcData : UclData;
     const pointInPixel = [params.offsetX, params.offsetY];
-    // console.log(chartInstance.convertFromPixel("grid", pointInPixel));
     // 使用 convertFromPixel方法 转换像素坐标值到逻辑坐标系上的点。获取点击位置对应的x轴数据的索引         值，借助于索引值的获取到其它的信息
     // 转换X轴坐标
     let pointInGrid = chartInstance.convertFromPixel(
@@ -262,24 +261,20 @@ onMounted(() => {
     var xValue = op.xAxis[0].data[xIndex];
 
     // 点击点的series -- data对应的值
-    // console.log(op.series)
     const seriesData = op.series[props.chartIndex].data;
     // 如果之前已经在x轴上绘制过，终止执行
     const xData = seriesData.map((dataPoint) => dataPoint[0]);
     if (xData.includes(xValue)) return;
-    // console.log(seriesData);
     var value = seriesData[xIndex] && seriesData[xIndex][1];
     // const dataIndex = seriesData.findIndex((dataPoint) => {
     //   return dataPoint[0] === xIndex && dataPoint[1] === value;
     // });
-    // console.log(value)
     // if (dataIndex > -1) {
 
     // } else {
     // 处理点击画布的逻辑
     // 如果绘制的点已等于x轴数量，停止执行
     // if (xAxisData.length === data.length) return;
-    // console.log(params);
     let x = params.offsetX;
     let y = params.offsetY;
     let pixel = chartInstance.convertFromPixel(
