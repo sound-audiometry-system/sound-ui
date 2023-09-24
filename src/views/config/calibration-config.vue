@@ -25,13 +25,13 @@
               <el-row class="table-row">
                 <el-col :span="4">
                   <el-checkbox-group v-model="radioFlag">
-                    <el-checkbox :label="item.index" :true-label="item.index"
-                      @change="startCalibration(item, 1)" :tabindex="item.index">信号声</el-checkbox>
+                    <el-checkbox :label="item.index" :true-label="item.index" @change="startCalibration(item, 1)"
+                      :tabindex="item.index">信号声</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
                 <el-col :span="2">
                   <el-input readonly style="width: 100%" controls-position="right" size="small"
-                    v-model="item.signalSoundVolume" :placeholder="item.signalSoundVolume" /></el-col>
+                    v-model="item.signalSoundDecibels" :placeholder="item.signalSoundVolume" /></el-col>
                 <el-col :span="5">(分贝db)</el-col>
               </el-row>
               <!-- 按钮 -->
@@ -49,8 +49,8 @@
               <el-row class="table-row">
                 <el-col :span="4">
                   <el-checkbox-group v-model="radioFlagEnv">
-                    <el-checkbox :label="item.index" :true-label="item.index"
-                      @change="startCalibration(item, 2)" :tabindex="item.index">环境声</el-checkbox>
+                    <el-checkbox :label="item.index" :true-label="item.index" @change="startCalibration(item, 2)"
+                      :tabindex="item.index">环境声</el-checkbox>
                   </el-checkbox-group>
                 </el-col>
                 <el-col :span="2">
@@ -137,9 +137,9 @@ import { GoldMedal } from "@element-plus/icons-vue/dist/types";
 
 
 const globalParam = reactive({
-  envLoop:false,
-  signalLoop:false,
-  test:true
+  envLoop: false,
+  signalLoop: false,
+  test: true
 })
 const setup = () => {
   //清空答案记录
@@ -187,8 +187,8 @@ let startSignal = (item) => {
   soundIndex.value.push(radioFlag.value * 2 + 1)
   // 打开信号声调试
   // if (!item.signalCalibrated) {
-    isSignalCalibration.value = true
-    queryForm.signalSoundVolume = item.signalSoundVolume
+  isSignalCalibration.value = true
+  queryForm.signalSoundVolume = item.signalSoundVolume
   // }
 }
 let startEnvironment = (item) => {
@@ -201,8 +201,8 @@ let startEnvironment = (item) => {
   bgIndex.value = radioFlagEnv.value * 2
   //打开环境声调试
   // if (!item.environmentalCalibrated) {
-    isCalibration.value = true
-    queryForm.environmentalSoundVolume = item.environmentalSoundVolume
+  isCalibration.value = true
+  queryForm.environmentalSoundVolume = item.environmentalSoundVolume
   // }
 }
 interface AlignData extends AlignDataSignal, AlignDataAmbient {
@@ -257,13 +257,12 @@ const marks = reactive<Marks>({
   0: "0", 5: "5", 10: "10", 15: "15", 20: "20", 25: "25", 30: "30", 35: "35", 40: "40", 45: "45", 50: "50",
   55: "55", 60: "60", 65: "65", 70: "70", 75: "75", 80: "80", 85: "85", 90: "90", 95: "95", 100: "100",
 });
-watch(
-  () => props.testData,
-  (newValue, oldValue) => {
-    devices.value = newValue.indexs;
-  },
+watch(() => props.testData, (newValue, oldValue) => {
+  devices.value = newValue.indexs;
+},
   { deep: true, immediate: true }
 );
+console.info(props.testData,"props")
 const emit = defineEmits(["handleBack"]);
 /**
  * 播放
@@ -272,12 +271,12 @@ const emit = defineEmits(["handleBack"]);
 const handleStart = async () => {
   auditionApi.stopTest()
   let item: any = getItem(queryForm.index);
-  if(!item) return 
+  if (!item) return
   //调整播放参数
-  if (isSignalCalibration.value){
+  if (isSignalCalibration.value) {
     globalParam.signalLoop = false
-  }else{
-   globalParam.envLoop = false
+  } else {
+    globalParam.envLoop = false
   }
   let param = getPlayParam()
   const res = await auditionApi.startTest(param, globalParam);
@@ -294,10 +293,12 @@ const getPlayParam = () => {
     let signalParam = {
       id: props.testData.id, name: props.testData.name, "enableManualPlayMode": false,
       signalSoundConfig: [{
-        audios: [{ "target": targetIndex * 2 + 1, 
-        "file": item.signalSource, 
-        "duration": item.signalDuration?item.signalDuration:3000, 
-        "volume": queryForm.signalSoundVolume }],
+        audios: [{
+          "target": targetIndex * 2 + 1,
+          "file": item.signalSource,
+          "duration": item.signalDuration ? item.signalDuration : 3000,
+          "volume": queryForm.signalSoundVolume
+        }],
         "nextAudioInterval": 1
       }]
     }
@@ -313,7 +314,7 @@ const getPlayParam = () => {
           "target": targetIndex * 2,
           "file": item.environmentalSource,
           "volume": queryForm.environmentalSoundVolume,
-          "duration": item.environmentalDuration?item.environmentalDuration:3000
+          "duration": item.environmentalDuration ? item.environmentalDuration : 3000
         },
       ]
     }
@@ -344,12 +345,12 @@ const handleCirculate = async () => {
   let item: any = getItem(queryForm.index);
   if (!item) return
   //构建公共播放参数
-  if(isSignalCalibration.value){
-    globalParam.signalLoop =true
-    globalParam.envLoop =  false
-  }else{
-    globalParam.signalLoop =false
-    globalParam.envLoop =true
+  if (isSignalCalibration.value) {
+    globalParam.signalLoop = true
+    globalParam.envLoop = false
+  } else {
+    globalParam.signalLoop = false
+    globalParam.envLoop = true
   }
   let param = getPlayParam()
   //调用接口
