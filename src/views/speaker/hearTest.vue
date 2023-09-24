@@ -1,51 +1,31 @@
 <template>
   <el-form-item label="测试名称">
     <el-input style="width: 1680px" disabled v-model="testName" />
-    <el-button
-      style="float: left; margin-left: 5px"
-      type="primary"
-      @click="handleBack"
-      >返回</el-button
-    >
+    <el-button style="float: left; margin-left: 5px" type="primary" @click="handleBack">返回</el-button>
   </el-form-item>
   <el-container>
     <el-aside>
       <div class="es-switch">
         <span><el-switch v-model="value1" /> <label>左显示器</label></span>
-        <span
-          ><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
+        <span><el-switch v-model="value2" class="ml-2" /><label>右显示器</label>
         </span>
       </div>
-      <div
-        style="
+      <div style="
           margin-left: 10px;
           width: 920px;
           height: 335px;
           padding: 0 6px;
           display: flex;
-        "
-      >
-        <el-row
-          style="
+        ">
+        <el-row style="
             background-color: #000;
             width: 82%;
             height: 100%;
             align-items: center;
             overflow: auto;
-          "
-          align="center"
-          :gutter="10"
-        >
-          <el-col
-            v-for="(item, index) in props.imageData.answerList"
-            :key="item.id"
-            :span="8"
-          >
-            <el-image
-              style="width: 100%; height: 160px"
-              :src="item.sourceUrl"
-              :fit="item.label"
-            />
+          " align="center" :gutter="10">
+          <el-col v-for="(item, index) in props.imageData.answerList" :key="item.id" :span="8">
+            <el-image style="width: 100%; height: 160px" :src="item.sourceUrl" :fit="item.label" />
           </el-col>
         </el-row>
         <div style="width: 18%; margin-left: 10px">
@@ -59,70 +39,40 @@
           <p style="font-size: 12px">同时打开两边显示器</p>
           <p v-if="prevRouter !== '/imitate'" style="font-size: 14px">
             当前正在答
-            {{ answerIndex && answerIndex <= 0 ? "" : answerIndex + 1 }} 题
-          </p>
+            {{ answerIndex && answerIndex <= 0 ? "" : answerIndex + 1 }} 题 </p>
         </div>
       </div>
 
       <el-row class="error-a">
         <label style="margin-left: 5px; font-size: large">错误走向</label>
-        <el-button
-          @click="handleCheck"
-          :disabled="syncDisabledBtn || !props.isPlay"
-          size="large"
-          style="margin-right: 5px"
-        >
+        <el-button @click="handleCheck" :disabled="syncDisabledBtn || !props.isPlay" size="large"
+          style="margin-right: 5px">
           <el-icon style="color: red; margin-right: 2px">
-            <CircleClose /> </el-icon
-          >错误</el-button
-        >
+            <CircleClose />
+          </el-icon>错误</el-button>
         <!-- <el-icon><CircleCloseFilled /></el-icon>   :icon="CircleClose"-->
       </el-row>
-      <el-row
-        :gutter="10"
-        style="
+      <el-row :gutter="10" style="
           margin-left: 10px;
           width: 920px;
           height: 305px;
           background-color: #efefef;
           padding-top: 6px;
           overflow: auto;
-        "
-      >
-        <el-col
-          v-for="(item, index) in props.imageData.answerList"
-          :key="item.id"
-          :span="8"
-        >
-          <el-image
-            @click="checkedImg(item, index)"
-            :class="{
-              'is-checked-img-error':
-                index === checkedImgIndex &&
-                !item.correct,
-              'is-checked-img-success':
-                index === checkedImgIndex &&
-                item.correct,
-            }"
-            style="width: 100%; height: 160px"
-            :src="item.sourceUrl"
-            :fit="item.label"
-          />
+        ">
+        <el-col v-for="(item, index) in props.imageData.answerList" :key="item.id" :span="8">
+          <el-image @click="checkedImg(item, index)" :class="{
+            'is-checked-img-error':
+              index === checkedImgIndex && !item.correct,
+            'is-checked-img-success':
+              index === checkedImgIndex && item.correct,
+          }" style="width: 100%; height: 160px" :src="item.sourceUrl" :fit="item.label" />
           <div style="text-align: center">
-            <el-icon
-              v-if="
-                index === checkedImgIndex && !item.correct
-              "
-              style="color: red; font-size: 26px; margin: 0 auto"
-            >
+            <el-icon v-if="index === checkedImgIndex && !item.correct"
+              style="color: red; font-size: 26px; margin: 0 auto">
               <CircleClose />
             </el-icon>
-            <el-icon
-              v-if="
-                index === checkedImgIndex && item.correct
-              "
-              style="color: green; font-size: 26px"
-            >
+            <el-icon v-if="index === checkedImgIndex && item.correct" style="color: green; font-size: 26px">
               <CircleCheck />
             </el-icon>
           </div>
@@ -131,116 +81,60 @@
     </el-aside>
 
     <el-main>
-      <el-button @click="handleAudio" style="margin: 3px 0px 5px 0px" link
-        ><el-icon style="margin-right: 2px; color: #134efe" circle>
-          <Microphone /> </el-icon
-        >{{ isOpen ? "关闭录音" : "开启录音" }}</el-button
-      >
+      <el-button @click="handleAudio" style="margin: 3px 0px 5px 0px" link><el-icon
+          style="margin-right: 2px; color: #134efe" circle>
+          <Microphone />
+        </el-icon>{{ isOpen ? "关闭录音" : "开启录音" }}</el-button>
       <div style="height: 320px; width: 760px">
-        <sound
-          @handleClkItem="handleClkItem"
-          :sound-index="soundIndex"
-          :bg-index="bgIndex"
-          env-index="122"
-        ></sound>
+        <sound @handleClkItem="handleClkItem" :sound-index="soundIndex" :bg-index="bgIndex" env-index="122"></sound>
       </div>
       <el-row class="el-btn a">
-        <el-button
-          :disabled="
-            (props.isPlay && prevRouter === '/imitate') ||
-            (props.isPlay && prevRouter !== '/imitate' && isStop)
-          "
-          size="large"
-          plain
-          @click="handleStart"
-          >开始</el-button
-        >
-        <el-button
-          v-if="prevRouter !== '/imitate'"
-          :disabled="
-            (answerIndex + 1 !== answerMarks.length &&
-              !isStop &&
-              enableManualplavMode) ||
-            (!enableManualplavMode && !isTestStop)
-          "
-          size="large"
-          plain
-          @click="handleSave(1)"
-          >保存</el-button
-        >
-        <el-button
-          v-if="prevRouter !== '/imitate'"
-          :disabled="!props.isPlay || answerIndex + 1 === answerMarks.length"
-          size="large"
-          plain
-          @click="handleSave(2)"
-          >提前结束</el-button
-        >
-        <el-button
-          v-if="prevRouter === '/imitate'"
-          :disabled="!props.isPlay"
-          size="large"
-          plain
-          @click="handleStop"
-          >模拟结束</el-button
-        >
+        <el-button :disabled="(props.isPlay && prevRouter === '/imitate') ||
+          (props.isPlay && prevRouter !== '/imitate' && isStop)
+          " size="large" plain @click="handleStart">开始</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="(answerIndex + 1 !== answerMarks.length &&
+          !isStop &&
+          enableManualplavMode) ||
+          (!enableManualplavMode && !isTestStop)
+          " size="large" plain @click="handleSave(1)">保存</el-button>
+        <el-button v-if="prevRouter !== '/imitate'" :disabled="!props.isPlay || answerIndex + 1 === answerMarks.length"
+          size="large" plain @click="handleSave(2)">提前结束</el-button>
+        <el-button v-if="prevRouter === '/imitate'" :disabled="!props.isPlay" size="large" plain
+          @click="handleStop">模拟结束</el-button>
       </el-row>
       <el-row class="el-btn b">
-        <el-button
-          :disabled="
-            !props.isPlay ||
-            isDisabled ||
-            enableManualplavMode ||
-            answerIndex <= 0
-          "
-          @click="handlePrev"
-          >上一个(左键)</el-button
-        >
-        <el-button
-          :disabled="
-            !props.isPlay ||
-            isDisabled ||
-            enableManualplavMode ||
-            answerIndex + 1 === answerMarks.length
-          "
-          @click="handleNext"
-          >下一个(右键)</el-button
-        >
-        <el-button
-          :disabled="
-            !props.isPlay ||
-            isDisabled ||
-            enableManualplavMode ||
-            answerIndex < 0
-          "
-          @click="handleReImage"
-          >重复</el-button
-        >
-        <el-button
-          v-if="prevRouter !== '/imitate' && !enableManualplavMode"
-          :disabled="!props.isPlay && enableManualplavModePlay"
-          @click="handleStop"
-          >测试结束</el-button
-        >
+        <el-button :disabled="!props.isPlay ||
+          isDisabled ||
+          enableManualplavMode ||
+          answerIndex <= 0
+          " @click="handlePrev">上一个(左键)</el-button>
+        <el-button :disabled="!props.isPlay ||
+          isDisabled ||
+          enableManualplavMode ||
+          answerIndex + 1 === answerMarks.length
+          " @click="handleNext">下一个(右键)</el-button>
+        <el-button :disabled="!props.isPlay ||
+          isDisabled ||
+          enableManualplavMode ||
+          answerIndex < 0
+          " @click="handleReImage">重复</el-button>
+        <el-button v-if="prevRouter !== '/imitate' && !enableManualplavMode"
+          :disabled="!props.isPlay && enableManualplavModePlay" @click="handleStop">测试结束</el-button>
       </el-row>
       <el-row>
-        <div
-          style="
+        <div style="
             height: 300px;
             width: 950px;
             background-color: #e9e9e9;
             margin-top: 15px;
             padding: 12px 20px;
-          "
-        >
-          <div
-            style="
+          ">
+          <div style="
               display: flex;
               justify-content: space-between;
               margin-bottom: 16px;
               align-items: center;
-            "
-          >
+            ">
             <span style="font-weight: bold">答题进度</span>
             <span style="font-size: 12px" @click="handleClk">
               查看全部<el-icon>
@@ -249,32 +143,21 @@
             </span>
           </div>
           <div style="height: 36px; overflow: hidden">
-            <span
-              v-for="(item, index) in answerMarks"
-              :key="index"
-              :class="{
-                'answer-num': true,
-                'success-active': item.answerMark == 2,
-                'error-active': item.answerMark == 3,
-              }"
-              >{{ index + 1 }}</span
-            >
+            <span v-for="(item, index) in answerMarks" :key="index" :class="{
+              'answer-num': true,
+              'success-active': item.answerMark == 2,
+              'error-active': item.answerMark == 3,
+            }">{{ index + 1 }}</span>
           </div>
         </div>
       </el-row>
     </el-main>
-    <answer-dialog
-      ref="answerDialogRef"
-      :answerMarks="answerMarks"
-    ></answer-dialog>
+    <answer-dialog ref="answerDialogRef" :answerMarks="answerMarks"></answer-dialog>
     <sound-dialog ref="soundDialogRef"></sound-dialog>
-    <div
-      :class="{ 'sound-fixed-box': true, move }"
-    >
+    <div :class="{ 'sound-fixed-box': true, move }">
       <p style="margin-bottom: 10px; font-size: 16px">音频播放列表</p>
       <soundList :sounds="sounds" :bg-index="bgIndex" />
-      <div
-        style="
+      <div style="
           width: 40px;
           height: 40px;
           line-height: 40px;
@@ -284,14 +167,8 @@
           right: -16px;
           background-color: #fff;
           border-radius: 50%;
-        "
-        @click="move = !move"
-      >
-        <img v-if="!move" src="../../assets/right.png" width="26" /><img
-          v-else
-          src="../../assets/left.png"
-          width="22"
-        />
+        " @click="move = !move">
+        <img v-if="!move" src="../../assets/right.png" width="26" /><img v-else src="../../assets/left.png" width="22" />
       </div>
     </div>
   </el-container>
@@ -383,7 +260,7 @@ let audioFiles = [];
 const sounds = ref([]);
 watch(
   () => props.imageData,
-  (newValue, oldValue) => {}
+  (newValue, oldValue) => { }
 );
 const handleClk = () => {
   sycnDisabledBtn.value = true;
@@ -452,7 +329,6 @@ const handleCheck = () => {
     if (item && item.image) {
       answerForm.wrongFile = item?.image;
     }
-    console.info(itemId.value, answerKey, "handleCheck  up");
     let answerArr =
       answerKey.value.length < 2
         ? itemId.value
@@ -479,7 +355,7 @@ const handleCheck = () => {
   answerCheckIndex = answerIndex.value;
   isCheckFlag.value = true;
 
-  // emit("handlePause");
+  emit("handlePause");
   window.setTimeout(() => {
     emit("handleResume");
   }, 3000);
@@ -501,7 +377,6 @@ const removeItem = () => {
 const handlePrev = async () => {
   //删除答案
   if (isDisabled.value) return;
-  console.log(answerIndex.value);
   if (answerIndex.value <= 0) return;
   if (
     (!enableManualplavMode.value && !props.isPlay) ||
@@ -521,8 +396,6 @@ const handlePrev = async () => {
 };
 // 下一个
 const handleNext = async () => {
-  console.log(enableManualplavMode.value, "enableManualplavMode");
-  console.log(props.isPlay, "props.isPlay");
   if (isDisabled.value) return;
   if (answerIndex.value + 1 === answerMarks.value.length) return;
   if (
@@ -559,6 +432,17 @@ const handleReImage = useThrottle(
     if (res.code == 0) {
       isCheckFlag.value = false;
       rePlayId = displayId;
+      sounds.value = sounds.value.filter(
+        (bgItem) =>
+          bgIndex.value &&
+          bgIndex.value >= 0 &&
+          bgItem.bgIndex === bgIndex.value
+      );
+      sounds.value.forEach((bgItem) => {
+        bgItem.index = -1;
+        bgItem.name = "";
+        bgItem.volume = "";
+      });
       //因为 imageDate 会被修改，所以这里需要重新赋值 -1
       // if (answerIndex.value > 0) answerIndex.value--;
     }
@@ -585,7 +469,6 @@ const checkedImg = (item, index) => {
   props.imageData.answerList[index].isCheckFlag = true;
   answerForm.correct = item.correct;
   answerForm.wrongFile = item?.image;
-  console.info(item, "checkedImg");
   let answerArr =
     answerKey.value.length < 2
       ? itemId.value
@@ -598,11 +481,8 @@ const checkedImg = (item, index) => {
     correct: item.correct,
     wrongFile: item?.image,
   };
-  console.info(imgError, "checkedImg");
   //构建错误答案
   answerMap.set(item.uuid, imgError);
-  console.info(answerMap, "checkedImg answerMap");
-
   item.correct
     ? (answerMarks.value[answerIndex.value].answerMark = 2)
     : (answerMarks.value[answerIndex.value].answerMark = 3);
@@ -647,9 +527,9 @@ onMounted(() => {
         const arr =
           sounds.value && sounds.value.length !== 0
             ? sounds.value.filter(
-                (bgItem) =>
-                  parseInt(bgItem.index / 2) == parseInt(bgIndex.value / 2)
-              )
+              (bgItem) =>
+                parseInt(bgItem.index / 2) == parseInt(bgIndex.value / 2)
+            )
             : [];
         if (arr.length === 0) {
           sounds.value.push({
@@ -693,15 +573,14 @@ onMounted(() => {
             });
           }
         }
-        console.log(sounds.value)
         soundIndex.value.push(item.target);
         // sounds.value.push({index: item.target, name: item.name, volume: item.volume, bgIndex: -2})
         const arr =
           sounds.value && sounds.value.length !== 0
             ? sounds.value.filter(
-                (bgItem) =>
-                  parseInt(bgItem.bgIndex / 2) == parseInt(item.target / 2)
-              )
+              (bgItem) =>
+                parseInt(bgItem.bgIndex / 2) == parseInt(item.target / 2)
+            )
             : [];
         if (arr.length === 0) {
           sounds.value.push({
@@ -819,10 +698,8 @@ onMounted(() => {
           ? Array.from(new Set(itemFileArr)).join(",")
           : itemFileArr;
         answerForm.file = fileId;
-        console.info(itemId.value, answerForm, "answerForm");
         // audioFiles = []
         answerMap.set(item.uuid, answerForm);
-        // console.info(answerMap, "11111111")
       }
 
       if (answerIndex.value + 1 === answerMarks.value.length) {
@@ -947,6 +824,7 @@ onBeforeUnmount(() => {
   text-align: center;
   margin-top: 6px;
 }
+
 .sound-fixed-box {
   width: 400px;
   height: 500px;
@@ -958,6 +836,7 @@ onBeforeUnmount(() => {
   // overflow-y: scroll;
   padding: 10px 20px;
 }
+
 .sound-fixed-box.move {
   transform: translateX(380px);
 }
