@@ -3,7 +3,7 @@
   <div v-loading="loading" class="main">
     <el-row :gutter="20">
       <el-col :span="16">
-        <el-input v-model="value" class="w-50 m-2" placeholder="搜索" :prefix-icon="Search"/>
+        <el-input v-model="itemName" class="w-50 m-2" placeholder="搜索" :prefix-icon="Search"/>
       </el-col>
       <el-col :span="2">
         <el-button color="#208571" @click="searchData">查询</el-button>
@@ -49,40 +49,42 @@
 import { onMounted, ref, watch, reactive } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { imitateApi } from "@/serve/api/user";
-const value = ref("");
+const itemName = ref("");
 const radio1 = ref("0");
 let loading = ref(false);
 let tableData = ref([]);
+let isCalibrated = ref(false);
 
 let tableDatas = []
 const queryForm = reactive({});
 const resetSearch = ()=>{
   //搜索条件置空
-  value.value = ""
+  itemName.value = ""
   radio1.value = "0"
   getListTestMode("",false);
 }
 
 const changRadio = (val) => {
-  getListTestMode(value.value,val==1?true:false);
+  isCalibrated.value = val==1?true:false
+  getListTestMode(itemName.value,isCalibrated.value);
 };
 
 const searchData = () => {
-  getListTestMode(value.value,radio1.value == "0"?false:true);
+  console.info("xxx",{name:itemName.value,...queryForm})
+  getListTestMode(itemName.value,isCalibrated.value);
 };
 
 const currentChange = (current:number) => {
   queryForm.current = current
-  getListTestMode()
+  getListTestMode(itemName.value,isCalibrated.value)
 };
 const emit = defineEmits(["handleCalibration"]);
 const handleCalibration = (index, row) => {
   emit("handleCalibration", index, row);
 };
-const getListTestMode = async (name: string = "",calibrated:boolean = false) => {
+const getListTestMode = async (name: string,calibrated:boolean = false) => {
   loading.value = true;
   const res = await imitateApi.getListThresholdMode({name: name,calibrated:calibrated, ...queryForm });
-  console.log(res);
   loading.value = false;
   if (res.code == 0) {
     tableData.value = res.data.records;
@@ -92,15 +94,15 @@ const getListTestMode = async (name: string = "",calibrated:boolean = false) => 
     queryForm.size = res.data.size
   }
 };
-watch(value, (newValue, oldValue)=> {
-  if(newValue) {
-    tableData.value = tableData.value.filter(item=> item.name.includes(newValue))
-  } else {
-    tableData.value = tableDatas
-  }
-})
+// watch(value, (newValue, oldValue)=> {
+  // if(newValue) {
+  //   tableData.value = tableData.value.filter(item=> item.name.includes(newValue))
+  // } else {
+  //   tableData.value = tableDatas
+  // }
+// })
 onMounted(() => {
-  getListTestMode();
+  getListTestMode("");
 });
 </script>
 <style scoped lang="scss">
