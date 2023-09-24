@@ -111,7 +111,7 @@
           <div style="text-align: center">
             <el-icon
               v-if="
-                index === checkedImgIndex && index + 1 != props.imageData.target
+                index === checkedImgIndex && !item.correct
               "
               style="color: red; font-size: 26px; margin: 0 auto"
             >
@@ -119,7 +119,7 @@
             </el-icon>
             <el-icon
               v-if="
-                index === checkedImgIndex && index + 1 == props.imageData.target
+                index === checkedImgIndex && item.correct
               "
               style="color: green; font-size: 26px"
             >
@@ -285,7 +285,7 @@
           background-color: #fff;
           border-radius: 50%;
         "
-        @mouseenter="move = !move"
+        @click="move = !move"
       >
         <img v-if="!move" src="../../assets/right.png" width="26" /><img
           v-else
