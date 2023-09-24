@@ -479,7 +479,7 @@ const handleCheck = () => {
   answerCheckIndex = answerIndex.value;
   isCheckFlag.value = true;
 
-  emit("handlePause");
+  // emit("handlePause");
   window.setTimeout(() => {
     emit("handleResume");
   }, 3000);
