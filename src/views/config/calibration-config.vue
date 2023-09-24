@@ -376,11 +376,11 @@ const handleSaveEnv = () => {
   // 答案写入集合
   setData(queryForm.index, answer.value)
   isCalibration.value = false
-  // TODO
   let item = devices.value.filter(x => x.index == queryForm.index);
   devices.value.forEach((x, index) => {
     if (x.index == queryForm.index) {
       x.environmentalCalibrated = true
+      x.environmentalSoundVolume = queryForm.environmentalSoundVolume
     }
   })
   // queryForm.environmentalCalibrated = true
@@ -407,6 +407,7 @@ const handleSaveItem = async () => {
   devices.value.forEach((x) => {
     if (x.index == queryForm.index) {
       x.signalCalibrated = true
+      x.signalSoundVolume = queryForm.signalSoundVolume
     }
   })
 };
