@@ -141,8 +141,7 @@
       <el-row class="el-btn a">
         <el-button
           :disabled="
-            (props.isPlay && prevRouter === '/imitate') ||
-            (props.isPlay && prevRouter !== '/imitate' && isStop)
+          props.isPlay || isTestStop
           "
           size="large"
           plain
@@ -638,7 +637,7 @@ onMounted(() => {
     //   return;
     // }
 
-    if (e.key === "recordStart" || e.key === "recordStop") {
+    if (e.key === "recordStop") {
       handleAudio(e.key);
     }
     if (e.key === "audioStart") {

@@ -209,7 +209,7 @@ const chooseItem = (val) => {
   width: 1920px;
   height: 967px;
   margin: 0 auto;
-  margin-top: 50px;
+  margin-top: 42px;
 
   .el-header {
     width: 1920px;

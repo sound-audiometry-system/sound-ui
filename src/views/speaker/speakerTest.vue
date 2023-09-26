@@ -152,18 +152,6 @@ const startTest = async (value1, value2) => {
     isStart = true;
     isChangeSelect.value = true;
     // isPlay.value = false
-    window.setTimeout(()=> {
-      if (!isOpen) {
-      ElMessageBox.confirm("当前录音未开启，是否开启？", "提示", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    }).then(async () => {
-      await handleAudio()
-      childRef.value.handleStartAudio()
-    })
-    }
-    }, 500)
   } else {
     ElMessage({
           message: res?.msg || "操作失败",
@@ -244,7 +232,7 @@ const handleSave = async (formEl: FormInstance | undefined) => {
   });
 };
 const recOpen = () => {
-  isOpen = true;
+  
   rec = Recorder({
     //本配置参数请参考下面的文档，有详细介绍
     type: "mp3",
@@ -268,6 +256,7 @@ const recOpen = () => {
   //var dialog=createDelayDialog(); 我们可以选择性的弹一个对话框：为了防止移动端浏览器存在第三种情况：用户忽略，并且（或者国产系统UC系）浏览器没有任何回调，此处demo省略了弹窗的代码
   rec.open(
     function (success) {
+      isOpen = true;
       ElMessage({
         message: "已开启录音",
         type: "success",
@@ -275,7 +264,7 @@ const recOpen = () => {
       //打开麦克风授权获得相关资源
       //dialog&&dialog.Cancel(); 如果开启了弹框，此处需要取消
       rec.start(); //此处可以立即开始录音，但不建议这样编写，因为open是一个延迟漫长的操作，通过两次用户操作来分别调用open和start是推荐的最佳流程
-
+      
       success && success();
     },
     function (msg, isUserNotAllow) {
@@ -291,7 +280,24 @@ const recStart = () => {
 };
 const handleStart = (value1, value2) => {
   if (isStart) return;
-  startTest(value1, value2);
+  if (!isOpen) {
+      ElMessageBox.confirm("当前录音未开启，是否开启？", "提示", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    }).then(async () => {
+      await handleAudio()
+      childRef.value.handleStartAudio()
+      window.setTimeout(()=>{
+        startTest(value1, value2);
+      },200)
+    }).catch(err=> {
+      window.setTimeout(()=>{
+        startTest(value1, value2);
+      },200)
+    })
+    }
+    
 };
 const handleStop = () => {
   // if (!isStart) return;
@@ -378,9 +384,9 @@ onMounted(() => {
         //播放背景声
         return;
       }
-    if (e.key === "recordStart") {
-      isOpen = true;
-    }
+    // if (e.key === "recordStart") {
+    //   isOpen = true;
+    // }
     if (e.key === "imageClean") {
       imageData = reactive({});
       return;
