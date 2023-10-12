@@ -135,6 +135,7 @@
           @handleClkItem="handleClkItem"
           :sound-index="soundIndex"
           :bg-index="bgIndex"
+          :bgIndexs="bgIndexs"
           env-index="122"
         ></sound>
       </div>
@@ -171,7 +172,7 @@
         >
         <el-button
           v-if="prevRouter === '/imitate'"
-          :disabled="!props.isPlay"
+          :disabled="!props.isPlay || answerIndex + 1 === answerMarks.length"
           size="large"
           plain
           @click="handleStop"
@@ -324,6 +325,7 @@ let sycnDisabledBtn = ref(false);
 const soundIndex = ref([]);
 let soundId = -2;
 const bgIndex = ref(-2);
+const bgIndexs = ref([])
 let bgName = "";
 let bgVolume = "";
 //
@@ -399,10 +401,12 @@ const handleBack = () => {
   router.back();
 };
 const handleStop = () => {
-  isTestStop = true;
+  
 
   if (prevRouter === "/imitate") {
     isStop.value = false;
+  } else {
+    isTestStop = true;
   }
   // for (const item of answerMarks.value) {
   //   item.answerMark = 1;
@@ -536,6 +540,7 @@ const handleStartAudio = () => {
 };
 const handleStopTest = () => {
   bgIndex.value = -3;
+  bgIndexs.value = []
   bgName = "";
   bgVolume = "";
   soundIndex.value = [];
@@ -644,6 +649,7 @@ onMounted(() => {
       if (item.id == -1) {
         //播放背景声
         bgIndex.value = item.target;
+        bgIndexs.value.push(item.target)
         bgName = item.name;
         bgVolume = item.decibel;
         const arr =
@@ -805,6 +811,7 @@ onMounted(() => {
           bgItem.bgName = "";
         });
         bgIndex.value = -2;
+        bgIndexs.value = []
         bgName = "";
         bgVolume = "";
 
