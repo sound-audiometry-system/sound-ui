@@ -300,13 +300,11 @@ const handleStart = (value1, value2) => {
     
 };
 const handleStop = () => {
-  // if (!isStart) return;
   stopTest();
 };
 
 const handleAudio = async () => {
   await recOpen();
-  // recStart()
 };
 const handleStopAudio = () => {
   if (!isOpen) return;
